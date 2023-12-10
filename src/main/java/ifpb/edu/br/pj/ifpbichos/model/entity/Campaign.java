@@ -5,6 +5,7 @@ import java.io.Serializable;
 import java.time.LocalDateTime;
 import java.util.Objects;
 
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -12,27 +13,38 @@ import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 
 
-
-@Entity
 @Table(name = "CAMPAING")
+@Entity
 public class Campaign implements Serializable {
 
 	/**
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
+	
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Integer id;
+	@Column(name = "START_DATE", nullable = false)
 	private LocalDateTime start;
+	@Column(name = "END_DATE", nullable = false)
 	private LocalDateTime end;
+	@Column(name = "CAMPAIGN_TITLE", nullable = false)
 	private String title;
+	@Column(name = "CAMPAIGN_DESCRIPTION")
 	private String description;
+	//true = ativa. false = encerrada
+	@Column(name = "CAMPAIGN_STATUS", nullable = false)
 	private boolean campaingStatus;
+	@Column(name = "CAMPAIGN_PET_IMAGE")
 	private File image;
+	@Column(name = "COLLECTION_GOAL", nullable = false)
 	private float collectionGoal;
+	@Column(name = "COLLECTION_PERCENTAGE", nullable = false)
 	private float collectionPercentage;
+	@Column(name = "BALANCE", nullable = false)
 	private float balance;
+	@Column(name = "UNDIRECTED_BALANCE", nullable = false)
 	private float undirectedBalance;
 	
 	public Campaign() {
