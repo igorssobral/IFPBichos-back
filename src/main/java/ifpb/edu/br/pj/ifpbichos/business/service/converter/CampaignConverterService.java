@@ -1,7 +1,7 @@
 package ifpb.edu.br.pj.ifpbichos.business.service.converter;
 
 import ifpb.edu.br.pj.ifpbichos.model.entity.Campaign;
-import ifpb.edu.br.pj.ifpbichos.presentation.DTO.CampaignDTO;
+import ifpb.edu.br.pj.ifpbichos.presentation.dto.CampaignDTO;
 import org.springframework.stereotype.Service;
 
 import java.util.List;

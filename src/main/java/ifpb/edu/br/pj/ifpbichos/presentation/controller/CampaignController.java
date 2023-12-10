@@ -3,7 +3,7 @@ import org.springframework.http.HttpStatus;
 import ifpb.edu.br.pj.ifpbichos.business.service.CampaignService;
 import ifpb.edu.br.pj.ifpbichos.business.service.converter.CampaignConverterService;
 import ifpb.edu.br.pj.ifpbichos.model.entity.Campaign;
-import ifpb.edu.br.pj.ifpbichos.presentation.DTO.CampaignDTO;
+import ifpb.edu.br.pj.ifpbichos.presentation.dto.CampaignDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;

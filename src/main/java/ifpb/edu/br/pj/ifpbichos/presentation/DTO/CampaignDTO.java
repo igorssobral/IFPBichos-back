@@ -1,4 +1,4 @@
-package ifpb.edu.br.pj.ifpbichos.presentation.DTO;
+package ifpb.edu.br.pj.ifpbichos.presentation.dto;
 
 import java.io.File;
 import java.time.LocalDateTime;
