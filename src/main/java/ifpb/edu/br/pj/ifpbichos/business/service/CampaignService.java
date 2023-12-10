@@ -89,4 +89,16 @@ public class CampaignService {
 		
 		campaignRepository.delete(campaign);
 	}
+
+	public void deleteById(Integer id) throws Exception {
+		if (id == null) {
+			throw new MissingFieldException("id", "delete");
+		} else if (!existsById(id)) {
+			throw new ObjectNotFoundException("campanha", "id", id);
+		}
+
+		campaignRepository.deleteById(id);
+	}
+
+
 }

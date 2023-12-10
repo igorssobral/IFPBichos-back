@@ -51,6 +51,20 @@ public class Campaign implements Serializable {
 		this.undirectedBalance = 0;
 	}
 
+	public Campaign(Integer id, LocalDateTime start, LocalDateTime end, String title, String description, boolean campaingStatus, File image, float collectionGoal, float collectionPercentage, float balance, float undirectedBalance) {
+		this.id = id;
+		this.start = start;
+		this.end = end;
+		this.title = title;
+		this.description = description;
+		this.campaingStatus = campaingStatus;
+		this.image = image;
+		this.collectionGoal = collectionGoal;
+		this.collectionPercentage = collectionPercentage;
+		this.balance = balance;
+		this.undirectedBalance = undirectedBalance;
+	}
+
 	public Integer getId() {
 		return id;
 	}
