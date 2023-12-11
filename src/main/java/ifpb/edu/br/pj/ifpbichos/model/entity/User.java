@@ -14,8 +14,8 @@ import jakarta.persistence.UniqueConstraint;
 
 @Entity
 @Inheritance(strategy = InheritanceType.TABLE_PER_CLASS)
-@Table(name = "USER", uniqueConstraints = {@UniqueConstraint(columnNames = {"USER_EMAIL"})})
-public abstract class User {
+@Table(name = "USERS", uniqueConstraints = {@UniqueConstraint(columnNames = {"USER_EMAIL","USER_LOGIN"})})
+public abstract class User{
 	
 	@Id
 	@GeneratedValue(strategy = GenerationType.SEQUENCE)
@@ -27,6 +27,10 @@ public abstract class User {
 	private String phoneNumber;
 	@Column(name = "USER_EMAIL",nullable = false)
 	private String email;
+	@Column(name = "USER_LOGIN",nullable = false)
+	private String login;
+	@Column(name = "USER_PASSWORD",nullable = false)
+	private String senha;
 	
 	public User() {
 		// TODO Auto-generated constructor stub
@@ -37,7 +41,22 @@ public abstract class User {
 		this.phoneNumber = phoneNumber;
 		this.email = email;
 	}
-	
+	public String getLogin() {
+		return login;
+	}
+
+	public void setLogin(String login) {
+		this.login = login;
+	}
+
+	public String getSenha() {
+		return senha;
+	}
+
+	public void setSenha(String senha) {
+		this.senha = senha;
+	}
+
 	public Integer getId() {
 		return id;
 	}

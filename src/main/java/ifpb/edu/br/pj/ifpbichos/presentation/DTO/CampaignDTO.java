@@ -4,7 +4,8 @@ import java.io.File;
 import java.time.LocalDateTime;
 
 public class CampaignDTO {
-    private Integer id;
+    
+	private Integer id;
     private LocalDateTime start;
     private LocalDateTime end;
     private String title;
