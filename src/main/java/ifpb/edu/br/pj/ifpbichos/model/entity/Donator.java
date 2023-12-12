@@ -8,8 +8,8 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
-import ifpb.edu.br.pj.ifpbichos.model.enums.ComissionMemberRole;
 import ifpb.edu.br.pj.ifpbichos.model.enums.DonatorType;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Table;
