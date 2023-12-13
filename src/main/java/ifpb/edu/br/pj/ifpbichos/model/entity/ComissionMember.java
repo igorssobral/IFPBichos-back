@@ -37,6 +37,12 @@ public class ComissionMember extends User implements UserDetails{
 		this.CPF = CPF;
 		this.role = role;
 	}
+
+	public ComissionMember(String name, String phoneNumber, String email, String CPF) {
+		super(name, phoneNumber, email);
+		this.CPF = CPF;
+
+	}
 	
 	public String getCPF() {
 		return CPF;

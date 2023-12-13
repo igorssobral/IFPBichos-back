@@ -2,7 +2,7 @@ package ifpb.edu.br.pj.ifpbichos.presentation.dto;
 
 import ifpb.edu.br.pj.ifpbichos.model.enums.DonatorType;
 
-public class DonatorDTO extends UserDTO{
+public class DonatorDTO extends UserDTO {
 	
 	private String registration;
 	
