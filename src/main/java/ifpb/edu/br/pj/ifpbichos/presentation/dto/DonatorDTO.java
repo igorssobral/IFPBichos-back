@@ -12,10 +12,10 @@ public class DonatorDTO extends UserDTO {
 		// TODO Auto-generated constructor stub
 	}
 	
-	public DonatorDTO(String nome, String phoneNumber, String email, String registration , DonatorType donatorType) {
-		super(nome, phoneNumber, email);
-		this.donatorType = donatorType;
+	public DonatorDTO(String name, String phoneNumber, String email,String login, String password, String registration, DonatorType donatorType) {
+		super(name, phoneNumber, email, login, password);
 		this.registration = registration;
+		this.donatorType = donatorType;
 	}
 
 	public String getRegistration() {

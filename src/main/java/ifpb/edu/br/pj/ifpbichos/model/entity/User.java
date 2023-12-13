@@ -2,6 +2,8 @@ package ifpb.edu.br.pj.ifpbichos.model.entity;
 
 import java.util.Objects;
 
+import org.springframework.security.core.userdetails.UserDetails;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -15,31 +17,38 @@ import jakarta.persistence.UniqueConstraint;
 @Entity
 @Inheritance(strategy = InheritanceType.TABLE_PER_CLASS)
 @Table(name = "USERS", uniqueConstraints = {@UniqueConstraint(columnNames = {"USER_EMAIL","USER_LOGIN"})})
-public abstract class User{
+public abstract class User implements UserDetails{
 	
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 	@Id
 	@GeneratedValue(strategy = GenerationType.SEQUENCE)
 	@Column(name = "USER_ID")
 	private Integer id;
-	@Column(name = "USER_NAME", nullable = false)
+	@Column(name = "USER_NAME")
 	private String name;
 	@Column(name = "USER_PHONE_NUMBER")
 	private String phoneNumber;
-	@Column(name = "USER_EMAIL",nullable = false)
+	@Column(name = "USER_EMAIL")
 	private String email;
-	@Column(name = "USER_LOGIN",nullable = false)
+	@Column(name = "USER_LOGIN")
 	private String login;
-	@Column(name = "USER_PASSWORD",nullable = false)
-	private String senha;
+	@Column(name = "USER_PASSWORD")
+	private String password;
+	
 	
 	public User() {
 		// TODO Auto-generated constructor stub
 	}
 	
-	public User(String name, String phoneNumber, String email) {
+	public User(String name, String phoneNumber, String email, String login, String password) {
 		this.name = name;
 		this.phoneNumber = phoneNumber;
 		this.email = email;
+		this.login = login;
+		this.password = password;
 	}
 	public String getLogin() {
 		return login;
@@ -49,12 +58,12 @@ public abstract class User{
 		this.login = login;
 	}
 
-	public String getSenha() {
-		return senha;
+	public String getPassword() {
+		return password;
 	}
 
-	public void setSenha(String senha) {
-		this.senha = senha;
+	public void setPassword(String password) {
+		this.password = password;
 	}
 
 	public Integer getId() {

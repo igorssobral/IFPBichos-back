@@ -11,17 +11,12 @@ public class ComissionMemberDTO extends UserDTO {
 		super();
 		// TODO Auto-generated constructor stub
 	}
-	public ComissionMemberDTO(String name, String phoneNumber, String email, String cPF, ComissionMemberRole role) {
-		super(name, phoneNumber, email);
-		CPF = cPF;
+	public ComissionMemberDTO(String name, String phoneNumber, String email,String login, String password, String CPF, ComissionMemberRole role) {
+		super(name, phoneNumber, email, login, password);
+		this.CPF = CPF;
 		this.role = role;
 	}
 
-	public ComissionMemberDTO(String name, String phoneNumber, String email, String CPF) {
-		super(name, phoneNumber, email);
-		CPF = CPF;
-
-	}
 
 	public String getCPF() {
 		return CPF;

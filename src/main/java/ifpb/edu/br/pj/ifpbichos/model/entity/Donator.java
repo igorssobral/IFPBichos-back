@@ -6,7 +6,6 @@ import java.util.Objects;
 
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
-import org.springframework.security.core.userdetails.UserDetails;
 
 import ifpb.edu.br.pj.ifpbichos.model.enums.DonatorType;
 
@@ -17,7 +16,7 @@ import jakarta.persistence.UniqueConstraint;
 
 @Entity
 @Table(name = "DONATOR", uniqueConstraints = {@UniqueConstraint(columnNames = {"USER_REGISTRATION"})})
-public class Donator extends User implements UserDetails {
+public class Donator extends User {
 	
 	/**
 	 * 
@@ -31,8 +30,8 @@ public class Donator extends User implements UserDetails {
 	public Donator() {
 		super();
 	}
-	public Donator(String name, String phoneNumber, String email, String registration, DonatorType donatorType) {
-		super(name, phoneNumber, email);
+	public Donator(String name, String phoneNumber, String email,String login, String password, String registration, DonatorType donatorType) {
+		super(name, phoneNumber, email, login, password);
 		this.registration = registration;
 		this.donatorType = donatorType;
 	}

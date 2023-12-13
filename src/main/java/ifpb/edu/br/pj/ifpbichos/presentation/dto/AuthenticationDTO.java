@@ -5,7 +5,7 @@ public class AuthenticationDTO {
 	private  String email;
 	private  String password;
 
-	public String getName() {
+	public String getEmail() {
 		return email;
 	}
 

@@ -17,7 +17,7 @@ import jakarta.persistence.UniqueConstraint;
 
 @Entity
 @Table(name = "COMISSION_MEMBER", uniqueConstraints = {@UniqueConstraint(columnNames = {"USER_CPF"})})
-public class ComissionMember extends User implements UserDetails{
+public class ComissionMember extends User {
 	
 	/**
 	 * 
@@ -32,18 +32,12 @@ public class ComissionMember extends User implements UserDetails{
 		super();
 		// TODO Auto-generated constructor stub
 	}
-	public ComissionMember(String name, String phoneNumber, String email, String CPF,ComissionMemberRole role) {
-		super(name, phoneNumber, email);
+	public ComissionMember(String name, String phoneNumber, String email, String login, String password, String CPF,ComissionMemberRole role) {
+		super(name, phoneNumber, email, login, password);
 		this.CPF = CPF;
 		this.role = role;
 	}
 
-	public ComissionMember(String name, String phoneNumber, String email, String CPF) {
-		super(name, phoneNumber, email);
-		this.CPF = CPF;
-
-	}
-	
 	public String getCPF() {
 		return CPF;
 	}
