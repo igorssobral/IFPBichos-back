@@ -14,7 +14,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/comissionmember")
+@RequestMapping("/api/comissionMember")
 public class ComissionMemberController {
 
     @Autowired

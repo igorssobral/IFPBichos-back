@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/donator")
+@RequestMapping("/api/donator")
 public class DonatorController {
 
     @Autowired
