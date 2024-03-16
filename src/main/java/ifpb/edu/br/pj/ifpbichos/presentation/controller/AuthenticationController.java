@@ -34,8 +34,12 @@ public class AuthenticationController {
 	
 	@PostMapping("/login")
 	public ResponseEntity login(@RequestBody AuthenticationDTO dto) {
+
+		var userNamePassword = new UsernamePasswordAuthenticationToken(dto.getLogin(), dto.getPassword());
+		System.out.println(dto.getLogin());
+		System.out.println(dto.getPassword());
+		System.out.println(userNamePassword);
 		System.out.println("chegou aqui");
-		var userNamePassword = new UsernamePasswordAuthenticationToken(dto.getEmail(), dto.getPassword());
 		var auth = this.authenticationManager.authenticate(userNamePassword);
 		var token = tokenService.generateToken((User) auth.getPrincipal());
 		
@@ -46,7 +50,7 @@ public class AuthenticationController {
 	
 	@PostMapping("/userRegistration")
 	public ResponseEntity userRegistration(@RequestBody UserRegistrationDTO dto) {
-		if(this.userRepository.findByLogin(dto.getEmail())!= null) {
+		if(this.userRepository.findByLogin(dto.getLogin())!= null) {
 			return ResponseEntity.badRequest().build();
 		}
 		String encryptedPassword = new BCryptPasswordEncoder().encode(dto.getPassword());

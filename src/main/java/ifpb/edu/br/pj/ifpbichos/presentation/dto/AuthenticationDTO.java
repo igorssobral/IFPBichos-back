@@ -2,11 +2,11 @@ package ifpb.edu.br.pj.ifpbichos.presentation.dto;
 
 public class AuthenticationDTO {
 		
-	private  String email;
+	private  String login;
 	private  String password;
 
-	public String getEmail() {
-		return email;
+	public String getLogin() {
+		return login;
 	}
 
 	public String getPassword() {
