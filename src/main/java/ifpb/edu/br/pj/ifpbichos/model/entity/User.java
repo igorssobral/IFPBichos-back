@@ -16,7 +16,7 @@ import jakarta.persistence.UniqueConstraint;
 
 @Entity
 @Inheritance(strategy = InheritanceType.TABLE_PER_CLASS)
-@Table(name = "USERS", uniqueConstraints = {@UniqueConstraint(columnNames = {"USER_EMAIL","USER_LOGIN"})})
+@Table(name = "USERS", uniqueConstraints = {@UniqueConstraint(columnNames = {"USER_LOGIN","USER_EMAIL"})})
 public abstract class User implements UserDetails{
 	
 	/**
