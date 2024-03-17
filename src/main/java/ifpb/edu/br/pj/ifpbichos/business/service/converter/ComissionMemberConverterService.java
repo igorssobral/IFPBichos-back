@@ -11,7 +11,7 @@ import java.util.List;
 public class ComissionMemberConverterService {
     public ComissionMember dtoToComissionMember(ComissionMemberDTO dto){
         if (dto != null) {
-            ComissionMember entity = new ComissionMember(dto.getName(), dto.getPhoneNumber(), dto.getEmail(), dto.getCPF(), dto.getLogin(), dto.getPassword(), dto.getRole());
+            ComissionMember entity = new ComissionMember(dto.getName(), dto.getPhoneNumber(), dto.getEmail(), dto.getCPF(), dto.getLogin(), dto.getUserRole(), dto.getPassword(), dto.getRole());
             return entity;
         }
         throw new IllegalArgumentException("Não foi possível converter pois o objeto é nulo");
@@ -19,7 +19,7 @@ public class ComissionMemberConverterService {
 
     public ComissionMemberDTO comissionMemberToDto(ComissionMember entity) {
         if (entity != null) {
-            ComissionMemberDTO dto = new ComissionMemberDTO(entity.getName(), entity.getPhoneNumber(), entity.getEmail(), entity.getCPF(), entity.getLogin(), entity.getPassword(), entity.getRole());
+            ComissionMemberDTO dto = new ComissionMemberDTO(entity.getName(), entity.getPhoneNumber(), entity.getEmail(), entity.getCPF(), entity.getLogin(), entity.getUserRole(), entity.getPassword(), entity.getRole());
             return dto;
         }
 

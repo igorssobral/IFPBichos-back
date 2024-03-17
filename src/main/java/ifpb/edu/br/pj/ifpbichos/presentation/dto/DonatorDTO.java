@@ -1,6 +1,7 @@
 package ifpb.edu.br.pj.ifpbichos.presentation.dto;
 
 import ifpb.edu.br.pj.ifpbichos.model.enums.DonatorType;
+import ifpb.edu.br.pj.ifpbichos.model.enums.UserRoles;
 
 public class DonatorDTO extends UserDTO {
 	
@@ -12,8 +13,8 @@ public class DonatorDTO extends UserDTO {
 		// TODO Auto-generated constructor stub
 	}
 	
-	public DonatorDTO(String name, String phoneNumber, String email,String login, String password, String registration, DonatorType donatorType) {
-		super(name, phoneNumber, email, login, password);
+	public DonatorDTO(String name, String phoneNumber, String email,String login, String password, UserRoles userRole,String registration, DonatorType donatorType) {
+		super(name, phoneNumber, email, login, password, userRole);
 		this.registration = registration;
 		this.donatorType = donatorType;
 	}

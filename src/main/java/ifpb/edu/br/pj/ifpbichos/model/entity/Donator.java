@@ -8,7 +8,7 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 
 import ifpb.edu.br.pj.ifpbichos.model.enums.DonatorType;
-
+import ifpb.edu.br.pj.ifpbichos.model.enums.UserRoles;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Table;
@@ -30,8 +30,8 @@ public class Donator extends User {
 	public Donator() {
 		super();
 	}
-	public Donator(String name, String phoneNumber, String email,String login, String password, String registration, DonatorType donatorType) {
-		super(name, phoneNumber, email, login, password);
+	public Donator(String name, String phoneNumber, String email,String login, String password, UserRoles userRole, String registration, DonatorType donatorType) {
+		super(name, phoneNumber, email, login, password, userRole);
 		this.registration = registration;
 		this.donatorType = donatorType;
 	}

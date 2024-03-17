@@ -6,10 +6,9 @@ import java.util.Objects;
 
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
-import org.springframework.security.core.userdetails.UserDetails;
 
 import ifpb.edu.br.pj.ifpbichos.model.enums.ComissionMemberRole;
-
+import ifpb.edu.br.pj.ifpbichos.model.enums.UserRoles;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Table;
@@ -32,8 +31,8 @@ public class ComissionMember extends User {
 		super();
 		// TODO Auto-generated constructor stub
 	}
-	public ComissionMember(String name, String phoneNumber, String email, String login, String password, String CPF,ComissionMemberRole role) {
-		super(name, phoneNumber, email, login, password);
+	public ComissionMember(String name, String phoneNumber, String email, String login, String password, UserRoles userRole, String CPF,ComissionMemberRole role) {
+		super(name, phoneNumber, email, login, password, userRole);
 		this.CPF = CPF;
 		this.role = role;
 	}

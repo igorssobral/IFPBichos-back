@@ -4,6 +4,7 @@ import java.util.Objects;
 
 import org.springframework.security.core.userdetails.UserDetails;
 
+import ifpb.edu.br.pj.ifpbichos.model.enums.UserRoles;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -37,19 +38,23 @@ public abstract class User implements UserDetails{
 	private String login;
 	@Column(name = "USER_PASSWORD")
 	private String password;
+	@Column(name = "USER_ROLE")
+	private UserRoles userRole;
 	
 	
 	public User() {
 		// TODO Auto-generated constructor stub
 	}
 	
-	public User(String name, String phoneNumber, String email, String login, String password) {
+	public User(String name, String phoneNumber, String email, String login, String password,UserRoles userRole) {
 		this.name = name;
 		this.phoneNumber = phoneNumber;
 		this.email = email;
 		this.login = login;
 		this.password = password;
+		this.userRole = userRole;
 	}
+	
 	public String getLogin() {
 		return login;
 	}
@@ -90,12 +95,12 @@ public abstract class User implements UserDetails{
 	public void setEmail(String email) {
 		this.email = email;
 	}
-	
+
 	@Override
 	public int hashCode() {
-		return Objects.hash(email, id, name, phoneNumber);
+		return Objects.hash(email, id, login, name, password, phoneNumber, userRole);
 	}
-	
+
 	@Override
 	public boolean equals(Object obj) {
 		if (this == obj)
@@ -105,14 +110,26 @@ public abstract class User implements UserDetails{
 		if (getClass() != obj.getClass())
 			return false;
 		User other = (User) obj;
-		return Objects.equals(email, other.email) && Objects.equals(id, other.id) && Objects.equals(name, other.name)
-				&& Objects.equals(phoneNumber, other.phoneNumber);
+		return Objects.equals(email, other.email) && Objects.equals(id, other.id) && Objects.equals(login, other.login)
+				&& Objects.equals(name, other.name) && Objects.equals(password, other.password)
+				&& Objects.equals(phoneNumber, other.phoneNumber) && userRole == other.userRole;
 	}
-	
+
 	@Override
 	public String toString() {
-		return "User [id=" + id + ", name=" + name + ", phoneNumber=" + phoneNumber + ", email=" + email + "]";
+		return "User [id=" + id + ", name=" + name + ", phoneNumber=" + phoneNumber + ", email=" + email + ", login="
+				+ login + ", password=" + password + ", userRole=" + userRole + "]";
 	}
+
+	public UserRoles getUserRole() {
+		return userRole;
+	}
+
+	public void setUserRole(UserRoles userRole) {
+		this.userRole = userRole;
+	}
+	
+	
 	
 	
 }

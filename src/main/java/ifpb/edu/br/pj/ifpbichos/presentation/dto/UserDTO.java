@@ -1,5 +1,7 @@
 package ifpb.edu.br.pj.ifpbichos.presentation.dto;
 
+import ifpb.edu.br.pj.ifpbichos.model.enums.UserRoles;
+
 public abstract class UserDTO {
 	
 	private String name;
@@ -7,17 +9,19 @@ public abstract class UserDTO {
 	private String email;
 	private String login;
 	private String password;
+	private UserRoles userRole;
 	
 	public UserDTO() {
 		// TODO Auto-generated constructor stub
 	}
 	
-	public UserDTO(String name,String phoneNumber, String email, String login,String password) {
+	public UserDTO(String name,String phoneNumber, String email, String login,String password, UserRoles userRole) {
 		this.name = name;
 		this.phoneNumber = phoneNumber;
 		this.email = email;
 		this.login = login;
 		this.password = password;
+		this.userRole = userRole;
 	}
 	
 	public String getName() {
@@ -53,6 +57,14 @@ public abstract class UserDTO {
 
 	public void setPassword(String password) {
 		this.password = password;
+	}
+
+	public UserRoles getUserRole() {
+		return userRole;
+	}
+
+	public void setUserRole(UserRoles userRole) {
+		this.userRole = userRole;
 	}
 	
 }

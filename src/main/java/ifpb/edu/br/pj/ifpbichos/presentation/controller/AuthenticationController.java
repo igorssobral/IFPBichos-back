@@ -11,8 +11,10 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import ifpb.edu.br.pj.ifpbichos.business.service.TokenService;
+import ifpb.edu.br.pj.ifpbichos.model.entity.ComissionMember;
 import ifpb.edu.br.pj.ifpbichos.model.entity.Donator;
 import ifpb.edu.br.pj.ifpbichos.model.entity.User;
+import ifpb.edu.br.pj.ifpbichos.model.enums.UserRoles;
 import ifpb.edu.br.pj.ifpbichos.model.repository.UserRepository;
 import ifpb.edu.br.pj.ifpbichos.presentation.dto.AuthenticationDTO;
 import ifpb.edu.br.pj.ifpbichos.presentation.dto.LoginResponseDTO;
@@ -53,10 +55,17 @@ public class AuthenticationController {
 		if(this.userRepository.findByLogin(dto.getLogin())!= null) {
 			return ResponseEntity.badRequest().build();
 		}
-		String encryptedPassword = new BCryptPasswordEncoder().encode(dto.getPassword());
 		
-		User newUser = new Donator(dto.getName(),dto.getPhoneNumber(),dto.getEmail(),dto.getLogin(),
-				encryptedPassword,dto.getRegistration(),dto.getDonatorType());
+		User newUser = null;
+		
+		String encryptedPassword = new BCryptPasswordEncoder().encode(dto.getPassword());
+		if(dto.getUserRole()== UserRoles.ADMIN) {
+			newUser = new ComissionMember(dto.getName(),dto.getPhoneNumber(),dto.getEmail(),dto.getLogin(),
+					encryptedPassword,dto.getUserRole(),dto.getCPF(),dto.getRole());
+		}else {
+			newUser = new Donator(dto.getName(),dto.getPhoneNumber(),dto.getEmail(),dto.getLogin(),
+					encryptedPassword,dto.getUserRole(), dto.getRegistration(),dto.getDonatorType());
+		}
 		
 		this.userRepository.save(newUser);
 		

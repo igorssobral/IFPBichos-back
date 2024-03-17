@@ -1,6 +1,7 @@
 package ifpb.edu.br.pj.ifpbichos.presentation.dto;
 
 import ifpb.edu.br.pj.ifpbichos.model.enums.ComissionMemberRole;
+import ifpb.edu.br.pj.ifpbichos.model.enums.UserRoles;
 
 public class ComissionMemberDTO extends UserDTO {
 	
@@ -11,8 +12,8 @@ public class ComissionMemberDTO extends UserDTO {
 		super();
 		// TODO Auto-generated constructor stub
 	}
-	public ComissionMemberDTO(String name, String phoneNumber, String email,String login, String password, String CPF, ComissionMemberRole role) {
-		super(name, phoneNumber, email, login, password);
+	public ComissionMemberDTO(String name, String phoneNumber, String email,String login, String password, UserRoles userRole, String CPF, ComissionMemberRole role) {
+		super(name, phoneNumber, email, login, password, userRole);
 		this.CPF = CPF;
 		this.role = role;
 	}
