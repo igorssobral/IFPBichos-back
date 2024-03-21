@@ -1,10 +1,8 @@
 package ifpb.edu.br.pj.ifpbichos.model.entity;
 
-import java.util.Collection;
 import java.util.List;
 import java.util.Objects;
 
-import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 
 import ifpb.edu.br.pj.ifpbichos.model.enums.DonatorType;
@@ -30,8 +28,8 @@ public class Donator extends User {
 	public Donator() {
 		super();
 	}
-	public Donator(String name, String phoneNumber, String email,String login, String password, UserRoles userRole, String registration, DonatorType donatorType) {
-		super(name, phoneNumber, email, login, password, userRole);
+	public Donator(String name,String cpf, String phoneNumber, String email,String login, String password, UserRoles userRole, String registration, DonatorType donatorType) {
+		super(name,cpf, phoneNumber, email, login, password, userRole);
 		this.registration = registration;
 		this.donatorType = donatorType;
 	}
@@ -74,7 +72,7 @@ public class Donator extends User {
 		return donatorType == other.donatorType && Objects.equals(registration, other.registration);
 	}
 	@Override
-	public Collection<? extends GrantedAuthority> getAuthorities() {
+	public List<SimpleGrantedAuthority> getAuthorities() {
 		return List.of(new SimpleGrantedAuthority("ROLE_USER"));
 	}
 	
