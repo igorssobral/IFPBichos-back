@@ -1,16 +1,10 @@
 package ifpb.edu.br.pj.ifpbichos.model.entity;
 
-import java.io.File;
 import java.io.Serializable;
 import java.time.LocalDateTime;
 import java.util.Objects;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 
 
 @Table(name = "CAMPAING")
@@ -36,8 +30,10 @@ public class Campaign implements Serializable {
 	//true = ativa. false = encerrada
 	@Column(name = "CAMPAIGN_STATUS", nullable = false)
 	private boolean campaingStatus;
+
+	@Lob
 	@Column(name = "CAMPAIGN_PET_IMAGE")
-	private File image;
+	private byte[] image;
 	@Column(name = "COLLECTION_GOAL", nullable = false)
 	private float collectionGoal;
 	@Column(name = "COLLECTION_PERCENTAGE", nullable = false)
@@ -51,7 +47,7 @@ public class Campaign implements Serializable {
 		
 	}
 	
-	public Campaign(LocalDateTime start, LocalDateTime end, String title, String description, File image,float collectionPercentage,  float balance,
+	public Campaign(LocalDateTime start, LocalDateTime end, String title, String description, byte[] image,float collectionPercentage,  float balance,
 	float undirectedBalance) {
 		this.start = start;
 		this.end = end;
@@ -63,7 +59,7 @@ public class Campaign implements Serializable {
 		this.undirectedBalance = 0;
 	}
 
-	public Campaign(Integer id, LocalDateTime start, LocalDateTime end, String title, String description, boolean campaingStatus, File image, float collectionGoal, float collectionPercentage, float balance, float undirectedBalance) {
+	public Campaign(Integer id, LocalDateTime start, LocalDateTime end, String title, String description, boolean campaingStatus, byte[] image, float collectionGoal, float collectionPercentage, float balance, float undirectedBalance) {
 		this.id = id;
 		this.start = start;
 		this.end = end;
@@ -125,11 +121,11 @@ public class Campaign implements Serializable {
 		this.campaingStatus = campaingStatus;
 	}
 
-	public File getImage() {
+	public byte[] getImage() {
 		return image;
 	}
 
-	public void setImage(File image) {
+	public void setImage(byte[] image) {
 		this.image = image;
 	}
 

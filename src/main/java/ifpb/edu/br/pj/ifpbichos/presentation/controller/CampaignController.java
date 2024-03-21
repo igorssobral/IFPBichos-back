@@ -25,9 +25,7 @@ public class CampaignController {
     @GetMapping
     public ResponseEntity getAll() {
         List<Campaign> entityList = campaignService.findAll();
-
         List<CampaignDTO> dtoList = converterService.CampaignsToDtos(entityList);
-
         return ResponseEntity.ok().body(dtoList);
     }
 
@@ -47,12 +45,10 @@ public class CampaignController {
 
     @PostMapping
     public ResponseEntity save(@RequestBody CampaignDTO dto) {
-
         try {
             Campaign entity = converterService.dtoToCampaign(dto);
             entity = campaignService.save(entity);
             dto = converterService.campaignToDto(entity);
-
             return new ResponseEntity(dto, HttpStatus.CREATED);
 
         } catch (Exception e) {

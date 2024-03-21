@@ -1,5 +1,6 @@
 package ifpb.edu.br.pj.ifpbichos.business.service;
 
+import java.io.IOException;
 import java.util.List;
 import java.util.Optional;
 
@@ -11,6 +12,7 @@ import ifpb.edu.br.pj.ifpbichos.model.repository.CampaignRepository;
 import ifpb.edu.br.pj.ifpbichos.presentation.exception.MissingFieldException;
 import ifpb.edu.br.pj.ifpbichos.presentation.exception.ObjectAlreadyExistsException;
 import ifpb.edu.br.pj.ifpbichos.presentation.exception.ObjectNotFoundException;
+import org.springframework.web.multipart.MultipartFile;
 
 @Service
 public class CampaignService {
@@ -100,5 +102,9 @@ public class CampaignService {
 		campaignRepository.deleteById(id);
 	}
 
+	public void saveCampaignWithImage(MultipartFile imageFile, Campaign campaign) throws IOException {
+		campaign.setImage(imageFile.getBytes());
+		campaignRepository.save(campaign);
+	}
 
 }
