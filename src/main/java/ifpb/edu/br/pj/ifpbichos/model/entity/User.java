@@ -1,7 +1,9 @@
 package ifpb.edu.br.pj.ifpbichos.model.entity;
 
+import java.util.List;
 import java.util.Objects;
 
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import ifpb.edu.br.pj.ifpbichos.model.enums.UserRoles;
@@ -30,6 +32,9 @@ public abstract class User implements UserDetails{
 	private Integer id;
 	@Column(name = "USER_NAME")
 	private String name;
+
+	@Column(name = "USER_CPF")
+	private String CPF;
 	@Column(name = "USER_PHONE_NUMBER")
 	private String phoneNumber;
 	@Column(name = "USER_EMAIL")
@@ -46,15 +51,21 @@ public abstract class User implements UserDetails{
 		// TODO Auto-generated constructor stub
 	}
 	
-	public User(String name, String phoneNumber, String email, String login, String password,UserRoles userRole) {
+	public User(String name,String cpf, String phoneNumber, String email, String login, String password,UserRoles userRole) {
 		this.name = name;
+		this.CPF = cpf;
 		this.phoneNumber = phoneNumber;
 		this.email = email;
 		this.login = login;
 		this.password = password;
 		this.userRole = userRole;
 	}
-	
+
+	@Override
+	public List<SimpleGrantedAuthority> getAuthorities() {
+		if(this.userRole == UserRoles.ADMIN) return List.of(new SimpleGrantedAuthority("ROLE_ADMIN"), new SimpleGrantedAuthority("ROLE_USER"));
+		else return List.of(new SimpleGrantedAuthority("ROLE_USER"));
+	}
 	public String getLogin() {
 		return login;
 	}
@@ -115,9 +126,10 @@ public abstract class User implements UserDetails{
 				&& Objects.equals(phoneNumber, other.phoneNumber) && userRole == other.userRole;
 	}
 
+
 	@Override
 	public String toString() {
-		return "User [id=" + id + ", name=" + name + ", phoneNumber=" + phoneNumber + ", email=" + email + ", login="
+		return "User [id=" + id + ", name=" + name + ",CPF= "+ CPF +" phoneNumber=" + phoneNumber + ", email=" + email + ", login="
 				+ login + ", password=" + password + ", userRole=" + userRole + "]";
 	}
 
@@ -128,8 +140,13 @@ public abstract class User implements UserDetails{
 	public void setUserRole(UserRoles userRole) {
 		this.userRole = userRole;
 	}
-	
-	
-	
-	
+
+
+	public String getCPF() {
+		return CPF;
+	}
+
+	public void setCPF(String CPF) {
+		this.CPF = CPF;
+	}
 }
