@@ -1,10 +1,8 @@
 package ifpb.edu.br.pj.ifpbichos.model.entity;
 
-import java.util.Collection;
 import java.util.List;
 import java.util.Objects;
 
-import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 
 import ifpb.edu.br.pj.ifpbichos.model.enums.ComissionMemberRole;
@@ -22,8 +20,7 @@ public class ComissionMember extends User {
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
-	@Column(name = "USER_CPF")
-	private String CPF;
+
 	@Column(name = "MEMBER_ROLE")
 	private ComissionMemberRole role;
 	
@@ -31,18 +28,13 @@ public class ComissionMember extends User {
 		super();
 		// TODO Auto-generated constructor stub
 	}
-	public ComissionMember(String name, String phoneNumber, String email, String login, String password, UserRoles userRole, String CPF,ComissionMemberRole role) {
-		super(name, phoneNumber, email, login, password, userRole);
-		this.CPF = CPF;
+	public ComissionMember(String name,String cpf, String phoneNumber, String email, String login, String password, UserRoles userRole,ComissionMemberRole role) {
+		super(name,cpf, phoneNumber, email, login, password, userRole);
 		this.role = role;
 	}
 
-	public String getCPF() {
-		return CPF;
-	}
-	public void setCPF(String cPF) {
-		CPF = cPF;
-	}
+
+
 	public ComissionMemberRole getRole() {
 		return role;
 	}
@@ -54,7 +46,7 @@ public class ComissionMember extends User {
 	public int hashCode() {
 		final int prime = 31;
 		int result = super.hashCode();
-		result = prime * result + Objects.hash(CPF, role);
+		result = prime * result + Objects.hash(getCPF(), role);
 		return result;
 	}
 	@Override
@@ -66,10 +58,10 @@ public class ComissionMember extends User {
 		if (getClass() != obj.getClass())
 			return false;
 		ComissionMember other = (ComissionMember) obj;
-		return Objects.equals(CPF, other.CPF) && role == other.role;
+		return Objects.equals(((ComissionMember) obj).getCPF(), other.getCPF()) && role == other.role;
 	}
 	@Override
-	public Collection<? extends GrantedAuthority> getAuthorities() {
+	public List<SimpleGrantedAuthority> getAuthorities() {
 		if(this.role == ComissionMemberRole.ADMIN) {
 			return List.of(new SimpleGrantedAuthority("ROLE_ADMIN"), new SimpleGrantedAuthority("ROLE_USER"));
 		}else

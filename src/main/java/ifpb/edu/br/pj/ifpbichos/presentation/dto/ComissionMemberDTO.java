@@ -5,26 +5,22 @@ import ifpb.edu.br.pj.ifpbichos.model.enums.UserRoles;
 
 public class ComissionMemberDTO extends UserDTO {
 	
-	private String CPF;
 	private ComissionMemberRole role;
-	
+
 	public ComissionMemberDTO() {
 		super();
 		// TODO Auto-generated constructor stub
 	}
-	public ComissionMemberDTO(String name, String phoneNumber, String email,String login, String password, UserRoles userRole, String CPF, ComissionMemberRole role) {
-		super(name, phoneNumber, email, login, password, userRole);
-		this.CPF = CPF;
+	public ComissionMemberDTO(String name,String cpf, String phoneNumber, String email,String login, String password, UserRoles userRole, ComissionMemberRole role) {
+		super(name,cpf, phoneNumber, email, login, password, userRole);
+
 		this.role = role;
 	}
 
 
-	public String getCPF() {
-		return CPF;
-	}
-	public void setCPF(String cPF) {
-		CPF = cPF;
-	}
+
+
+
 	public ComissionMemberRole getRole() {
 		return role;
 	}
