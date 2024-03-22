@@ -15,16 +15,16 @@ import jakarta.persistence.UniqueConstraint;
 @Entity
 @Table(name = "DONATOR", uniqueConstraints = {@UniqueConstraint(columnNames = {"USER_REGISTRATION"})})
 public class Donator extends User {
-	
+
 	/**
-	 * 
+	 *
 	 */
 	private static final long serialVersionUID = 1L;
 	@Column(name = "USER_REGISTRATION")
 	private String registration;
 	@Column(name = "DONATOR_TYPE")
 	private DonatorType donatorType;
-	
+
 	public Donator() {
 		super();
 	}
@@ -33,7 +33,7 @@ public class Donator extends User {
 		this.registration = registration;
 		this.donatorType = donatorType;
 	}
-	
+
 	public String getRegistration() {
 		return registration;
 	}
@@ -75,12 +75,8 @@ public class Donator extends User {
 	public List<SimpleGrantedAuthority> getAuthorities() {
 		return List.of(new SimpleGrantedAuthority("ROLE_USER"));
 	}
-	
-	@Override
-	public String getPassword() {
-		// TODO Auto-generated method stub
-		return null;
-	}
+
+
 	@Override
 	public String getUsername() {
 		return super.getLogin();
@@ -105,5 +101,5 @@ public class Donator extends User {
 		// TODO Auto-generated method stub
 		return true;
 	}
-	
+
 }

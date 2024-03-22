@@ -15,25 +15,23 @@ import jakarta.persistence.UniqueConstraint;
 @Entity
 @Table(name = "COMISSION_MEMBER", uniqueConstraints = {@UniqueConstraint(columnNames = {"USER_CPF"})})
 public class ComissionMember extends User {
-	
+
 	/**
-	 * 
+	 *
 	 */
 	private static final long serialVersionUID = 1L;
 
 	@Column(name = "MEMBER_ROLE")
 	private ComissionMemberRole role;
-	
-	public ComissionMember() {
-		super();
-		// TODO Auto-generated constructor stub
-	}
+
 	public ComissionMember(String name,String cpf, String phoneNumber, String email, String login, String password, UserRoles userRole,ComissionMemberRole role) {
 		super(name,cpf, phoneNumber, email, login, password, userRole);
 		this.role = role;
 	}
 
+	public ComissionMember() {
 
+	}
 
 	public ComissionMemberRole getRole() {
 		return role;
@@ -41,7 +39,7 @@ public class ComissionMember extends User {
 	public void setRole(ComissionMemberRole role) {
 		this.role = role;
 	}
-	
+
 	@Override
 	public int hashCode() {
 		final int prime = 31;
@@ -67,34 +65,28 @@ public class ComissionMember extends User {
 		}else
 			return List.of(new SimpleGrantedAuthority("ROLE_USER"));
 	}
-	@Override
-	public String getPassword() {
-		// TODO Auto-generated method stub
-		return null;
-	}
+
+
 	@Override
 	public String getUsername() {
-		// TODO Auto-generated method stub
 		return super.getLogin();
 	}
 	@Override
 	public boolean isAccountNonExpired() {
-		// TODO Auto-generated method stub
 		return true;
 	}
 	@Override
 	public boolean isAccountNonLocked() {
-		// TODO Auto-generated method stub
 		return true;
 	}
 	@Override
 	public boolean isCredentialsNonExpired() {
-		// TODO Auto-generated method stub
 		return true;
 	}
 	@Override
 	public boolean isEnabled() {
-		// TODO Auto-generated method stub
 		return true;
 	}
 }
+
+
