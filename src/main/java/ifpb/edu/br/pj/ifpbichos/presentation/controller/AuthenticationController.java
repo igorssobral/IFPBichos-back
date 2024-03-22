@@ -16,6 +16,7 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -35,23 +36,13 @@ public class AuthenticationController {
 
 	@PostMapping("/login")
 	public ResponseEntity login(@RequestBody @Valid AuthenticationDTO dto){
-//		System.out.println(data);
-//		var usernamePassword = new UsernamePasswordAuthenticationToken(data.login(), data.password());
-//		System.out.println(usernamePassword);
-//		var auth = this.authenticationManager.authenticate(usernamePassword);
-//
-//
-//		var token = tokenService.generateToken((User) auth.getPrincipal());
-//
-//		return ResponseEntity.ok(new LoginResponseDTO(token));
-		UserDetails user = userRepository.findByLogin(dto.login());
 
-		if(dto.login().equals(user.getUsername())){
+		var usernamePassword = new UsernamePasswordAuthenticationToken(dto.login(), dto.password());
+		var auth = this.authenticationManager.authenticate(usernamePassword);
 
-			return ResponseEntity.ok(user);
-		}
+		var token = tokenService.generateToken((User) auth.getPrincipal());
 
-		return ResponseEntity.badRequest().build();
+		return ResponseEntity.ok(new LoginResponseDTO(token));
 
 	}
 
