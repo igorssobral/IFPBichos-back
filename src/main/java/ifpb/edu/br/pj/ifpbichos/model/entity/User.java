@@ -1,21 +1,14 @@
 package ifpb.edu.br.pj.ifpbichos.model.entity;
 
 
-
-
+import ifpb.edu.br.pj.ifpbichos.model.enums.UserRoles;
+import jakarta.persistence.*;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
-import ifpb.edu.br.pj.ifpbichos.model.enums.UserRoles;
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.Inheritance;
-import jakarta.persistence.InheritanceType;
-import jakarta.persistence.Table;
-import jakarta.persistence.UniqueConstraint;
-
+import java.util.Collection;
+import java.util.List;
 import java.util.Objects;
 
 @Entity
@@ -60,7 +53,14 @@ public abstract class User implements UserDetails {
 	}
 
 	public User() {
+	}
 
+
+	@Override
+	public Collection<? extends GrantedAuthority> getAuthorities() {
+		if (this.userRole == UserRoles.ADMIN)
+			return List.of(new SimpleGrantedAuthority("ROLE_ADMIN"), new SimpleGrantedAuthority("ROLE_USER"));
+		else return List.of(new SimpleGrantedAuthority("ROLE_USER"));
 	}
 
 	public Integer getId() {
