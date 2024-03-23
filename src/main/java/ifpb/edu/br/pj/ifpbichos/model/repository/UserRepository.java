@@ -8,5 +8,6 @@ import org.springframework.security.core.userdetails.UserDetails;
 import ifpb.edu.br.pj.ifpbichos.model.entity.User;
 
 public interface UserRepository extends JpaRepository<User, Integer>{
-	UserDetails findByLogin(String login);
+	public UserDetails findByLogin(String login);
+	public boolean existsByLogin(String login);
 }

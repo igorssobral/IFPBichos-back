@@ -8,6 +8,8 @@ import ifpb.edu.br.pj.ifpbichos.model.repository.UserRepository;
 import ifpb.edu.br.pj.ifpbichos.presentation.dto.AuthenticationDTO;
 import ifpb.edu.br.pj.ifpbichos.presentation.dto.LoginResponseDTO;
 import ifpb.edu.br.pj.ifpbichos.presentation.dto.UserRegistrationDTO;
+import ifpb.edu.br.pj.ifpbichos.presentation.exception.ObjectAlreadyExistsException;
+import ifpb.edu.br.pj.ifpbichos.presentation.exception.ObjectNotFoundException;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -34,6 +36,9 @@ public class AuthenticationController {
 
 	@PostMapping("/login")
 	public ResponseEntity login(@RequestBody @Valid AuthenticationDTO dto){
+		if(!userRepository.existsByLogin(dto.login())) {
+			 return ResponseEntity.badRequest().body("Usuário inexistente");
+		}
 
 		var usernamePassword = new UsernamePasswordAuthenticationToken(dto.login(), dto.password());
 		var auth = this.authenticationManager.authenticate(usernamePassword);
@@ -47,8 +52,8 @@ public class AuthenticationController {
 
 	@PostMapping("/userRegistration")
 	public ResponseEntity userRegistration(@RequestBody UserRegistrationDTO dto) {
-
-		if(this.userRepository.findByLogin(dto.login())!= null) {
+		
+		if(userRepository.existsByLogin(dto.login())) {
 
 			return ResponseEntity.badRequest().build();
 		}

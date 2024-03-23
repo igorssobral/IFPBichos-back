@@ -39,7 +39,7 @@ public class CampaignService {
 		}
 		
 		if (!existsByTitle(title)) {
-			throw new ObjectNotFoundException("local", "nome", title);
+			throw new ObjectNotFoundException("Campanha", "nome", title);
 		}
 		return campaignRepository.findByTitle(title);
 	}
@@ -50,7 +50,7 @@ public class CampaignService {
 		}
 		
 		if (!existsById(id)) {
-			throw new ObjectNotFoundException("local", "id", id);
+			throw new ObjectNotFoundException("Campanha", "id", id);
 		}
 		return campaignRepository.getReferenceById(id);
 	}
@@ -58,7 +58,7 @@ public class CampaignService {
 	public Campaign save(Campaign campaign) throws Exception {
 	
 		if (existsByTitle(campaign.getTitle())) {
-			throw new ObjectAlreadyExistsException("Já existe um local com nome " + campaign.getTitle());
+			throw new ObjectAlreadyExistsException("Já existe uma campanha com nome " + campaign.getTitle());
 		}
 		
 		return campaignRepository.save(campaign);
@@ -69,13 +69,13 @@ public class CampaignService {
 		if (campaign.getId() == null) {
 			throw new MissingFieldException("id", "update");
 		} else if (!existsById(campaign.getId())) {
-			throw new ObjectNotFoundException("local", "id", campaign.getId());
+			throw new ObjectNotFoundException("Campanha", "id", campaign.getId());
 		} 
 		
 		if (existsByTitle(campaign.getTitle())) {
-			Campaign placeSaved = findByName(campaign.getTitle()).get();
-			if (placeSaved.getId() != campaign.getId()) {
-				throw new ObjectAlreadyExistsException("Já existe um local com o título " + campaign.getTitle());
+			Campaign campaignSaved = findByName(campaign.getTitle()).get();
+			if (campaignSaved.getTitle() != campaign.getTitle()) {
+				throw new ObjectAlreadyExistsException("Já existe uma campanha com o título " + campaign.getTitle());
 			}
 		}
 
