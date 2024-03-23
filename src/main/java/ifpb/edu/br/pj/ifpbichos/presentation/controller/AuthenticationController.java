@@ -1,5 +1,4 @@
 package ifpb.edu.br.pj.ifpbichos.presentation.controller;
-
 import ifpb.edu.br.pj.ifpbichos.business.service.TokenService;
 import ifpb.edu.br.pj.ifpbichos.model.entity.ComissionMember;
 import ifpb.edu.br.pj.ifpbichos.model.entity.Donator;
@@ -14,13 +13,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+
 
 @RestController
 @RequestMapping("/api/auth")
@@ -42,7 +40,8 @@ public class AuthenticationController {
 
 		var token = tokenService.generateToken((User) auth.getPrincipal());
 
-		return ResponseEntity.ok(new LoginResponseDTO(token));
+
+		return ResponseEntity.ok(new LoginResponseDTO(token, dto.login()));
 
 	}
 
