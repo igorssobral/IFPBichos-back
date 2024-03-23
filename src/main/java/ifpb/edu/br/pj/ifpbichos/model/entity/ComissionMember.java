@@ -1,16 +1,13 @@
 package ifpb.edu.br.pj.ifpbichos.model.entity;
 
-import java.util.List;
-import java.util.Objects;
-
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
-
 import ifpb.edu.br.pj.ifpbichos.model.enums.ComissionMemberRole;
 import ifpb.edu.br.pj.ifpbichos.model.enums.UserRoles;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Table;
 import jakarta.persistence.UniqueConstraint;
+
+import java.util.Objects;
 
 @Entity
 @Table(name = "COMISSION_MEMBER", uniqueConstraints = {@UniqueConstraint(columnNames = {"USER_CPF"})})
@@ -20,7 +17,6 @@ public class ComissionMember extends User {
 	 *
 	 */
 	private static final long serialVersionUID = 1L;
-
 	@Column(name = "MEMBER_ROLE")
 	private ComissionMemberRole role;
 
@@ -30,7 +26,6 @@ public class ComissionMember extends User {
 	}
 
 	public ComissionMember() {
-
 	}
 
 	public ComissionMemberRole getRole() {
@@ -39,33 +34,26 @@ public class ComissionMember extends User {
 	public void setRole(ComissionMemberRole role) {
 		this.role = role;
 	}
+	@Override
+	public String toString() {
+		return super.toString() + " - ComissionMember{" +
+				"role=" + role +
+				'}';
+	}
+
+
+	@Override
+	public boolean equals(Object o) {
+		if (this == o) return true;
+		if (!(o instanceof ComissionMember that)) return false;
+		if (!super.equals(o)) return false;
+		return getRole() == that.getRole();
+	}
 
 	@Override
 	public int hashCode() {
-		final int prime = 31;
-		int result = super.hashCode();
-		result = prime * result + Objects.hash(getCPF(), role);
-		return result;
+		return Objects.hash(super.hashCode(), getRole());
 	}
-	@Override
-	public boolean equals(Object obj) {
-		if (this == obj)
-			return true;
-		if (!super.equals(obj))
-			return false;
-		if (getClass() != obj.getClass())
-			return false;
-		ComissionMember other = (ComissionMember) obj;
-		return Objects.equals(((ComissionMember) obj).getCPF(), other.getCPF()) && role == other.role;
-	}
-	@Override
-	public List<SimpleGrantedAuthority> getAuthorities() {
-		if(this.role == ComissionMemberRole.ADMIN) {
-			return List.of(new SimpleGrantedAuthority("ROLE_ADMIN"), new SimpleGrantedAuthority("ROLE_USER"));
-		}else
-			return List.of(new SimpleGrantedAuthority("ROLE_USER"));
-	}
-
 
 	@Override
 	public String getUsername() {

@@ -13,7 +13,6 @@ public class ComissionMemberDTO extends UserDTO {
 	}
 	public ComissionMemberDTO(String name,String cpf, String phoneNumber, String email,String login, String password, UserRoles userRole, ComissionMemberRole role) {
 		super(name,cpf, phoneNumber, email, login, password, userRole);
-
 		this.role = role;
 	}
 
