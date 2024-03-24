@@ -7,5 +7,6 @@ import ifpb.edu.br.pj.ifpbichos.model.entity.Donator;
 
 @Repository
 public interface DonatorRepository extends JpaRepository<Donator, Integer>{
+    public boolean existsByLogin(String Login);
 	
 }

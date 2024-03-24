@@ -45,7 +45,7 @@ public class ComissionMemberService {
 
     public ComissionMember update(ComissionMember comissionMember) throws Exception {
     	if(comissionMember.getId() == null) {
-    		throw new MissingFieldException("id", "ipdate");
+    		throw new MissingFieldException("id", "update");
     	}else if(!comissionMemberRepository.existsById(comissionMember.getId())){
     		throw new ObjectNotFoundException("Membro de comissão", "id", comissionMember.getId());
     	}
@@ -56,7 +56,7 @@ public class ComissionMemberService {
     	if (comissionMember.getId() == null) {
 			throw new MissingFieldException("id", "delete");
 		} else if (comissionMemberRepository.existsById(comissionMember.getId())) {
-			throw new ObjectNotFoundException("local", "id", comissionMember.getId());
+			throw new ObjectNotFoundException("Membro da comissão", "id", comissionMember.getId());
 		}
 		
     	comissionMemberRepository.delete(comissionMember);

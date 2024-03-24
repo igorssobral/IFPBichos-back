@@ -1,2 +1,5 @@
-package ifpb.edu.br.pj.ifpbichos.business.service;public class ComissionMemberServiceTest {
+package ifpb.edu.br.pj.ifpbichos.business.service;
+
+public class ComissionMemberServiceTest {
+
 }
