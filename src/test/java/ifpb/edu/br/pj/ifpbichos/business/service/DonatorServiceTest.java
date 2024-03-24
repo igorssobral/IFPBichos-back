@@ -58,8 +58,8 @@ public class DonatorServiceTest {
 
          when(repository.existsById(anyInt())).thenReturn(true);
 
-         assertDoesNotThrow(() -> service.findById(2));
-         verify(repository).getReferenceById(2);
+         assertDoesNotThrow(() -> service.findById(3));
+         verify(repository).getReferenceById(3);
      }
 
 }

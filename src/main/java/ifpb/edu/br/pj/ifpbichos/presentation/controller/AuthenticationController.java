@@ -8,8 +8,6 @@ import ifpb.edu.br.pj.ifpbichos.model.repository.UserRepository;
 import ifpb.edu.br.pj.ifpbichos.presentation.dto.AuthenticationDTO;
 import ifpb.edu.br.pj.ifpbichos.presentation.dto.LoginResponseDTO;
 import ifpb.edu.br.pj.ifpbichos.presentation.dto.UserRegistrationDTO;
-import ifpb.edu.br.pj.ifpbichos.presentation.exception.ObjectAlreadyExistsException;
-import ifpb.edu.br.pj.ifpbichos.presentation.exception.ObjectNotFoundException;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -54,8 +52,7 @@ public class AuthenticationController {
 	public ResponseEntity userRegistration(@RequestBody UserRegistrationDTO dto) {
 		
 		if(userRepository.existsByLogin(dto.login())) {
-
-			return ResponseEntity.badRequest().build();
+			return ResponseEntity.badRequest().body("Já há um usuário com esse login.");
 		}
 
 		User newUser = null;
