@@ -18,20 +18,25 @@ import static org.mockito.Mockito.when;
 
 public class DonatorServiceTest {
 
-    @Mock
-    private static DonatorRepository repository;
+	   @Mock
+	   private DonatorRepository repository;
 
-    @InjectMocks
-    private static Donator donatorExp;
-    private static DonatorService service;
-    @BeforeAll
-    public static void setup() {
-        service = new DonatorService();
-        donatorExp = new Donator();
+	   @InjectMocks
+	   private DonatorService service;
 
-        ReflectionTestUtils.setField(service, "donatorRepository", repository);
+	   @BeforeEach
+	   public void setup() {
+	        MockitoAnnotations.openMocks(this);
+	        service = new DonatorService();
+	        ReflectionTestUtils.setField(service, "donatorRepository", repository);
 
-    }
+	        Donator user = new Donator();
+	        user.setId(1);
+	        Donator user02 = new Donator();
+	        user02.setId(2);
+	        repository.save(user);
+	        repository.save(user02);
+	    }
 
     @BeforeEach
     public void beforeEach() {
@@ -54,7 +59,7 @@ public class DonatorServiceTest {
         when(repository.existsById(anyInt())).thenReturn(true);
 
         assertDoesNotThrow(() -> service.findById(2));
-        verify(repository).getById(2);
+        verify(repository).getReferenceById(2);
     }
 
 }
