@@ -18,48 +18,48 @@ import static org.mockito.Mockito.when;
 
 public class DonatorServiceTest {
 
-	   @Mock
-	   private DonatorRepository repository;
+	 @Mock
+	 private DonatorRepository repository;
 
-	   @InjectMocks
-	   private DonatorService service;
+	 @InjectMocks
+	 private DonatorService service;
 
-	   @BeforeEach
-	   public void setup() {
-	        MockitoAnnotations.openMocks(this);
-	        service = new DonatorService();
-	        ReflectionTestUtils.setField(service, "donatorRepository", repository);
+	 @BeforeEach
+	 public void setup() {
+		 MockitoAnnotations.openMocks(this);
+	     service = new DonatorService();
+	     ReflectionTestUtils.setField(service, "donatorRepository", repository);
 
-	        Donator user = new Donator();
-	        user.setId(1);
-	        Donator user02 = new Donator();
-	        user02.setId(2);
-	        repository.save(user);
-	        repository.save(user02);
-	    }
+	     Donator user = new Donator();
+	     user.setId(1);
+	     Donator user02 = new Donator();
+	     user02.setId(2);
+	     repository.save(user);
+	     repository.save(user02);
+	 }
 
-    @BeforeEach
-    public void beforeEach() {
-        MockitoAnnotations.openMocks(this);
+	 @BeforeEach
+ 	 public void beforeEach() {
+         MockitoAnnotations.openMocks(this);
 
-        Donator user = new Donator();
-        user.setId(1);
-        Donator user02 = new Donator();
-        user02.setId(2);
-        repository.save(user);
-        repository.save(user02);
-    }
+       	 Donator user = new Donator();
+       	 user.setId(1);
+       	 Donator user02 = new Donator();
+       	 user02.setId(2);
+       	 repository.save(user);
+         repository.save(user02);
+	}
 
 
 
-    @DisplayName("Id Valid")
-    @Test
-    public void testFindByIdObjectValid() {
+     @DisplayName("Id Valid")
+     @Test
+     public void testFindByIdObjectValid() {
 
-        when(repository.existsById(anyInt())).thenReturn(true);
+         when(repository.existsById(anyInt())).thenReturn(true);
 
-        assertDoesNotThrow(() -> service.findById(2));
-        verify(repository).getReferenceById(2);
-    }
+         assertDoesNotThrow(() -> service.findById(2));
+         verify(repository).getReferenceById(2);
+     }
 
 }
