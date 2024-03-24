@@ -8,16 +8,15 @@ import ifpb.edu.br.pj.ifpbichos.model.repository.UserRepository;
 import ifpb.edu.br.pj.ifpbichos.presentation.dto.AuthenticationDTO;
 import ifpb.edu.br.pj.ifpbichos.presentation.dto.LoginResponseDTO;
 import ifpb.edu.br.pj.ifpbichos.presentation.dto.UserRegistrationDTO;
+import ifpb.edu.br.pj.ifpbichos.presentation.exception.ObjectAlreadyExistsException;
+import ifpb.edu.br.pj.ifpbichos.presentation.exception.ObjectNotFoundException;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 
 @RestController
@@ -38,13 +37,15 @@ public class AuthenticationController {
 			 return ResponseEntity.badRequest().body("Usuário inexistente");
 		}
 
+		User user = (User) userRepository.findByLogin(dto.login());
+
 		var usernamePassword = new UsernamePasswordAuthenticationToken(dto.login(), dto.password());
 		var auth = this.authenticationManager.authenticate(usernamePassword);
 
 		var token = tokenService.generateToken((User) auth.getPrincipal());
 
 
-		return ResponseEntity.ok(new LoginResponseDTO(token, dto.login()));
+		return ResponseEntity.ok(new LoginResponseDTO(token, dto.login(),user.getUserRole()));
 
 	}
 
@@ -52,7 +53,8 @@ public class AuthenticationController {
 	public ResponseEntity userRegistration(@RequestBody UserRegistrationDTO dto) {
 		
 		if(userRepository.existsByLogin(dto.login())) {
-			return ResponseEntity.badRequest().body("Já há um usuário com esse login.");
+
+			return ResponseEntity.badRequest().build();
 		}
 
 		User newUser = null;
@@ -71,4 +73,17 @@ public class AuthenticationController {
 		return ResponseEntity.ok().build();
 	}
 
+	@PostMapping("/isValidToken")
+	public ResponseEntity isValidToken(@RequestParam String token){
+		try{
+			if(!tokenService.isValidToken(token)) {
+				return ResponseEntity.badRequest().body("token invalid!!");
+			}
+			else{
+				return ResponseEntity.ok().build();
+			}
+		}catch (Exception e) {
+			return ResponseEntity.internalServerError().body(e);
+		}
+	}
 }
