@@ -8,8 +8,6 @@ import ifpb.edu.br.pj.ifpbichos.model.repository.UserRepository;
 import ifpb.edu.br.pj.ifpbichos.presentation.dto.AuthenticationDTO;
 import ifpb.edu.br.pj.ifpbichos.presentation.dto.LoginResponseDTO;
 import ifpb.edu.br.pj.ifpbichos.presentation.dto.UserRegistrationDTO;
-import ifpb.edu.br.pj.ifpbichos.presentation.exception.ObjectAlreadyExistsException;
-import ifpb.edu.br.pj.ifpbichos.presentation.exception.ObjectNotFoundException;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -30,6 +28,18 @@ public class AuthenticationController {
 	private UserRepository userRepository;
 	@Autowired
 	private TokenService tokenService;
+
+
+	public void setAuthenticationManager(AuthenticationManager authenticationManager) {
+		this.authenticationManager = authenticationManager;
+	}
+
+	public void setUserRepository(UserRepository userRepository) {
+		this.userRepository = userRepository;
+	}
+	public void setTokenService(TokenService tokenService) {
+		this.tokenService = tokenService;
+	}
 
 	@PostMapping("/login")
 	public ResponseEntity login(@RequestBody @Valid AuthenticationDTO dto){
