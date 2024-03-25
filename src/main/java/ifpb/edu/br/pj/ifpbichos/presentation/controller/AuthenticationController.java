@@ -9,7 +9,6 @@ import ifpb.edu.br.pj.ifpbichos.presentation.dto.AuthenticationDTO;
 import ifpb.edu.br.pj.ifpbichos.presentation.dto.LoginResponseDTO;
 import ifpb.edu.br.pj.ifpbichos.presentation.dto.UserRegistrationDTO;
 import ifpb.edu.br.pj.ifpbichos.presentation.exception.MissingFieldException;
-import ifpb.edu.br.pj.ifpbichos.presentation.exception.ObjectAlreadyExistsException;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -66,24 +65,13 @@ public class AuthenticationController {
 
 	@PostMapping("/userRegistration")
 	public ResponseEntity userRegistration(@RequestBody UserRegistrationDTO dto) {
-		Exception e =null;
-		if(dto.name().isEmpty() || dto.CPF().isBlank() || dto.phoneNumber().isEmpty() || 
-				dto.email().isEmpty() || dto.password().isEmpty()) {
-			e = new MissingFieldException();
-			return ResponseEntity.badRequest().body(e.getMessage());
-		}
 		
 		if(userRepository.existsByLogin(dto.login())) {
-			 e = new ObjectAlreadyExistsException("Já existe um usuário com esse login");
-			 return ResponseEntity.badRequest().body(e.getMessage());
+
+			return ResponseEntity.badRequest().build();
 		}
 
 		User newUser = null;
-		
-		if(dto.name().isEmpty() || dto.CPF().isBlank() || dto.phoneNumber().isEmpty() || 
-				dto.email().isEmpty() || dto.password().isEmpty()) {
-			
-		}
 
 		String encryptedPassword = new BCryptPasswordEncoder().encode(dto.password());
 		if(dto.userRole() == UserRoles.ADMIN) {
