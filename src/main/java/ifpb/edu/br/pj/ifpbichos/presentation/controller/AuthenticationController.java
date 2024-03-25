@@ -1,20 +1,17 @@
 package ifpb.edu.br.pj.ifpbichos.presentation.controller;
+
 import ifpb.edu.br.pj.ifpbichos.business.service.TokenService;
-import ifpb.edu.br.pj.ifpbichos.model.entity.ComissionMember;
-import ifpb.edu.br.pj.ifpbichos.model.entity.Donator;
+import ifpb.edu.br.pj.ifpbichos.business.service.UserRegistrationService;
 import ifpb.edu.br.pj.ifpbichos.model.entity.User;
-import ifpb.edu.br.pj.ifpbichos.model.enums.UserRoles;
 import ifpb.edu.br.pj.ifpbichos.model.repository.UserRepository;
 import ifpb.edu.br.pj.ifpbichos.presentation.dto.AuthenticationDTO;
 import ifpb.edu.br.pj.ifpbichos.presentation.dto.LoginResponseDTO;
 import ifpb.edu.br.pj.ifpbichos.presentation.dto.UserRegistrationDTO;
-import ifpb.edu.br.pj.ifpbichos.presentation.exception.MissingFieldException;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
 
@@ -29,7 +26,8 @@ public class AuthenticationController {
 	private UserRepository userRepository;
 	@Autowired
 	private TokenService tokenService;
-
+	@Autowired
+	private UserRegistrationService userRegistrationService;
 
 	public void setAuthenticationManager(AuthenticationManager authenticationManager) {
 		this.authenticationManager = authenticationManager;
@@ -44,10 +42,7 @@ public class AuthenticationController {
 
 	@PostMapping("/login")
 	public ResponseEntity login(@RequestBody @Valid AuthenticationDTO dto){
-		if(dto.login().isEmpty() || dto.password().isEmpty()) {
-			Exception e = new MissingFieldException("email ou senha");
-			return ResponseEntity.badRequest().body(e.getMessage());
-		}else if(!userRepository.existsByLogin(dto.login())) {
+		if (!userRepository.existsByLogin(dto.login())) {
 			return ResponseEntity.badRequest().body("Usuário inexistente");
 		}
 
@@ -65,24 +60,15 @@ public class AuthenticationController {
 
 	@PostMapping("/userRegistration")
 	public ResponseEntity userRegistration(@RequestBody UserRegistrationDTO dto) {
-		
-		if(userRepository.existsByLogin(dto.login())) {
 
-			return ResponseEntity.badRequest().build();
+		if (userRepository.existsByLogin(dto.login())) {
+			return ResponseEntity.badRequest().body("Ja existe uma conta cadastrada com esse email");
+		}
+		if (userRepository.existsByCPF(dto.CPF())) {
+			return ResponseEntity.badRequest().body("CPF já registrado");
 		}
 
-		User newUser = null;
-
-		String encryptedPassword = new BCryptPasswordEncoder().encode(dto.password());
-		if(dto.userRole() == UserRoles.ADMIN) {
-			newUser = new ComissionMember(dto.name(),dto.CPF(),dto.phoneNumber(),dto.email(),dto.login(),
-					encryptedPassword,dto.userRole(),dto.role());
-		}else {
-			newUser = new Donator(dto.name(),dto.CPF(),dto.phoneNumber(),dto.email(),dto.login(),
-					encryptedPassword,UserRoles.USER, dto.registration(),dto.donatorType());
-		}
-
-		this.userRepository.save(newUser);
+		userRegistrationService.registerUser(dto);
 
 		return ResponseEntity.ok().build();
 	}
