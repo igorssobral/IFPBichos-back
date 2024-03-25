@@ -17,7 +17,7 @@ public class ComissionMember extends User {
 	 *
 	 */
 	private static final long serialVersionUID = 1L;
-	@Column(name = "MEMBER_ROLE", nullable = false)
+	@Column(name = "MEMBER_ROLE")
 	private ComissionMemberRole role;
 
 	public ComissionMember(String name,String cpf, String phoneNumber, String email, String login, String password, UserRoles userRole,ComissionMemberRole role) {

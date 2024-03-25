@@ -13,15 +13,16 @@ import ifpb.edu.br.pj.ifpbichos.presentation.dto.LoginResponseDTO;
 import ifpb.edu.br.pj.ifpbichos.presentation.dto.UserRegistrationDTO;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.mockito.InjectMocks;
 import org.mockito.Mock;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.core.Authentication;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
 
 
 public class AuthenticationControllerTest {
@@ -50,6 +51,7 @@ public class AuthenticationControllerTest {
         tokenService = mock(TokenService.class);
         authenticationController.setAuthenticationManager(authenticationManager);
         authenticationController.setUserRepository(userRepository);
+        authenticationController.setUserRegistrationService(userRegistrationService);
         authenticationController.setTokenService(tokenService);
     }
     @Test
@@ -92,15 +94,51 @@ public class AuthenticationControllerTest {
     }
 
     @Test
-    public void testUserRegistration_Success() {
-        when(userRepository.existsByLogin(any())).thenReturn(false);
+    void testUserRegistration_Success() {
 
-        UserRegistrationDTO userRegistrationDTO = createUserRegistrationDTO();
+        UserRegistrationDTO dto = createUserRegistrationDTO();
+        when(userRepository.existsByLogin(dto.login())).thenReturn(false);
+        when(userRepository.existsByCPF(dto.CPF())).thenReturn(false);
 
-        ResponseEntity response = authenticationController.userRegistration(userRegistrationDTO);
+        // Act
+        ResponseEntity responseEntity = authenticationController.userRegistration(dto);
 
-        assert response.getStatusCodeValue() == 200;
+        // Assert
+        assertEquals(200, responseEntity.getStatusCodeValue());
+        verify(userRegistrationService, times(1)).registerUser(dto);
     }
+
+    @Test
+    void testUserRegistration_EmailAlreadyExists() {
+
+        UserRegistrationDTO dto = createUserRegistrationDTO();
+        when(userRepository.existsByLogin(dto.login())).thenReturn(true);
+
+
+        ResponseEntity responseEntity = authenticationController.userRegistration(dto);
+
+
+        assertEquals(400, responseEntity.getStatusCodeValue());
+        assertTrue(responseEntity.getBody().toString().contains("Ja existe uma conta cadastrada com esse email"));
+        verify(userRegistrationService, never()).registerUser(dto);
+    }
+
+    @Test
+    void testUserRegistration_CPFAlreadyExists() {
+
+        UserRegistrationDTO dto = createUserRegistrationDTO();
+        when(userRepository.existsByLogin(dto.login())).thenReturn(false);
+        when(userRepository.existsByCPF(dto.CPF())).thenReturn(true);
+
+
+        ResponseEntity responseEntity = authenticationController.userRegistration(dto);
+
+
+        assertEquals(400, responseEntity.getStatusCodeValue());
+        assertTrue(responseEntity.getBody().toString().contains("CPF já registrado"));
+        verify(userRegistrationService, never()).registerUser(dto);
+    }
+
 
     @Test
     public void testUserRegistration_UserAlreadyExists() {

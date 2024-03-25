@@ -24,10 +24,17 @@ public class AuthenticationController {
 
 	@Autowired
 	private UserRepository userRepository;
+
 	@Autowired
 	private TokenService tokenService;
+
 	@Autowired
 	private UserRegistrationService userRegistrationService;
+
+
+
+	public AuthenticationController() {
+	}
 
 	public void setAuthenticationManager(AuthenticationManager authenticationManager) {
 		this.authenticationManager = authenticationManager;
@@ -35,6 +42,10 @@ public class AuthenticationController {
 
 	public void setUserRepository(UserRepository userRepository) {
 		this.userRepository = userRepository;
+	}
+
+	public void setUserRegistrationService(UserRegistrationService userRegistrationService) {
+		this.userRegistrationService = userRegistrationService;
 	}
 	public void setTokenService(TokenService tokenService) {
 		this.tokenService = tokenService;
