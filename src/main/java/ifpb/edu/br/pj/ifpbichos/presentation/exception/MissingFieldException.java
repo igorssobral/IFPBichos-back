@@ -11,4 +11,7 @@ public class MissingFieldException extends Exception {
 	public MissingFieldException(String fieldName, String typeOfRequest) {
 		super("Não foi possível usar " + typeOfRequest + ", o campo " + fieldName + " está faltando!");
 	}
+	public MissingFieldException() {
+		super("Não foi possível concluir a ação,algum campo está faltando!");
+	}
 }
