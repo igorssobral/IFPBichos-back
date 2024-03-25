@@ -8,6 +8,7 @@ import ifpb.edu.br.pj.ifpbichos.model.repository.UserRepository;
 import ifpb.edu.br.pj.ifpbichos.presentation.dto.AuthenticationDTO;
 import ifpb.edu.br.pj.ifpbichos.presentation.dto.LoginResponseDTO;
 import ifpb.edu.br.pj.ifpbichos.presentation.dto.UserRegistrationDTO;
+import ifpb.edu.br.pj.ifpbichos.presentation.exception.MissingFieldException;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -43,8 +44,11 @@ public class AuthenticationController {
 
 	@PostMapping("/login")
 	public ResponseEntity login(@RequestBody @Valid AuthenticationDTO dto){
-		if(!userRepository.existsByLogin(dto.login())) {
-			 return ResponseEntity.badRequest().body("Usuário inexistente");
+		if(dto.login().isEmpty() || dto.password().isEmpty()) {
+			Exception e = new MissingFieldException("email ou senha");
+			return ResponseEntity.badRequest().body(e.getMessage());
+		}else if(!userRepository.existsByLogin(dto.login())) {
+			return ResponseEntity.badRequest().body("Usuário inexistente");
 		}
 
 		User user = (User) userRepository.findByLogin(dto.login());

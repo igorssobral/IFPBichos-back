@@ -25,20 +25,20 @@ public abstract class User implements UserDetails {
 	@Column(name = "USER_ID")
 	private Integer id;
 
-	@Column(name = "USER_NAME")
+	@Column(name = "USER_NAME",nullable = false, unique = true)
 	private String name;
 
-	@Column(name = "USER_CPF")
+	@Column(name = "USER_CPF",nullable = false, unique = true)
 	private String CPF;
-	@Column(name = "USER_PHONE_NUMBER")
+	@Column(name = "USER_PHONE_NUMBER",nullable = false, unique = true)
 	private String phoneNumber;
-	@Column(name = "USER_EMAIL")
+	@Column(name = "USER_EMAIL",nullable = false, unique = true)
 	private String email;
-	@Column(name = "USER_LOGIN")
+	@Column(name = "USER_LOGIN",nullable = false, unique = true)
 	private String login;
-	@Column(name = "USER_PASSWORD")
+	@Column(name = "USER_PASSWORD",nullable = false)
 	private String password;
-	@Column(name = "USER_ROLE")
+	@Column(name = "USER_ROLE",nullable = false)
 	private UserRoles userRole;
 
 
