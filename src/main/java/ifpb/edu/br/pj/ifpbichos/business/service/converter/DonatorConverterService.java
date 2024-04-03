@@ -11,16 +11,16 @@ import java.util.List;
 public class DonatorConverterService {
     public Donator dtoToDonator(DonatorDTO dto){
         if (dto != null) {
-            Donator entity = new Donator(dto.getName(),dto.getCPF(), dto.getPhoneNumber(), dto.getEmail(), dto.getRegistration(),dto.getLogin(), dto.getUserRole(), dto.getPassword(), dto.getDonatorType());
-            return entity;
+        	 Donator entity = new Donator(dto.getName(),dto.getCPF(), dto.getPhoneNumber(), dto.getEmail(), dto.getLogin(), dto.getPassword(), dto.getUserRole(), dto.getDonatorType());
+             return entity;
         }
         throw new IllegalArgumentException("Não foi possível converter pois o objeto é nulo");
     }
 
     public DonatorDTO donatorToDto(Donator entity) {
         if (entity != null) {
-            DonatorDTO dto = new DonatorDTO(entity.getName(),entity.getCPF(), entity.getPhoneNumber(), entity.getEmail(), entity.getRegistration(),entity.getLogin(), entity.getUserRole(), entity.getPassword(), entity.getDonatorType());
-            return dto;
+        	 DonatorDTO dto = new DonatorDTO(entity.getName(),entity.getCPF(), entity.getPhoneNumber(), entity.getEmail(), entity.getLogin(), null, entity.getUserRole(), entity.getPassword(), entity.getDonatorType());
+             return dto;
         }
 
         throw new IllegalArgumentException("Não foi possível converter pois o objeto é nulo");

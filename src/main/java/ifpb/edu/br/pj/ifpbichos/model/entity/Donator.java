@@ -17,25 +17,14 @@ public class Donator extends User {
 	 *
 	 */
 	private static final long serialVersionUID = 1L;
-	@Column(name = "USER_REGISTRATION")
-	private String registration;
 	@Column(name = "DONATOR_TYPE")
 	private DonatorType donatorType;
 
 	public Donator() {
 	}
-	public Donator(String name,String cpf, String phoneNumber, String email,String login, String password, UserRoles userRole, String registration, DonatorType donatorType) {
+	public Donator(String name,String cpf, String phoneNumber, String email,String login, String password, UserRoles userRole, DonatorType donatorType) {
 		super(name,cpf, phoneNumber, email, login, password, userRole);
-		this.registration = registration;
 		this.donatorType = donatorType;
-	}
-
-	public String getRegistration() {
-		return registration;
-	}
-
-	public void setRegistration(String registration) {
-		this.registration = registration;
 	}
 
 	public DonatorType getDonatorType() {
@@ -46,24 +35,33 @@ public class Donator extends User {
 		this.donatorType = donatorType;
 	}
 
+	
+
 	@Override
 	public String toString() {
-		return super.toString() + " - Donator{" + "registration='" + registration + '\'' + ", donatorType=" + donatorType + '}';
+		return "Donator [donatorType=" + donatorType + "]";
 	}
+	
 
-	@Override
-	public boolean equals(Object o) {
-		if (this == o) return true;
-		if (!(o instanceof Donator donator)) return false;
-		if (!super.equals(o)) return false;
-		return Objects.equals(getRegistration(), donator.getRegistration()) && getDonatorType() == donator.getDonatorType();
-	}
-
+	
 	@Override
 	public int hashCode() {
-		return Objects.hash(super.hashCode(), getRegistration(), getDonatorType());
+		final int prime = 31;
+		int result = super.hashCode();
+		result = prime * result + Objects.hash(donatorType);
+		return result;
 	}
-
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (!super.equals(obj))
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		Donator other = (Donator) obj;
+		return donatorType == other.donatorType;
+	}
 	@Override
 	public String getUsername() {
 		return super.getLogin();

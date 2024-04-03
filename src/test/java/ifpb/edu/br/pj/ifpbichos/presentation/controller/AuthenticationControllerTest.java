@@ -155,7 +155,7 @@ public class AuthenticationControllerTest {
 
     private User createMockUser() {
         return new Donator("mocked_name", "mocked_cpf", "mocked_phone", "username@gmail.com",
-                "username@gmail.com", "joao1234", UserRoles.USER, "mocked_register", DonatorType.PRIVATE_INDIVIDUAL);
+                "username@gmail.com", "joao1234", UserRoles.USER, DonatorType.PRIVATE_INDIVIDUAL);
     }
 
 

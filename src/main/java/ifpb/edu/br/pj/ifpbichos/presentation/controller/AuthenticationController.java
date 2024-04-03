@@ -71,15 +71,12 @@ public class AuthenticationController {
 
 	@PostMapping("/userRegistration")
 	public ResponseEntity userRegistration(@RequestBody UserRegistrationDTO dto) {
-
-		if (userRepository.existsByLogin(dto.login())) {
-			return ResponseEntity.badRequest().body("Ja existe uma conta cadastrada com esse email");
+		try {
+			userRegistrationService.registerUser(dto);
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			return ResponseEntity.badRequest().body(e.getMessage());
 		}
-		if (userRepository.existsByCPF(dto.CPF())) {
-			return ResponseEntity.badRequest().body("CPF já registrado");
-		}
-
-		userRegistrationService.registerUser(dto);
 
 		return ResponseEntity.ok().build();
 	}

@@ -12,4 +12,5 @@ public interface UserRepository extends JpaRepository<User, Integer>{
 	public boolean existsByLogin(String login);
 
 	public boolean existsByCPF(String cpf);
+	public boolean existsByPhoneNumber(String phoneNumber);
 }
