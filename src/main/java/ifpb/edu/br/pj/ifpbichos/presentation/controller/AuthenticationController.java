@@ -1,5 +1,6 @@
 package ifpb.edu.br.pj.ifpbichos.presentation.controller;
 
+import ifpb.edu.br.pj.ifpbichos.business.service.LoginService;
 import ifpb.edu.br.pj.ifpbichos.business.service.TokenService;
 import ifpb.edu.br.pj.ifpbichos.business.service.UserRegistrationService;
 import ifpb.edu.br.pj.ifpbichos.model.entity.User;
@@ -30,6 +31,9 @@ public class AuthenticationController {
 
 	@Autowired
 	private UserRegistrationService userRegistrationService;
+	
+	@Autowired
+	private LoginService loginService;
 
 
 
@@ -53,20 +57,11 @@ public class AuthenticationController {
 
 	@PostMapping("/login")
 	public ResponseEntity login(@RequestBody @Valid AuthenticationDTO dto){
-		if (!userRepository.existsByLogin(dto.login())) {
-			return ResponseEntity.badRequest().body("Usuário inexistente");
+		try {
+			return ResponseEntity.ok(loginService.login(dto));
+		} catch (Exception e) {
+			return ResponseEntity.badRequest().body(e.getMessage());
 		}
-
-		User user = (User) userRepository.findByLogin(dto.login());
-
-		var usernamePassword = new UsernamePasswordAuthenticationToken(dto.login(), dto.password());
-		var auth = this.authenticationManager.authenticate(usernamePassword);
-
-		var token = tokenService.generateToken((User) auth.getPrincipal());
-
-
-		return ResponseEntity.ok(new LoginResponseDTO(token, dto.login(),user.getUserRole()));
-
 	}
 
 	@PostMapping("/userRegistration")
@@ -74,7 +69,6 @@ public class AuthenticationController {
 		try {
 			userRegistrationService.registerUser(dto);
 		} catch (Exception e) {
-			// TODO Auto-generated catch block
 			return ResponseEntity.badRequest().body(e.getMessage());
 		}
 

@@ -23,7 +23,7 @@ public class Campaign implements Serializable {
 	private LocalDateTime start;
 	@Column(name = "END_DATE", nullable = false)
 	private LocalDateTime end;
-	@Column(name = "CAMPAIGN_TITLE", nullable = false)
+	@Column(name = "CAMPAIGN_TITLE", nullable = false, unique = true)
 	private String title;
 	@Column(name = "CAMPAIGN_DESCRIPTION")
 	private String description;
