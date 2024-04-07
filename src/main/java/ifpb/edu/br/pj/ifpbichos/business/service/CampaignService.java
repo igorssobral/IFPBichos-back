@@ -1,5 +1,6 @@
 package ifpb.edu.br.pj.ifpbichos.business.service;
 
+import java.io.IOException;
 import java.util.List;
 import java.util.Optional;
 
@@ -11,6 +12,7 @@ import ifpb.edu.br.pj.ifpbichos.model.repository.CampaignRepository;
 import ifpb.edu.br.pj.ifpbichos.presentation.exception.MissingFieldException;
 import ifpb.edu.br.pj.ifpbichos.presentation.exception.ObjectAlreadyExistsException;
 import ifpb.edu.br.pj.ifpbichos.presentation.exception.ObjectNotFoundException;
+import org.springframework.web.multipart.MultipartFile;
 
 @Service
 public class CampaignService {
@@ -37,7 +39,7 @@ public class CampaignService {
 		}
 		
 		if (!existsByTitle(title)) {
-			throw new ObjectNotFoundException("local", "nome", title);
+			throw new ObjectNotFoundException("Campanha", "nome", title);
 		}
 		return campaignRepository.findByTitle(title);
 	}
@@ -48,7 +50,7 @@ public class CampaignService {
 		}
 		
 		if (!existsById(id)) {
-			throw new ObjectNotFoundException("local", "id", id);
+			throw new ObjectNotFoundException("Campanha", "id", id);
 		}
 		return campaignRepository.getReferenceById(id);
 	}
@@ -56,7 +58,7 @@ public class CampaignService {
 	public Campaign save(Campaign campaign) throws Exception {
 	
 		if (existsByTitle(campaign.getTitle())) {
-			throw new ObjectAlreadyExistsException("Já existe um local com nome " + campaign.getTitle());
+			throw new ObjectAlreadyExistsException("Já existe uma campanha com nome " + campaign.getTitle());
 		}
 		
 		return campaignRepository.save(campaign);
@@ -67,13 +69,13 @@ public class CampaignService {
 		if (campaign.getId() == null) {
 			throw new MissingFieldException("id", "update");
 		} else if (!existsById(campaign.getId())) {
-			throw new ObjectNotFoundException("local", "id", campaign.getId());
+			throw new ObjectNotFoundException("Campanha", "id", campaign.getId());
 		} 
 		
 		if (existsByTitle(campaign.getTitle())) {
-			Campaign placeSaved = findByName(campaign.getTitle()).get();
-			if (placeSaved.getId() != campaign.getId()) {
-				throw new ObjectAlreadyExistsException("Já existe um local com o título " + campaign.getTitle());
+			Campaign campaignSaved = findByName(campaign.getTitle()).get();
+			if (campaignSaved.getTitle() != campaign.getTitle()) {
+				throw new ObjectAlreadyExistsException("Já existe uma campanha com o título " + campaign.getTitle());
 			}
 		}
 
@@ -100,5 +102,9 @@ public class CampaignService {
 		campaignRepository.deleteById(id);
 	}
 
+	public void saveCampaignWithImage(MultipartFile imageFile, Campaign campaign) throws IOException {
+		campaign.setImage(imageFile.getBytes());
+		campaignRepository.save(campaign);
+	}
 
 }

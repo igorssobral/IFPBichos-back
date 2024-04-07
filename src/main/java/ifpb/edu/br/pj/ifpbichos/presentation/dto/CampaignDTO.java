@@ -1,6 +1,5 @@
 package ifpb.edu.br.pj.ifpbichos.presentation.dto;
 
-import java.io.File;
 import java.time.LocalDateTime;
 
 public class CampaignDTO {
@@ -11,11 +10,13 @@ public class CampaignDTO {
     private String title;
     private String description;
     private boolean campaingStatus;
-    private File image;
+    private String image;
     private float collectionGoal;
     private float collectionPercentage;
     private float balance;
     private float undirectedBalance;
+
+    public CampaignDTO() {}
 
     public Integer getId() {
         return id;
@@ -41,7 +42,7 @@ public class CampaignDTO {
         return campaingStatus;
     }
 
-    public File getImage() {
+    public String getImage() {
         return image;
     }
 
@@ -85,7 +86,7 @@ public class CampaignDTO {
         this.campaingStatus = campaingStatus;
     }
 
-    public void setImage(File image) {
+    public void setImage(String image) {
         this.image = image;
     }
 
@@ -105,7 +106,7 @@ public class CampaignDTO {
         this.undirectedBalance = undirectedBalance;
     }
 
-    public CampaignDTO(Integer id, LocalDateTime start, LocalDateTime end, String title, String description, boolean campaingStatus, File image, float collectionGoal, float collectionPercentage, float balance, float undirectedBalance) {
+    public CampaignDTO(Integer id, LocalDateTime start, LocalDateTime end, String title, String description, boolean campaingStatus, String image, float collectionGoal, float collectionPercentage, float balance, float undirectedBalance) {
         this.id = id;
         this.start = start;
         this.end = end;
@@ -119,7 +120,7 @@ public class CampaignDTO {
         this.undirectedBalance = undirectedBalance;
     }
 
-    public CampaignDTO(LocalDateTime start, LocalDateTime end, String title, String description, boolean campaingStatus, File image, float collectionGoal, float collectionPercentage, float balance, float undirectedBalance) {
+    public CampaignDTO(LocalDateTime start, LocalDateTime end, String title, String description, boolean campaingStatus, String image, float collectionGoal, float collectionPercentage, float balance, float undirectedBalance) {
         this.start = start;
         this.end = end;
         this.title = title;

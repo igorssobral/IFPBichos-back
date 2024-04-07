@@ -4,6 +4,7 @@ import ifpb.edu.br.pj.ifpbichos.model.entity.Campaign;
 import ifpb.edu.br.pj.ifpbichos.presentation.dto.CampaignDTO;
 import org.springframework.stereotype.Service;
 
+import java.util.Base64;
 import java.util.List;
 import java.util.ArrayList;
 
@@ -11,17 +12,36 @@ import java.util.ArrayList;
 public class CampaignConverterService {
     public Campaign dtoToCampaign(CampaignDTO dto){
         if (dto != null) {
-            Campaign campaign = new Campaign(dto.getId(), dto.getStart(), dto.getEnd(), dto.getTitle(), dto.getDescription(), dto.isCampaingStatus(),
-                    dto.getImage(), dto.getCollectionGoal(), dto.getCollectionPercentage(), dto.getBalance(), dto.getUndirectedBalance());
-            return campaign;
+//            if (dto.getImage() != null && !dto.getImage().isEmpty()) {
+
+//                try {
+//                    byte[] imageBytes = Base64.getDecoder().decode(dto.getImage());
+
+//                    System.out.println(imageBytes);
+
+                    Campaign campaign = new Campaign(dto.getId(), dto.getStart(), dto.getEnd(), dto.getTitle(), dto.getDescription(), dto.isCampaingStatus(),
+                            null, dto.getCollectionGoal(), dto.getCollectionPercentage(), dto.getBalance(), dto.getUndirectedBalance());
+                    System.out.println(campaign.getTitle());
+                    return campaign;
+//                } catch (IllegalArgumentException e) {
+//                    throw new IllegalArgumentException("Erro ao decodificar a imagem Base64: " + e.getMessage());
+//                }
+//            }
+
         }
         throw new IllegalArgumentException("Não foi possível converter pois o objeto é nulo");
     }
 
     public CampaignDTO campaignToDto(Campaign entity) {
         if (entity != null) {
+            byte[] imageBytes = entity.getImage();
+            String encodedImage = "";
+            if (imageBytes != null) {
+                encodedImage = Base64.getEncoder().encodeToString(imageBytes);
+
+            }
             CampaignDTO dto = new CampaignDTO(entity.getId(), entity.getStart(), entity.getEnd(), entity.getTitle(), entity.getDescription(), entity.isCampaingStatus(),
-                    entity.getImage(), entity.getCollectionGoal(), entity.getCollectionPercentage(), entity.getBalance(), entity.getUndirectedBalance());
+                    encodedImage, entity.getCollectionGoal(), entity.getCollectionPercentage(), entity.getBalance(), entity.getUndirectedBalance());
             return dto;
         }
 
