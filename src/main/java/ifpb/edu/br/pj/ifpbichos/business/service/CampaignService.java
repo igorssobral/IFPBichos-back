@@ -1,17 +1,17 @@
 package ifpb.edu.br.pj.ifpbichos.business.service;
 
 import java.io.IOException;
+import java.time.LocalDate;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 
+import ifpb.edu.br.pj.ifpbichos.presentation.exception.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import ifpb.edu.br.pj.ifpbichos.model.entity.Campaign;
 import ifpb.edu.br.pj.ifpbichos.model.repository.CampaignRepository;
-import ifpb.edu.br.pj.ifpbichos.presentation.exception.MissingFieldException;
-import ifpb.edu.br.pj.ifpbichos.presentation.exception.ObjectAlreadyExistsException;
-import ifpb.edu.br.pj.ifpbichos.presentation.exception.ObjectNotFoundException;
 import org.springframework.web.multipart.MultipartFile;
 
 @Service
@@ -24,7 +24,8 @@ public class CampaignService {
 		return campaignRepository.existsById(id);
 	}
 	
-	public boolean existsByTitle(String title) {
+	public boolean existsByTitle(String title)
+	{
 		return campaignRepository.existsByTitle(title);
 	}
 	
@@ -60,7 +61,23 @@ public class CampaignService {
 		if (existsByTitle(campaign.getTitle())) {
 			throw new ObjectAlreadyExistsException("Já existe uma campanha com nome " + campaign.getTitle());
 		}
-		
+		if (campaign.getStart().isAfter(campaign.getEnd())) {
+			throw new InvalidDateRangeException("Não pode criar essa campanha Data de início deve ser anterior à data de término");
+		}
+
+		if (campaign.getStart().isBefore(LocalDate.now().atStartOfDay())) {
+			throw new InvalidDateRangeException("Não pode criar essa campanha Data de início deve ser no futuro");
+		}
+
+		if (campaign.getBalance() <= 0) {
+			throw new InvalidCollectionGoalException("O orçamento da campanha deve ser um valor positivo");
+		}
+
+		if (campaign.getUndirectedBalance() <= 0) {
+			throw new InvalidcollectionPercentageException("A porcentagem da campanha deve ser um valor positivo");
+		}
+
+
 		return campaignRepository.save(campaign);
 	}
 	
@@ -78,6 +95,27 @@ public class CampaignService {
 				throw new ObjectAlreadyExistsException("Já existe uma campanha com o título " + campaign.getTitle());
 			}
 		}
+
+		if (campaign.getStart().isAfter(campaign.getEnd())) {
+			throw new InvalidDateRangeException("Não pode editar essa campanha Data de início deve ser anterior à data de término");
+		}
+
+		if (campaign.getStart().isBefore(LocalDate.now().atStartOfDay())) {
+			throw new InvalidDateRangeException("Não pode editar essa campanha Data de início deve ser no futuro");
+		}
+
+		if (campaign.getBalance() <= 0) {
+			throw new InvalidCollectionGoalException("O orçamento da campanha deve ser um valor positivo");
+		}
+
+		if (campaign.getUndirectedBalance() <= 0) {
+			throw new InvalidcollectionPercentageException("A porcentagem da campanha deve ser um valor positivo");
+		}
+
+		if(campaign.isCampaingStatus()==false){
+			throw new CampaignNotEditableException("A campanha ja foi encerrada e nao pode ser atualizada");
+		}
+
 
 		return campaignRepository.save(campaign);
 	}
@@ -102,7 +140,10 @@ public class CampaignService {
 		campaignRepository.deleteById(id);
 	}
 
-	public void saveCampaignWithImage(MultipartFile imageFile, Campaign campaign) throws IOException {
+	public void saveCampaignWithImage(MultipartFile imageFile, Campaign campaign) throws Exception {
+		if (!Arrays.asList("image/jpeg", "image/png").contains(imageFile.getContentType())) {
+			throw new InvalidImageTypeException("O tipo da imagem deve ser JPEG ou PNG");
+		}
 		campaign.setImage(imageFile.getBytes());
 		campaignRepository.save(campaign);
 	}

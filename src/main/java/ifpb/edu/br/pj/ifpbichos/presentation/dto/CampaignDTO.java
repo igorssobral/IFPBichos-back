@@ -1,5 +1,7 @@
 package ifpb.edu.br.pj.ifpbichos.presentation.dto;
 
+import ifpb.edu.br.pj.ifpbichos.model.enums.Animal;
+
 import java.time.LocalDateTime;
 
 public class CampaignDTO {
@@ -15,6 +17,7 @@ public class CampaignDTO {
     private float collectionPercentage;
     private float balance;
     private float undirectedBalance;
+    private Animal animal;
 
     public CampaignDTO() {}
 
@@ -62,6 +65,10 @@ public class CampaignDTO {
         return undirectedBalance;
     }
 
+    public Animal getAnimal() {
+        return animal;
+    }
+
     public void setId(Integer id) {
         this.id = id;
     }
@@ -106,7 +113,11 @@ public class CampaignDTO {
         this.undirectedBalance = undirectedBalance;
     }
 
-    public CampaignDTO(Integer id, LocalDateTime start, LocalDateTime end, String title, String description, boolean campaingStatus, String image, float collectionGoal, float collectionPercentage, float balance, float undirectedBalance) {
+    public void setAnimal(Animal animal) {
+        this.animal = animal;
+    }
+
+    public CampaignDTO(Integer id, LocalDateTime start, LocalDateTime end, String title, String description, boolean campaingStatus, String image, float collectionGoal, float collectionPercentage, float balance, float undirectedBalance, Animal animal) {
         this.id = id;
         this.start = start;
         this.end = end;
@@ -118,9 +129,10 @@ public class CampaignDTO {
         this.collectionPercentage = collectionPercentage;
         this.balance = balance;
         this.undirectedBalance = undirectedBalance;
+        this.animal=animal;
     }
 
-    public CampaignDTO(LocalDateTime start, LocalDateTime end, String title, String description, boolean campaingStatus, String image, float collectionGoal, float collectionPercentage, float balance, float undirectedBalance) {
+    public CampaignDTO(LocalDateTime start, LocalDateTime end, String title, String description, boolean campaingStatus, String image, float collectionGoal, float collectionPercentage, float balance, float undirectedBalance,Animal animal) {
         this.start = start;
         this.end = end;
         this.title = title;
@@ -131,5 +143,6 @@ public class CampaignDTO {
         this.collectionPercentage = collectionPercentage;
         this.balance = balance;
         this.undirectedBalance = undirectedBalance;
+        this.animal=animal;
     }
 }

@@ -4,6 +4,7 @@ import java.io.Serializable;
 import java.time.LocalDateTime;
 import java.util.Objects;
 
+import ifpb.edu.br.pj.ifpbichos.model.enums.Animal;
 import jakarta.persistence.*;
 
 
@@ -28,6 +29,11 @@ public class Campaign implements Serializable {
 	@Column(name = "CAMPAIGN_DESCRIPTION")
 	private String description;
 	//true = ativa. false = encerrada
+
+	@Column(name = "CAMPAIGN_ANIMAL")
+	private Animal animal;
+
+
 	@Column(name = "CAMPAIGN_STATUS", nullable = false)
 	private boolean campaingStatus;
 
@@ -48,7 +54,7 @@ public class Campaign implements Serializable {
 	}
 	
 	public Campaign(LocalDateTime start, LocalDateTime end, String title, String description, byte[] image,float collectionPercentage,  float balance,
-	float undirectedBalance) {
+	float undirectedBalance,Animal animal) {
 		this.start = start;
 		this.end = end;
 		this.title = title;
@@ -57,9 +63,10 @@ public class Campaign implements Serializable {
 		this.collectionPercentage = collectionPercentage;
 		this.balance = 0;
 		this.undirectedBalance = 0;
+		this.animal=animal;
 	}
 
-	public Campaign(Integer id, LocalDateTime start, LocalDateTime end, String title, String description, boolean campaingStatus, byte[] image, float collectionGoal, float collectionPercentage, float balance, float undirectedBalance) {
+	public Campaign(Integer id, LocalDateTime start, LocalDateTime end, String title, String description, boolean campaingStatus, byte[] image, float collectionGoal, float collectionPercentage, float balance, float undirectedBalance, Animal animal) {
 		this.id = id;
 		this.start = start;
 		this.end = end;
@@ -71,6 +78,7 @@ public class Campaign implements Serializable {
 		this.collectionPercentage = collectionPercentage;
 		this.balance = balance;
 		this.undirectedBalance = undirectedBalance;
+		this.animal=animal;
 	}
 
 	public Integer getId() {
@@ -157,6 +165,14 @@ public class Campaign implements Serializable {
 		return undirectedBalance;
 	}
 
+	public Animal getAnimal(){
+		return animal;
+	}
+
+	public void setAnimal(Animal animal) {
+		this.animal = animal;
+	}
+
 	public void setUndirectedBalance(float undirectedBalance) {
 		this.undirectedBalance = undirectedBalance;
 	}
@@ -164,6 +180,8 @@ public class Campaign implements Serializable {
 	public static long getSerialversionuid() {
 		return serialVersionUID;
 	}
+
+
 
 	@Override
 	public int hashCode() {

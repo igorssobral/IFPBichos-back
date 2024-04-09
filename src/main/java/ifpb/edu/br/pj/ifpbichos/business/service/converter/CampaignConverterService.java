@@ -20,7 +20,7 @@ public class CampaignConverterService {
 //                    System.out.println(imageBytes);
 
                     Campaign campaign = new Campaign(dto.getId(), dto.getStart(), dto.getEnd(), dto.getTitle(), dto.getDescription(), dto.isCampaingStatus(),
-                            null, dto.getCollectionGoal(), dto.getCollectionPercentage(), dto.getBalance(), dto.getUndirectedBalance());
+                            null, dto.getCollectionGoal(), dto.getCollectionPercentage(), dto.getBalance(), dto.getUndirectedBalance(),dto.getAnimal());
                     System.out.println(campaign.getTitle());
                     return campaign;
 //                } catch (IllegalArgumentException e) {
@@ -41,7 +41,7 @@ public class CampaignConverterService {
 
             }
             CampaignDTO dto = new CampaignDTO(entity.getId(), entity.getStart(), entity.getEnd(), entity.getTitle(), entity.getDescription(), entity.isCampaingStatus(),
-                    encodedImage, entity.getCollectionGoal(), entity.getCollectionPercentage(), entity.getBalance(), entity.getUndirectedBalance());
+                    encodedImage, entity.getCollectionGoal(), entity.getCollectionPercentage(), entity.getBalance(), entity.getUndirectedBalance(),entity.getAnimal());
             return dto;
         }
 

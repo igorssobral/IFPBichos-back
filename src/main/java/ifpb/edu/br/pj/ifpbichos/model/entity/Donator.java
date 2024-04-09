@@ -10,7 +10,7 @@ import jakarta.persistence.UniqueConstraint;
 import java.util.Objects;
 
 @Entity
-@Table(name = "DONATOR", uniqueConstraints = {@UniqueConstraint(columnNames = {"USER_REGISTRATION"})})
+@Table(name = "DONATOR", uniqueConstraints = {@UniqueConstraint(columnNames = {"USER_CPF"})})
 public class Donator extends User {
 
 	/**
