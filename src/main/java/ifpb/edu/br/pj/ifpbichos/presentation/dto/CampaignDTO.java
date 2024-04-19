@@ -17,7 +17,7 @@ public class CampaignDTO {
     private float collectionPercentage;
     private float balance;
     private float undirectedBalance;
-    private Animal animal;
+    private String animal;
 
     public CampaignDTO() {}
 
@@ -65,7 +65,7 @@ public class CampaignDTO {
         return undirectedBalance;
     }
 
-    public Animal getAnimal() {
+    public String getAnimal() {
         return animal;
     }
 
@@ -113,11 +113,11 @@ public class CampaignDTO {
         this.undirectedBalance = undirectedBalance;
     }
 
-    public void setAnimal(Animal animal) {
+    public void setAnimal(String animal) {
         this.animal = animal;
     }
 
-    public CampaignDTO(Integer id, LocalDateTime start, LocalDateTime end, String title, String description, boolean campaingStatus, String image, float collectionGoal, float collectionPercentage, float balance, float undirectedBalance, Animal animal) {
+    public CampaignDTO(Integer id, LocalDateTime start, LocalDateTime end, String title, String description, boolean campaingStatus, String image, float collectionGoal, float collectionPercentage, float balance, float undirectedBalance, String animal) {
         this.id = id;
         this.start = start;
         this.end = end;
@@ -132,7 +132,7 @@ public class CampaignDTO {
         this.animal=animal;
     }
 
-    public CampaignDTO(LocalDateTime start, LocalDateTime end, String title, String description, boolean campaingStatus, String image, float collectionGoal, float collectionPercentage, float balance, float undirectedBalance,Animal animal) {
+    public CampaignDTO(LocalDateTime start, LocalDateTime end, String title, String description, boolean campaingStatus, String image, float collectionGoal, float collectionPercentage, float balance, float undirectedBalance,String animal) {
         this.start = start;
         this.end = end;
         this.title = title;
