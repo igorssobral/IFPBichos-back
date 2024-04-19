@@ -69,11 +69,11 @@ public class CampaignService {
 			throw new InvalidDateRangeException("Não pode criar essa campanha Data de início deve ser no futuro");
 		}
 
-		if (campaign.getBalance() <= 0) {
+		if (campaign.getBalance() < 0) {
 			throw new InvalidCollectionGoalException("O orçamento da campanha deve ser um valor positivo");
 		}
 
-		if (campaign.getUndirectedBalance() <= 0) {
+		if (campaign.getUndirectedBalance() < 0) {
 			throw new InvalidcollectionPercentageException("A porcentagem da campanha deve ser um valor positivo");
 		}
 
