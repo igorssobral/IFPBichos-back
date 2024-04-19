@@ -1,6 +1,7 @@
 package ifpb.edu.br.pj.ifpbichos.business.service.converter;
 
 import ifpb.edu.br.pj.ifpbichos.model.entity.Campaign;
+import ifpb.edu.br.pj.ifpbichos.model.enums.Animal;
 import ifpb.edu.br.pj.ifpbichos.presentation.dto.CampaignDTO;
 import org.springframework.stereotype.Service;
 
@@ -17,10 +18,9 @@ public class CampaignConverterService {
 //                try {
 //                    byte[] imageBytes = Base64.getDecoder().decode(dto.getImage());
 
-//                    System.out.println(imageBytes);
 
                     Campaign campaign = new Campaign(dto.getId(), dto.getStart(), dto.getEnd(), dto.getTitle(), dto.getDescription(), dto.isCampaingStatus(),
-                            null, dto.getCollectionGoal(), dto.getCollectionPercentage(), dto.getBalance(), dto.getUndirectedBalance(),dto.getAnimal());
+                            null, dto.getCollectionGoal(), dto.getCollectionPercentage(), dto.getBalance(), dto.getUndirectedBalance(), Animal.valueOf(dto.getAnimal()));
                     System.out.println(campaign.getTitle());
                     return campaign;
 //                } catch (IllegalArgumentException e) {
@@ -40,8 +40,11 @@ public class CampaignConverterService {
                 encodedImage = Base64.getEncoder().encodeToString(imageBytes);
 
             }
+
+            float progress = (entity.getBalance() / entity.getCollectionGoal()) * 100;
+            int progressInt = (int) progress;
             CampaignDTO dto = new CampaignDTO(entity.getId(), entity.getStart(), entity.getEnd(), entity.getTitle(), entity.getDescription(), entity.isCampaingStatus(),
-                    encodedImage, entity.getCollectionGoal(), entity.getCollectionPercentage(), entity.getBalance(), entity.getUndirectedBalance(),entity.getAnimal());
+                    encodedImage, entity.getCollectionGoal(),progressInt , entity.getBalance(), entity.getUndirectedBalance(),entity.getAnimal() != null ? entity.getAnimal().toString() : "");
             return dto;
         }
 
