@@ -60,7 +60,7 @@ public class AuthenticationControllerTest {
         authenticationController.setUserRepository(userRepository);
         authenticationController.setUserRegistrationService(userRegistrationService);
         authenticationController.setTokenService(tokenService);
-        authenticationController.setLoginService(loginService); // Configurar o loginService no controller
+        authenticationController.setLoginService(loginService);
 
     }
     @Test
