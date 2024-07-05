@@ -54,6 +54,9 @@ public class AuthenticationController {
 	public void setTokenService(TokenService tokenService) {
 		this.tokenService = tokenService;
 	}
+	public void setLoginService(LoginService loginService) {
+		this.loginService = loginService;
+	}
 
 	@PostMapping("/login")
 	public ResponseEntity login(@RequestBody @Valid AuthenticationDTO dto){
@@ -88,4 +91,6 @@ public class AuthenticationController {
 			return ResponseEntity.internalServerError().body(e);
 		}
 	}
+
+
 }

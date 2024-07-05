@@ -1,5 +1,6 @@
 package ifpb.edu.br.pj.ifpbichos.presentation.controller;
 
+import ifpb.edu.br.pj.ifpbichos.business.service.LoginService;
 import ifpb.edu.br.pj.ifpbichos.business.service.TokenService;
 import ifpb.edu.br.pj.ifpbichos.business.service.UserRegistrationService;
 import ifpb.edu.br.pj.ifpbichos.model.entity.Donator;
@@ -11,11 +12,12 @@ import ifpb.edu.br.pj.ifpbichos.model.repository.UserRepository;
 import ifpb.edu.br.pj.ifpbichos.presentation.dto.AuthenticationDTO;
 import ifpb.edu.br.pj.ifpbichos.presentation.dto.LoginResponseDTO;
 import ifpb.edu.br.pj.ifpbichos.presentation.dto.UserRegistrationDTO;
+import ifpb.edu.br.pj.ifpbichos.presentation.exception.ObjectAlreadyExistsException;
+import ifpb.edu.br.pj.ifpbichos.presentation.exception.ObjectNotFoundException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.core.Authentication;
@@ -26,6 +28,9 @@ import static org.mockito.Mockito.*;
 
 
 public class AuthenticationControllerTest {
+
+    @Mock
+    private LoginService loginService;
 
     @Mock
     private AuthenticationController authenticationController;
@@ -49,16 +54,20 @@ public class AuthenticationControllerTest {
         userRepository = mock(UserRepository.class);
         userRegistrationService = mock(UserRegistrationService.class);
         tokenService = mock(TokenService.class);
+        loginService = mock(LoginService.class);
+
         authenticationController.setAuthenticationManager(authenticationManager);
         authenticationController.setUserRepository(userRepository);
         authenticationController.setUserRegistrationService(userRegistrationService);
         authenticationController.setTokenService(tokenService);
+        authenticationController.setLoginService(loginService); // Configurar o loginService no controller
+
     }
     @Test
-    void login_ValidUser_ReturnsToken() {
-
+    void login_ValidUser_ReturnsToken() throws Exception {
         AuthenticationDTO dto = new AuthenticationDTO("username@gmail.com", "password");
         User user = createMockUser();
+
         when(userRepository.existsByLogin(dto.login())).thenReturn(true);
         when(userRepository.findByLogin(dto.login())).thenReturn(user);
         Authentication authentication = mock(Authentication.class);
@@ -66,13 +75,14 @@ public class AuthenticationControllerTest {
         when(authenticationManager.authenticate(any())).thenReturn(authentication);
         when(tokenService.generateToken(user)).thenReturn("generatedToken");
 
+        LoginResponseDTO loginResponse = new LoginResponseDTO("generatedToken", dto.login(), user.getUserRole());
+        when(loginService.login(dto)).thenReturn(loginResponse);
 
         ResponseEntity responseEntity = authenticationController.login(dto);
-
-
-        assertEquals(200, responseEntity.getStatusCodeValue());
+        assertEquals(HttpStatus.OK.value(), responseEntity.getStatusCodeValue());
         assertNotNull(responseEntity.getBody());
-        assertInstanceOf(LoginResponseDTO.class, responseEntity.getBody());
+        assertTrue(responseEntity.getBody() instanceof LoginResponseDTO);
+
         LoginResponseDTO loginResponseDTO = (LoginResponseDTO) responseEntity.getBody();
         assertEquals("username@gmail.com", loginResponseDTO.user());
         assertEquals(UserRoles.USER.toString(), loginResponseDTO.userRole().toString());
@@ -80,82 +90,83 @@ public class AuthenticationControllerTest {
     }
 
 
+
     @Test
-    public void testLogin_UserNotFound() {
-        when(userRepository.existsByLogin(any())).thenReturn(false);
+    public void testLogin_UserNotFound() throws Exception {
+        AuthenticationDTO authenticationDTO = new AuthenticationDTO("non_existent_user", "mocked_password");
 
-        AuthenticationDTO authenticationDTO = new AuthenticationDTO("non_existent_user","mocked_password");
+        when(userRepository.existsByLogin(authenticationDTO.login())).thenReturn(false);
 
+        doThrow(new ObjectNotFoundException("Usuário inexistente!")).when(loginService).login(authenticationDTO);
 
-        ResponseEntity response = authenticationController.login(authenticationDTO);
+        ResponseEntity<?> response = authenticationController.login(authenticationDTO);
 
-        assert response.getStatusCodeValue() == 400;
-        assert response.getBody().equals("Usuário inexistente");
+        assertEquals(400, response.getStatusCodeValue());
+        assertEquals("Usuário inexistente!", response.getBody());
     }
 
     @Test
-    void testUserRegistration_Success() {
+    void testUserRegistration_Success() throws Exception {
 
         UserRegistrationDTO dto = createUserRegistrationDTO();
         when(userRepository.existsByLogin(dto.login())).thenReturn(false);
         when(userRepository.existsByCPF(dto.CPF())).thenReturn(false);
 
-        // Act
         ResponseEntity responseEntity = authenticationController.userRegistration(dto);
 
-        // Assert
         assertEquals(200, responseEntity.getStatusCodeValue());
         verify(userRegistrationService, times(1)).registerUser(dto);
     }
 
     @Test
-    void testUserRegistration_EmailAlreadyExists() {
+    void testUserRegistration_EmailAlreadyExists() throws Exception {
 
         UserRegistrationDTO dto = createUserRegistrationDTO();
-        when(userRepository.existsByLogin(dto.login())).thenReturn(true);
+        doThrow(new ObjectAlreadyExistsException("Já existe um usuário com esse email")).when(userRegistrationService).registerUser(dto);
 
-
-        ResponseEntity responseEntity = authenticationController.userRegistration(dto);
-
+        ResponseEntity<?> responseEntity = authenticationController.userRegistration(dto);
 
         assertEquals(400, responseEntity.getStatusCodeValue());
-        assertTrue(responseEntity.getBody().toString().contains("Ja existe uma conta cadastrada com esse email"));
-        verify(userRegistrationService, never()).registerUser(dto);
+        assertEquals("Já existe um usuário com esse email", responseEntity.getBody());
+        verify(userRegistrationService, times(1)).registerUser(dto);
+
+
+
     }
 
     @Test
-    void testUserRegistration_CPFAlreadyExists() {
-
+    public void testUserRegistration_CPFAlreadyExists() throws Exception {
         UserRegistrationDTO dto = createUserRegistrationDTO();
-        when(userRepository.existsByLogin(dto.login())).thenReturn(false);
-        when(userRepository.existsByCPF(dto.CPF())).thenReturn(true);
+        doThrow(new ObjectAlreadyExistsException("Já existe um usuário com esse CPF")).when(userRegistrationService).registerUser(dto);
 
-
-        ResponseEntity responseEntity = authenticationController.userRegistration(dto);
-
+        ResponseEntity<?> responseEntity = authenticationController.userRegistration(dto);
 
         assertEquals(400, responseEntity.getStatusCodeValue());
-        assertTrue(responseEntity.getBody().toString().contains("CPF já registrado"));
-        verify(userRegistrationService, never()).registerUser(dto);
+        assertEquals("Já existe um usuário com esse CPF", responseEntity.getBody());
+        verify(userRegistrationService, times(1)).registerUser(dto);
     }
-
 
     @Test
-    public void testUserRegistration_UserAlreadyExists() {
-        when(userRepository.existsByLogin(any())).thenReturn(true);
-        when(userRepository.existsByCPF(any())).thenReturn(true);
+    void testUserRegistration_UserAlreadyExists() throws Exception {
+        UserRegistrationDTO dto = createUserRegistrationDTO();
+        doThrow(new ObjectAlreadyExistsException("Já existe um usuário com esse login")).when(userRegistrationService).registerUser(dto);
+        doThrow(new ObjectAlreadyExistsException("Já existe um usuário com esse CPF")).when(userRegistrationService).registerUser(dto);
 
 
-        UserRegistrationDTO userRegistrationDTO = createUserRegistrationDTO();
 
-        ResponseEntity response = authenticationController.userRegistration(userRegistrationDTO);
 
-        assert response.getStatusCodeValue() == 400;
+        ResponseEntity<?> response = authenticationController.userRegistration(dto);
+
+        assertEquals(400, response.getStatusCodeValue());
+
+        assertTrue(response.getBody().toString().contains("Já existe um usuário com esse login") ||
+                response.getBody().toString().contains("Já existe um usuário com esse CPF"));
     }
+
 
     private User createMockUser() {
         return new Donator("mocked_name", "mocked_cpf", "mocked_phone", "username@gmail.com",
-                "username@gmail.com", "joao1234", UserRoles.USER, DonatorType.PRIVATE_INDIVIDUAL);
+                "username@gmail.com", "password", UserRoles.USER, DonatorType.PRIVATE_INDIVIDUAL);
     }
 
 

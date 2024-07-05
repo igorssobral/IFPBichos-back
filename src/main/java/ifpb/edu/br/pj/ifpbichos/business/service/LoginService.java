@@ -1,5 +1,6 @@
 package ifpb.edu.br.pj.ifpbichos.business.service;
 
+import org.hibernate.validator.internal.constraintvalidators.bv.number.bound.decimal.DecimalMaxValidatorForLong;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -25,19 +26,20 @@ public class LoginService {
 	 @Autowired
 	 private TokenService tokenService;
 
-	 @Transactional
-	 public LoginResponseDTO login(AuthenticationDTO dto) throws Exception{
-		 if (!userRepository.existsByLogin(dto.login())) {
-			 throw new ObjectNotFoundException("Usuário inexistente!");
-		 }
 
-			User user = (User) userRepository.findByLogin(dto.login());
+	@Transactional
+	public LoginResponseDTO login(AuthenticationDTO dto) throws Exception {
+		if (!userRepository.existsByLogin(dto.login())) {
+			throw new ObjectNotFoundException("Usuário inexistente!");
+		}
 
-			var usernamePassword = new UsernamePasswordAuthenticationToken(dto.login(), dto.password());
-			var auth = this.authenticationManager.authenticate(usernamePassword);
+		User user = (User) userRepository.findByLogin(dto.login());
 
-			var token = tokenService.generateToken((User) auth.getPrincipal());
-			
-			return new LoginResponseDTO(token, dto.login(),user.getUserRole());
-	 }
+		var usernamePassword = new UsernamePasswordAuthenticationToken(dto.login(), dto.password());
+		var auth = this.authenticationManager.authenticate(usernamePassword);
+
+		var token = tokenService.generateToken((User) auth.getPrincipal());
+
+		return new LoginResponseDTO(token, dto.login(), user.getUserRole());
+	}
 }

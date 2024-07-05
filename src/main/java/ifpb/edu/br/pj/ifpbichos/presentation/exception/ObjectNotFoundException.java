@@ -8,7 +8,7 @@ public class ObjectNotFoundException extends Exception {
 		super("Não foi encontrado " + object + " com " + fieldName+ " " + field);
 	}
 	public ObjectNotFoundException(String message) {
-		super("Usuário não existe");
+		super(message);
 	}
 	
 }
