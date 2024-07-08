@@ -5,31 +5,26 @@ import ifpb.edu.br.pj.ifpbichos.model.enums.Animal;
 import ifpb.edu.br.pj.ifpbichos.presentation.dto.CampaignDTO;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.Base64;
 import java.util.List;
-import java.util.ArrayList;
 
 @Service
 public class CampaignConverterService {
     public Campaign dtoToCampaign(CampaignDTO dto){
+
         if (dto != null) {
-//            if (dto.getImage() != null && !dto.getImage().isEmpty()) {
-
-//                try {
-//                    byte[] imageBytes = Base64.getDecoder().decode(dto.getImage());
 
 
-                    Campaign campaign = new Campaign(dto.getId(), dto.getStart(), dto.getEnd(), dto.getTitle(), dto.getDescription(), dto.isCampaingStatus(),
+            Campaign campaign = new Campaign(dto.getId(), dto.getStart(), dto.getEnd(), dto.getTitle(), dto.getDescription(), true,
                             null, dto.getCollectionGoal(), dto.getCollectionPercentage(), dto.getBalance(), dto.getUndirectedBalance(), Animal.valueOf(dto.getAnimal()));
-                    System.out.println(campaign.getTitle());
                     return campaign;
-//                } catch (IllegalArgumentException e) {
-//                    throw new IllegalArgumentException("Erro ao decodificar a imagem Base64: " + e.getMessage());
-//                }
-//            }
+
 
         }
+
         throw new IllegalArgumentException("Não foi possível converter pois o objeto é nulo");
+
     }
 
     public CampaignDTO campaignToDto(Campaign entity) {

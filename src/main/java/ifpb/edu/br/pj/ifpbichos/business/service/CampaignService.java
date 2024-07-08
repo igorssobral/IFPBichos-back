@@ -74,7 +74,7 @@ public class CampaignService {
 		}
 
 		if (campaign.getUndirectedBalance() < 0) {
-			throw new InvalidcollectionPercentageException("A porcentagem da campanha deve ser um valor positivo");
+			throw new InvalidCollectionPercentageException("A porcentagem da campanha deve ser um valor positivo");
 		}
 
 
@@ -100,22 +100,21 @@ public class CampaignService {
 			throw new InvalidDateRangeException("Não pode editar essa campanha Data de início deve ser anterior à data de término");
 		}
 
-		if (campaign.getStart().isBefore(LocalDate.now().atStartOfDay())) {
+		if (campaign.getEnd().isBefore(LocalDate.now().atStartOfDay())) {
 			throw new InvalidDateRangeException("Não pode editar essa campanha Data de início deve ser no futuro");
 		}
 
-		if (campaign.getBalance() <= 0) {
+		if (campaign.getBalance() < 0) {
 			throw new InvalidCollectionGoalException("O orçamento da campanha deve ser um valor positivo");
 		}
 
-		if (campaign.getUndirectedBalance() <= 0) {
-			throw new InvalidcollectionPercentageException("A porcentagem da campanha deve ser um valor positivo");
+		if (campaign.getUndirectedBalance() < 0) {
+			throw new InvalidCollectionPercentageException("A porcentagem da campanha deve ser um valor positivo");
 		}
 
 		if(campaign.isCampaingStatus()==false){
 			throw new CampaignNotEditableException("A campanha ja foi encerrada e nao pode ser atualizada");
 		}
-
 
 		return campaignRepository.save(campaign);
 	}

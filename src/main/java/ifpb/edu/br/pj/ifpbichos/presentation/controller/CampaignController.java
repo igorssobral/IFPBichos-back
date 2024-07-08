@@ -1,4 +1,6 @@
 package ifpb.edu.br.pj.ifpbichos.presentation.controller;
+import ifpb.edu.br.pj.ifpbichos.model.enums.Animal;
+import ifpb.edu.br.pj.ifpbichos.model.repository.CampaignRepository;
 import org.springframework.http.HttpStatus;
 
 import ifpb.edu.br.pj.ifpbichos.business.service.CampaignService;
@@ -11,6 +13,7 @@ import org.springframework.web.bind.annotation.*;
 
 
 import java.util.List;
+import java.util.Optional;
 
 @RestController
 @RequestMapping("/api/campaign")
@@ -21,6 +24,8 @@ public class CampaignController {
 
     @Autowired
     private CampaignConverterService converterService;
+    @Autowired
+    private CampaignRepository campaignRepository;
 
     @GetMapping
     public ResponseEntity getAll() {
@@ -47,6 +52,7 @@ public class CampaignController {
     public ResponseEntity save(@RequestBody CampaignDTO dto) {
         try {
             Campaign entity = converterService.dtoToCampaign(dto);
+
             entity = campaignService.save(entity);
             dto = converterService.campaignToDto(entity);
             return new ResponseEntity(dto, HttpStatus.CREATED);
@@ -58,15 +64,21 @@ public class CampaignController {
 
     @PutMapping("/{id}")
     public ResponseEntity update(@PathVariable Integer id, @RequestBody CampaignDTO dto) {
-
         try {
-            dto.setId(id);
-            Campaign entity = converterService.dtoToCampaign(dto);
-            entity = campaignService.update(entity);
+            Optional<Campaign> entityOptional = campaignRepository.findById(id);
+            if (!entityOptional.isPresent()) {
+                return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Campaign not found");
+            }
+            Campaign entity = entityOptional.get();
+            entity.setTitle(dto.getTitle());
+            entity.setEnd(dto.getEnd());
+            entity.setDescription(dto.getDescription());
+            entity.setAnimal(Animal.valueOf(dto.getAnimal()));
+            entity.setImage(null);
+
+            campaignService.update(entity);
             dto = converterService.campaignToDto(entity);
-
             return ResponseEntity.ok().body(dto);
-
         } catch (Exception e) {
             return ResponseEntity.badRequest().body(e.getMessage());
         }
