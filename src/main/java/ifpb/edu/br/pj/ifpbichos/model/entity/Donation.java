@@ -2,6 +2,8 @@ package ifpb.edu.br.pj.ifpbichos.model.entity;
 
 import java.io.Serializable;
 import java.time.LocalDateTime;
+import java.util.Objects;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -22,7 +24,7 @@ public class Donation implements Serializable{
 	@Column(name = "DONATION_DATE", nullable = false)
 	private LocalDateTime date;
 	@Column(name = "DONATION_VALUE", nullable = false)
-	private float donationValue;
+	private double donationValue;
 	@Column(name = "DIRECTED", nullable = false)
 	private Boolean directed;
 	
@@ -42,17 +44,44 @@ public class Donation implements Serializable{
 	public void setDate(LocalDateTime date) {
 		this.date = date;
 	}
-	public float getDonationValue() {
+	public double getDonationValue() {
 		return donationValue;
 	}
 	public void setDonationValue(float donationValue) {
 		this.donationValue = donationValue;
 	}
-	public Boolean getIsDirected() {
+
+	public Boolean getDirected() {
 		return directed;
 	}
-	public void setIsDirected(Boolean directed) {
+
+	public void setDirected(Boolean directed) {
 		this.directed = directed;
+	}
+
+	@Override
+	public String toString() {
+		return "Donation [id=" + id + ", date=" + date + ", donationValue=" + donationValue + ", directed=" + directed
+				+ "]";
+	}
+
+	@Override
+	public int hashCode() {
+		return Objects.hash(date, directed, donationValue, id);
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		Donation other = (Donation) obj;
+		return Objects.equals(date, other.date) && Objects.equals(directed, other.directed)
+				&& Double.doubleToLongBits(donationValue) == Double.doubleToLongBits(other.donationValue)
+				&& Objects.equals(id, other.id);
 	}
 	
 	
