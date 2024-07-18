@@ -1,17 +1,14 @@
 package ifpb.edu.br.pj.ifpbichos.presentation.controller;
 
+import com.mercadopago.client.preference.PreferenceClient;
 import com.mercadopago.exceptions.MPApiException;
 import com.mercadopago.exceptions.MPException;
-import com.mercadopago.resources.payment.Payment;
 import com.mercadopago.resources.preference.Preference;
 import ifpb.edu.br.pj.ifpbichos.business.service.MercadoPagoService;
+import ifpb.edu.br.pj.ifpbichos.model.entity.Donation;
 import lombok.Data;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.math.BigDecimal;
 
@@ -24,24 +21,40 @@ public class PaymentController {
 
     @PostMapping
     public Preference createPayment(@RequestBody PaymentRequest paymentRequest) throws MPException, MPApiException, MPApiException {
-        return mercadoPagoService.createPayment(
-                paymentRequest.getDescription(),
-                paymentRequest.getTransactionAmount(),
-                paymentRequest.getToken(),
-                paymentRequest.getPaymentMethodId(),
-                paymentRequest.getInstallments(),
-                paymentRequest.getEmail()
+        return mercadoPagoService.createPayment(paymentRequest.getTitle(), paymentRequest.getDescription(),
+                paymentRequest.getTransactionAmount(), paymentRequest.getInstallments(),paymentRequest.getCampaignId()
+                ,paymentRequest.getUserLogin()
+
         );
+    }
+
+    @PatchMapping("/{preferenceId}")
+    public Donation updatePayment(@PathVariable String preferenceId, @RequestBody PaymentRequest paymentRequest) throws Exception {
+        System.out.println(paymentRequest.toString());
+        return mercadoPagoService.updatePayment(preferenceId, paymentRequest.getPaymentId(), paymentRequest.getStatus(), paymentRequest.getPaymentType());
+    }
+
+    @GetMapping
+    public Preference findPreference(@RequestParam String id) throws MPException, MPApiException {
+        PreferenceClient client = new PreferenceClient();
+
+        Preference preference = client.get(id);
+        System.out.println(preference);
+        return preference;
     }
 }
 @Data
 class PaymentRequest {
+    private String title;
     private String description;
     private BigDecimal transactionAmount;
-    private String token;
-    private String paymentMethodId;
     private int installments;
-    private String email;
+    private String paymentId;
+    private String status;
+    private String paymentType;
+    private String preferenceId;
+    private Long CampaignId;
+    private String userLogin;
 
     // Getters and setters
 }

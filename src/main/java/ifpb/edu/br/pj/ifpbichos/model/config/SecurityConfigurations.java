@@ -36,6 +36,7 @@ public class SecurityConfigurations {
 						.requestMatchers(HttpMethod.DELETE, "/api/campaign/{id}").hasRole("ADMIN")
 						.requestMatchers(HttpMethod.POST, "/api/auth/isValidToken").permitAll()
 						.requestMatchers(HttpMethod.POST, "/payments").permitAll()
+						.requestMatchers(HttpMethod.PUT,"/payments/{preferenceId}").permitAll()
 
 						.anyRequest().authenticated()
 				)
