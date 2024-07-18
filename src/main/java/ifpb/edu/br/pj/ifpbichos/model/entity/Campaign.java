@@ -1,7 +1,9 @@
 package ifpb.edu.br.pj.ifpbichos.model.entity;
 
 import java.io.Serializable;
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.Objects;
 
 import ifpb.edu.br.pj.ifpbichos.model.enums.Animal;
@@ -19,7 +21,7 @@ public class Campaign implements Serializable {
 	
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private Integer id;
+	private Long id;
 	@Column(name = "START_DATE", nullable = false)
 	private LocalDateTime start;
 	@Column(name = "END_DATE", nullable = false)
@@ -29,6 +31,9 @@ public class Campaign implements Serializable {
 	@Column(name = "CAMPAIGN_DESCRIPTION")
 	private String description;
 	//true = ativa. false = encerrada
+
+	@OneToMany(mappedBy = "campaign")
+	private List<Donation> donations;
 
 	@Column(name = "CAMPAIGN_ANIMAL")
 	private Animal animal;
@@ -41,32 +46,32 @@ public class Campaign implements Serializable {
 	@Column(name = "CAMPAIGN_PET_IMAGE")
 	private byte[] image;
 	@Column(name = "COLLECTION_GOAL", nullable = false)
-	private float collectionGoal;
+	private BigDecimal collectionGoal;
 	@Column(name = "COLLECTION_PERCENTAGE", nullable = false)
 	private float collectionPercentage;
 	@Column(name = "BALANCE", nullable = false)
-	private float balance;
+	private BigDecimal balance;
 	@Column(name = "UNDIRECTED_BALANCE", nullable = false)
-	private float undirectedBalance;
+	private BigDecimal undirectedBalance;
 	
 	public Campaign() {
 		
 	}
-	
-	public Campaign(LocalDateTime start, LocalDateTime end, String title, String description, byte[] image,float collectionPercentage,  float balance,
-	float undirectedBalance,Animal animal) {
+
+	public Campaign(LocalDateTime start, LocalDateTime end, String title, String description, byte[] image,float collectionPercentage,  BigDecimal balance,
+	BigDecimal undirectedBalance,Animal animal) {
 		this.start = start;
 		this.end = end;
 		this.title = title;
 		this.description = description;
 		this.image = image;
 		this.collectionPercentage = collectionPercentage;
-		this.balance = 0;
-		this.undirectedBalance = 0;
+		this.balance = BigDecimal.valueOf(0);
+		this.undirectedBalance = BigDecimal.valueOf(0);
 		this.animal=animal;
 	}
 
-	public Campaign(Integer id, LocalDateTime start, LocalDateTime end, String title, String description, boolean campaingStatus, byte[] image, float collectionGoal, float collectionPercentage, float balance, float undirectedBalance, Animal animal) {
+	public Campaign(Long id, LocalDateTime start, LocalDateTime end, String title, String description, boolean campaingStatus, byte[] image, BigDecimal collectionGoal, float collectionPercentage, BigDecimal balance, BigDecimal undirectedBalance, Animal animal) {
 		this.id = id;
 		this.start = start;
 		this.end = end;
@@ -81,11 +86,11 @@ public class Campaign implements Serializable {
 		this.animal=animal;
 	}
 
-	public Integer getId() {
+	public Long getId() {
 		return id;
 	}
 
-	public void setId(Integer id) {
+	public void setId(Long id) {
 		this.id = id;
 	}
 
@@ -137,11 +142,11 @@ public class Campaign implements Serializable {
 		this.image = image;
 	}
 
-	public float getCollectionGoal() {
+	public BigDecimal getCollectionGoal() {
 		return collectionGoal;
 	}
 
-	public void setCollectionGoal(float collectionGoal) {
+	public void setCollectionGoal(BigDecimal collectionGoal) {
 		this.collectionGoal = collectionGoal;
 	}
 
@@ -153,15 +158,15 @@ public class Campaign implements Serializable {
 		this.collectionPercentage = collectionPercentage;
 	}
 
-	public float getBalance() {
+	public BigDecimal getBalance() {
 		return balance;
 	}
 
-	public void setBalance(float balance) {
+	public void setBalance(BigDecimal balance) {
 		this.balance = balance;
 	}
 
-	public float getUndirectedBalance() {
+	public BigDecimal getUndirectedBalance() {
 		return undirectedBalance;
 	}
 
@@ -173,7 +178,7 @@ public class Campaign implements Serializable {
 		this.animal = animal;
 	}
 
-	public void setUndirectedBalance(float undirectedBalance) {
+	public void setUndirectedBalance(BigDecimal undirectedBalance) {
 		this.undirectedBalance = undirectedBalance;
 	}
 
@@ -190,22 +195,10 @@ public class Campaign implements Serializable {
 	}
 
 	@Override
-	public boolean equals(Object obj) {
-		if (this == obj)
-			return true;
-		if (obj == null)
-			return false;
-		if (getClass() != obj.getClass())
-			return false;
-		Campaign other = (Campaign) obj;
-		return Float.floatToIntBits(balance) == Float.floatToIntBits(other.balance)
-				&& campaingStatus == other.campaingStatus
-				&& Float.floatToIntBits(collectionGoal) == Float.floatToIntBits(other.collectionGoal)
-				&& Float.floatToIntBits(collectionPercentage) == Float.floatToIntBits(other.collectionPercentage)
-				&& Objects.equals(description, other.description) && Objects.equals(end, other.end)
-				&& Objects.equals(id, other.id) && Objects.equals(image, other.image)
-				&& Objects.equals(start, other.start) && Objects.equals(title, other.title)
-				&& Float.floatToIntBits(undirectedBalance) == Float.floatToIntBits(other.undirectedBalance);
+	public boolean equals(Object o) {
+		if (this == o) return true;
+		if (!(o instanceof Campaign campaign)) return false;
+        return isCampaingStatus() == campaign.isCampaingStatus() && Float.compare(getCollectionPercentage(), campaign.getCollectionPercentage()) == 0 && Objects.equals(getId(), campaign.getId()) && Objects.equals(getStart(), campaign.getStart()) && Objects.equals(getEnd(), campaign.getEnd()) && Objects.equals(getTitle(), campaign.getTitle()) && Objects.equals(getDescription(), campaign.getDescription()) && Objects.equals(donations, campaign.donations) && getAnimal() == campaign.getAnimal() && Objects.deepEquals(getImage(), campaign.getImage()) && Objects.equals(getCollectionGoal(), campaign.getCollectionGoal()) && Objects.equals(getBalance(), campaign.getBalance()) && Objects.equals(getUndirectedBalance(), campaign.getUndirectedBalance());
 	}
 
 	@Override

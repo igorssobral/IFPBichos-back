@@ -3,6 +3,7 @@ package ifpb.edu.br.pj.ifpbichos.model.entity;
 
 import ifpb.edu.br.pj.ifpbichos.model.enums.UserRoles;
 import jakarta.persistence.*;
+import lombok.Data;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -12,8 +13,9 @@ import java.util.List;
 import java.util.Objects;
 
 @Entity
-@Inheritance(strategy = InheritanceType.TABLE_PER_CLASS)
+@Inheritance(strategy = InheritanceType.JOINED)
 @Table(name = "USERS", uniqueConstraints = {@UniqueConstraint(columnNames = {"USER_LOGIN","USER_EMAIL"})})
+@Data
 public abstract class User implements UserDetails {
 
 	/**
@@ -41,6 +43,8 @@ public abstract class User implements UserDetails {
 	@Column(name = "USER_ROLE")
 	private UserRoles userRole;
 
+	@OneToMany(mappedBy = "donator")
+	private List<Donation> donations;
 
 	public User(String name, String cpf, String phoneNumber, String email, String login, String password, UserRoles userRole) {
 		this.name = name;

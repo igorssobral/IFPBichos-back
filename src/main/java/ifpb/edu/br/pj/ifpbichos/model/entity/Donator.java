@@ -2,15 +2,15 @@ package ifpb.edu.br.pj.ifpbichos.model.entity;
 
 import ifpb.edu.br.pj.ifpbichos.model.enums.DonatorType;
 import ifpb.edu.br.pj.ifpbichos.model.enums.UserRoles;
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.Table;
-import jakarta.persistence.UniqueConstraint;
+import jakarta.persistence.*;
+import lombok.Data;
 
+import java.util.List;
 import java.util.Objects;
 
 @Entity
 @Table(name = "DONATOR", uniqueConstraints = {@UniqueConstraint(columnNames = {"USER_CPF"})})
+@Data
 public class Donator extends User {
 
 	/**
@@ -19,6 +19,8 @@ public class Donator extends User {
 	private static final long serialVersionUID = 1L;
 	@Column(name = "DONATOR_TYPE")
 	private DonatorType donatorType;
+
+
 
 	public Donator() {
 	}

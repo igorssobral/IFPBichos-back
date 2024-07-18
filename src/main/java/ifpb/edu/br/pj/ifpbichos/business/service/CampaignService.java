@@ -1,6 +1,7 @@
 package ifpb.edu.br.pj.ifpbichos.business.service;
 
 import java.io.IOException;
+import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.Arrays;
 import java.util.List;
@@ -19,8 +20,8 @@ public class CampaignService {
 	
 	@Autowired
 	private CampaignRepository campaignRepository;
-	
-	public boolean existsById(Integer id) {
+
+	public boolean existsById(Long id) {
 		return campaignRepository.existsById(id);
 	}
 	
@@ -31,7 +32,7 @@ public class CampaignService {
 	
 	
 	public List<Campaign> findAll() {
-		return campaignRepository.findAll();
+		return campaignRepository.findAllByOrderByStartAsc();
 	}
 	
 	public Optional<Campaign> findByName(String title) throws Exception {
@@ -45,7 +46,7 @@ public class CampaignService {
 		return campaignRepository.findByTitle(title);
 	}
 	
-	public Campaign findById(Integer id) throws Exception {
+	public Campaign findById(Long id) throws Exception {
 		if (id == null) {
 			throw new MissingFieldException("id");
 		}
@@ -55,9 +56,9 @@ public class CampaignService {
 		}
 		return campaignRepository.getReferenceById(id);
 	}
-	
+
 	public Campaign save(Campaign campaign) throws Exception {
-	
+
 		if (existsByTitle(campaign.getTitle())) {
 			throw new ObjectAlreadyExistsException("Já existe uma campanha com nome " + campaign.getTitle());
 		}
@@ -69,18 +70,18 @@ public class CampaignService {
 			throw new InvalidDateRangeException("Não pode criar essa campanha Data de início deve ser no futuro");
 		}
 
-		if (campaign.getBalance() < 0) {
+		if (campaign.getCollectionGoal().compareTo(BigDecimal.ZERO) < 0) {
 			throw new InvalidCollectionGoalException("O orçamento da campanha deve ser um valor positivo");
 		}
 
-		if (campaign.getUndirectedBalance() < 0) {
+		if (campaign.getBalance().compareTo(BigDecimal.ZERO) < 0) {
 			throw new InvalidCollectionPercentageException("A porcentagem da campanha deve ser um valor positivo");
 		}
 
 
 		return campaignRepository.save(campaign);
 	}
-	
+
 	public Campaign update(Campaign campaign) throws Exception {
 		
 		if (campaign.getId() == null) {
@@ -104,11 +105,11 @@ public class CampaignService {
 			throw new InvalidDateRangeException("Não pode editar essa campanha Data de início deve ser no futuro");
 		}
 
-		if (campaign.getBalance() < 0) {
+		if (campaign.getBalance().compareTo(BigDecimal.ZERO) < 0) {
 			throw new InvalidCollectionGoalException("O orçamento da campanha deve ser um valor positivo");
 		}
 
-		if (campaign.getUndirectedBalance() < 0) {
+		if (campaign.getUndirectedBalance().compareTo(BigDecimal.ZERO) < 0) {
 			throw new InvalidCollectionPercentageException("A porcentagem da campanha deve ser um valor positivo");
 		}
 
@@ -129,7 +130,7 @@ public class CampaignService {
 		campaignRepository.delete(campaign);
 	}
 
-	public void deleteById(Integer id) throws Exception {
+	public void deleteById(Long id) throws Exception {
 		if (id == null) {
 			throw new MissingFieldException("id", "delete");
 		} else if (!existsById(id)) {

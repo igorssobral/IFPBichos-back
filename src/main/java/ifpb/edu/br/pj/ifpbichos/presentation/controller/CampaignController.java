@@ -35,7 +35,7 @@ public class CampaignController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity findById(@PathVariable Integer id) {
+    public ResponseEntity findById(@PathVariable Long id) {
 
         try {
             Campaign entity = campaignService.findById(id);
@@ -63,7 +63,7 @@ public class CampaignController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity update(@PathVariable Integer id, @RequestBody CampaignDTO dto) {
+    public ResponseEntity update(@PathVariable Long id, @RequestBody CampaignDTO dto) {
         try {
             Optional<Campaign> entityOptional = campaignRepository.findById(id);
             if (!entityOptional.isPresent()) {
@@ -85,7 +85,7 @@ public class CampaignController {
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity delete(@PathVariable Integer id) {
+    public ResponseEntity delete(@PathVariable Long id) {
 
         try {
             campaignService.deleteById(id);

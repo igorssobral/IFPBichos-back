@@ -2,26 +2,27 @@ package ifpb.edu.br.pj.ifpbichos.presentation.dto;
 
 import ifpb.edu.br.pj.ifpbichos.model.enums.Animal;
 
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
 public class CampaignDTO {
     
-	private Integer id;
+	private Long id;
     private LocalDateTime start;
     private LocalDateTime end;
     private String title;
     private String description;
     private boolean campaingStatus;
     private String image;
-    private float collectionGoal;
+    private BigDecimal collectionGoal;
     private float collectionPercentage;
-    private float balance;
-    private float undirectedBalance;
+    private BigDecimal balance;
+    private BigDecimal undirectedBalance;
     private String animal;
 
     public CampaignDTO() {}
 
-    public Integer getId() {
+    public Long getId() {
         return id;
     }
 
@@ -49,7 +50,7 @@ public class CampaignDTO {
         return image;
     }
 
-    public float getCollectionGoal() {
+    public BigDecimal getCollectionGoal() {
         return collectionGoal;
     }
 
@@ -57,11 +58,11 @@ public class CampaignDTO {
         return collectionPercentage;
     }
 
-    public float getBalance() {
+    public BigDecimal getBalance() {
         return balance;
     }
 
-    public float getUndirectedBalance() {
+    public BigDecimal getUndirectedBalance() {
         return undirectedBalance;
     }
 
@@ -69,7 +70,7 @@ public class CampaignDTO {
         return animal;
     }
 
-    public void setId(Integer id) {
+    public void setId(Long id) {
         this.id = id;
     }
 
@@ -97,7 +98,7 @@ public class CampaignDTO {
         this.image = image;
     }
 
-    public void setCollectionGoal(float collectionGoal) {
+    public void setCollectionGoal(BigDecimal collectionGoal) {
         this.collectionGoal = collectionGoal;
     }
 
@@ -105,11 +106,11 @@ public class CampaignDTO {
         this.collectionPercentage = collectionPercentage;
     }
 
-    public void setBalance(float balance) {
+    public void setBalance(BigDecimal balance) {
         this.balance = balance;
     }
 
-    public void setUndirectedBalance(float undirectedBalance) {
+    public void setUndirectedBalance(BigDecimal undirectedBalance) {
         this.undirectedBalance = undirectedBalance;
     }
 
@@ -117,7 +118,7 @@ public class CampaignDTO {
         this.animal = animal;
     }
 
-    public CampaignDTO(Integer id, LocalDateTime start, LocalDateTime end, String title, String description, boolean campaingStatus, String image, float collectionGoal, float collectionPercentage, float balance, float undirectedBalance, String animal) {
+    public CampaignDTO(Long id, LocalDateTime start, LocalDateTime end, String title, String description, boolean campaingStatus, String image, BigDecimal collectionGoal, float collectionPercentage, BigDecimal balance, BigDecimal undirectedBalance, String animal) {
         this.id = id;
         this.start = start;
         this.end = end;
@@ -132,7 +133,7 @@ public class CampaignDTO {
         this.animal=animal;
     }
 
-    public CampaignDTO(LocalDateTime start, LocalDateTime end, String title, String description, boolean campaingStatus, String image, float collectionGoal, float collectionPercentage, float balance, float undirectedBalance,String animal) {
+    public CampaignDTO(LocalDateTime start, LocalDateTime end, String title, String description, boolean campaingStatus, String image, BigDecimal collectionGoal, float collectionPercentage, BigDecimal balance, BigDecimal undirectedBalance,String animal) {
         this.start = start;
         this.end = end;
         this.title = title;

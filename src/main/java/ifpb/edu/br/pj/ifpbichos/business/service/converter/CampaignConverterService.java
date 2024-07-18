@@ -5,6 +5,8 @@ import ifpb.edu.br.pj.ifpbichos.model.enums.Animal;
 import ifpb.edu.br.pj.ifpbichos.presentation.dto.CampaignDTO;
 import org.springframework.stereotype.Service;
 
+import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.util.ArrayList;
 import java.util.Base64;
 import java.util.List;
@@ -35,15 +37,21 @@ public class CampaignConverterService {
                 encodedImage = Base64.getEncoder().encodeToString(imageBytes);
 
             }
+            if (entity.getCollectionGoal().compareTo(BigDecimal.ZERO) != 0) {
+                // Calcular o progresso (balance / collectionGoal) * 100
+                BigDecimal progress = entity.getBalance().divide(entity.getCollectionGoal(), 4, RoundingMode.HALF_UP)
+                        .multiply(new BigDecimal("100"))
+                        .setScale(2, RoundingMode.HALF_UP);
 
-            float progress = (entity.getBalance() / entity.getCollectionGoal()) * 100;
-            int progressInt = (int) progress;
-            CampaignDTO dto = new CampaignDTO(entity.getId(), entity.getStart(), entity.getEnd(), entity.getTitle(), entity.getDescription(), entity.isCampaingStatus(),
-                    encodedImage, entity.getCollectionGoal(),progressInt , entity.getBalance(), entity.getUndirectedBalance(),entity.getAnimal() != null ? entity.getAnimal().toString() : "");
-            return dto;
+                int progressInt = progress.intValue();
+                CampaignDTO dto = new CampaignDTO(entity.getId(), entity.getStart(), entity.getEnd(), entity.getTitle(), entity.getDescription(), entity.isCampaingStatus(),
+                        encodedImage, entity.getCollectionGoal(), progressInt, entity.getBalance(), entity.getUndirectedBalance(), entity.getAnimal() != null ? entity.getAnimal().toString() : "");
+                return dto;
+            }
+
+
         }
-
-        throw new IllegalArgumentException("Não foi possível converter pois o objeto é nulo");
+        return null;
     }
 
     public List<Campaign> dtosToCampaigns(List<CampaignDTO> dtoList) {
