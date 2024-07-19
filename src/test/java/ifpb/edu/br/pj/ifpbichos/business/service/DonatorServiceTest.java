@@ -13,6 +13,7 @@ import org.springframework.test.util.ReflectionTestUtils;
 
 import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 import static org.mockito.ArgumentMatchers.anyInt;
+import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
@@ -31,9 +32,9 @@ public class DonatorServiceTest {
 	     ReflectionTestUtils.setField(service, "donatorRepository", repository);
 
 	     Donator user = new Donator();
-	     user.setId(1);
+	     user.setId(1L);
 	     Donator user02 = new Donator();
-	     user02.setId(2);
+	     user02.setId(2L);
 	     repository.save(user);
 	     repository.save(user02);
 	 }
@@ -43,9 +44,9 @@ public class DonatorServiceTest {
          MockitoAnnotations.openMocks(this);
 
        	 Donator user = new Donator();
-       	 user.setId(1);
+       	 user.setId(1L);
        	 Donator user02 = new Donator();
-       	 user02.setId(2);
+       	 user02.setId(2L);
        	 repository.save(user);
          repository.save(user02);
 	}
@@ -56,10 +57,10 @@ public class DonatorServiceTest {
      @Test
      public void testFindByIdObjectValid() {
 
-         when(repository.existsById(anyInt())).thenReturn(true);
+         when(repository.existsById(anyLong())).thenReturn(true);
 
-         assertDoesNotThrow(() -> service.findById(3));
-         verify(repository).getReferenceById(3);
+         assertDoesNotThrow(() -> service.findById(3L));
+         verify(repository).getReferenceById(3L);
      }
 
 }

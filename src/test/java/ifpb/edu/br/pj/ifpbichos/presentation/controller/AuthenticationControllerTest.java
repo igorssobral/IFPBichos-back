@@ -49,18 +49,14 @@ public class AuthenticationControllerTest {
 
     @BeforeEach
     public void setUp() {
-        authenticationController = new AuthenticationController();
+
         authenticationManager = mock(AuthenticationManager.class);
         userRepository = mock(UserRepository.class);
         userRegistrationService = mock(UserRegistrationService.class);
         tokenService = mock(TokenService.class);
         loginService = mock(LoginService.class);
+        authenticationController = new AuthenticationController(authenticationManager, tokenService, userRegistrationService, loginService);
 
-        authenticationController.setAuthenticationManager(authenticationManager);
-        authenticationController.setUserRepository(userRepository);
-        authenticationController.setUserRegistrationService(userRegistrationService);
-        authenticationController.setTokenService(tokenService);
-        authenticationController.setLoginService(loginService);
 
     }
     @Test
@@ -216,6 +212,8 @@ public class AuthenticationControllerTest {
 
         assertEquals(500, responseEntity.getStatusCodeValue());
         assertNotNull(responseEntity.getBody());
-        assertEquals(expectedErrorMessage, ((RuntimeException) responseEntity.getBody()).getMessage());    }
+        assertInstanceOf(String.class, responseEntity.getBody());
+        assertEquals(expectedErrorMessage, responseEntity.getBody());
+    }
 
 }

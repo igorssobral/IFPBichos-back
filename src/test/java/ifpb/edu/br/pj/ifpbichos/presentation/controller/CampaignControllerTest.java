@@ -119,7 +119,7 @@ public class CampaignControllerTest {
         campaignDTO.setTitle("campanha");
         campaignDTO.setEnd(LocalDateTime.of(2023, 12, 31, 23, 59));
         campaignDTO.setDescription("Descrição");
-        campaignDTO.setAnimal("CACHORRO");
+        campaignDTO.setAnimal(Animal.CACHORRO);
 
         when(campaignRepository.findById(id)).thenReturn(Optional.of(campaign));
         when(campaignService.update(campaign)).thenReturn(campaign);
@@ -168,7 +168,7 @@ public class CampaignControllerTest {
         campaignDTO.setTitle("campanha");
         campaignDTO.setEnd(LocalDateTime.of(2023, 12, 30, 23, 59));
         campaignDTO.setDescription("Descrição");
-        campaignDTO.setAnimal("CACHORRO");
+        campaignDTO.setAnimal(Animal.CACHORRO);
 
         when(campaignRepository.findById(id)).thenReturn(Optional.of(campaign));
         when(converterService.dtoToCampaign(any(CampaignDTO.class))).thenReturn(campaign);
