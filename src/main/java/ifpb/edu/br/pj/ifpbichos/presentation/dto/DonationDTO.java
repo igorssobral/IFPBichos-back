@@ -1,9 +1,11 @@
 package ifpb.edu.br.pj.ifpbichos.presentation.dto;
 
+import lombok.Data;
+
 import java.time.LocalDateTime;
 
 
-
+@Data
 public class DonationDTO {
 
 	private LocalDateTime date;
@@ -11,25 +13,7 @@ public class DonationDTO {
 	private Boolean isDirected;
 	
 	
-	public LocalDateTime getDate() {
-		return date;
-	}
-	public void setDate(LocalDateTime date) {
-		this.date = date;
-	}
-	public float getDonationValue() {
-		return donationValue;
-	}
-	public void setDonationValue(float donationValue) {
-		this.donationValue = donationValue;
-	}
-	public Boolean getIsDirected() {
-		return isDirected;
-	}
-	public void setIsDirected(Boolean isDirected) {
-		this.isDirected = isDirected;
-	}
-	
+
 	
 	
 }
