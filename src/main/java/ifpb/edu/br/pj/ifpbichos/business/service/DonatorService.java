@@ -17,14 +17,11 @@ public class DonatorService {
         @Autowired
         private DonatorRepository donatorRepository;
 
-
         public List<Donator> findAll() {
             return donatorRepository.findAll();
         }
 
-
-
-        public Donator findById(Integer id) throws Exception {
+        public Donator findById(Long id) throws Exception {
             if (id == null) {
                 throw new MissingFieldException("id");
             }else if(!donatorRepository.existsById(id)) {
@@ -61,8 +58,8 @@ public class DonatorService {
             donatorRepository.delete(donator);
         }
 
-        public void deleteById(String cpf) throws Exception {
+        public void deleteById(Long id) throws Exception {
 
-            donatorRepository.deleteById(Integer.valueOf(cpf));
+            donatorRepository.deleteById(id);
         }
 }

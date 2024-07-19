@@ -75,9 +75,8 @@ public class CampaignService {
 		}
 
 		if (campaign.getBalance().compareTo(BigDecimal.ZERO) < 0) {
-			throw new InvalidCollectionPercentageException("A porcentagem da campanha deve ser um valor positivo");
+			throw new InvalidCollectionPercentageException("O balanço da campanha deve ser um valor positivo");
 		}
-
 
 		return campaignRepository.save(campaign);
 	}
@@ -113,7 +112,7 @@ public class CampaignService {
 			throw new InvalidCollectionPercentageException("A porcentagem da campanha deve ser um valor positivo");
 		}
 
-		if(campaign.isCampaingStatus()==false){
+		if(!campaign.isCampaingStatus()){
 			throw new CampaignNotEditableException("A campanha ja foi encerrada e nao pode ser atualizada");
 		}
 

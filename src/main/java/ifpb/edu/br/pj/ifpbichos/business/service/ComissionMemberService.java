@@ -26,7 +26,7 @@ public class ComissionMemberService {
 
 
 
-    public ComissionMember findById(Integer id) throws Exception {
+    public ComissionMember findById(Long id) throws Exception {
         if (id == null) {
             throw new MissingFieldException("id");
         }else if(!comissionMemberRepository.existsById(id)) {
@@ -62,8 +62,8 @@ public class ComissionMemberService {
     	comissionMemberRepository.delete(comissionMember);
     }
 
-    public void deleteById(String cpf) throws Exception {
+    public void deleteById(Long id) throws Exception {
 
-        comissionMemberRepository.deleteById(Integer.valueOf(cpf));
+        comissionMemberRepository.deleteById(id);
     }
 }
