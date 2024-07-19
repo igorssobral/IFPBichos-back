@@ -49,9 +49,7 @@ public class Donation implements Serializable{
 	@Column(name = "DIRECTED", nullable = false)
 	private Boolean directed;
 	
-	public Donation() {
-		
-	}
+	public Donation() {}
 	
 	public Donation(LocalDateTime date, BigDecimal donationValue, Boolean isDirected) {
 		this.date = date;

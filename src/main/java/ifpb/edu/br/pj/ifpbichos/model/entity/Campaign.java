@@ -8,10 +8,12 @@ import java.util.Objects;
 
 import ifpb.edu.br.pj.ifpbichos.model.enums.Animal;
 import jakarta.persistence.*;
+import lombok.Data;
 
 
 @Table(name = "CAMPAING")
 @Entity
+@Data
 public class Campaign implements Serializable {
 
 	/**
@@ -54,9 +56,7 @@ public class Campaign implements Serializable {
 	@Column(name = "UNDIRECTED_BALANCE", nullable = false)
 	private BigDecimal undirectedBalance;
 	
-	public Campaign() {
-		
-	}
+	public Campaign() {}
 
 	public Campaign(LocalDateTime start, LocalDateTime end, String title, String description, byte[] image,float collectionPercentage,  BigDecimal balance,
 	BigDecimal undirectedBalance,Animal animal) {
@@ -86,129 +86,6 @@ public class Campaign implements Serializable {
 		this.animal=animal;
 	}
 
-	public Long getId() {
-		return id;
-	}
 
-	public void setId(Long id) {
-		this.id = id;
-	}
-
-	public LocalDateTime getStart() {
-		return start;
-	}
-
-	public void setStart(LocalDateTime start) {
-		this.start = start;
-	}
-
-	public LocalDateTime getEnd() {
-		return end;
-	}
-
-	public void setEnd(LocalDateTime end) {
-		this.end = end;
-	}
-
-	public String getTitle() {
-		return title;
-	}
-
-	public void setTitle(String title) {
-		this.title = title;
-	}
-
-	public String getDescription() {
-		return description;
-	}
-
-	public void setDescription(String description) {
-		this.description = description;
-	}
-
-	public boolean isCampaingStatus() {
-		return campaingStatus;
-	}
-
-	public void setCampaingStatus(boolean campaingStatus) {
-		this.campaingStatus = campaingStatus;
-	}
-
-	public byte[] getImage() {
-		return image;
-	}
-
-	public void setImage(byte[] image) {
-		this.image = image;
-	}
-
-	public BigDecimal getCollectionGoal() {
-		return collectionGoal;
-	}
-
-	public void setCollectionGoal(BigDecimal collectionGoal) {
-		this.collectionGoal = collectionGoal;
-	}
-
-	public float getCollectionPercentage() {
-		return collectionPercentage;
-	}
-
-	public void setCollectionPercentage(float collectionPercentage) {
-		this.collectionPercentage = collectionPercentage;
-	}
-
-	public BigDecimal getBalance() {
-		return balance;
-	}
-
-	public void setBalance(BigDecimal balance) {
-		this.balance = balance;
-	}
-
-	public BigDecimal getUndirectedBalance() {
-		return undirectedBalance;
-	}
-
-	public Animal getAnimal(){
-		return animal;
-	}
-
-	public void setAnimal(Animal animal) {
-		this.animal = animal;
-	}
-
-	public void setUndirectedBalance(BigDecimal undirectedBalance) {
-		this.undirectedBalance = undirectedBalance;
-	}
-
-	public static long getSerialversionuid() {
-		return serialVersionUID;
-	}
-
-
-
-	@Override
-	public int hashCode() {
-		return Objects.hash(balance, campaingStatus, collectionGoal, collectionPercentage, description, end, id, image,
-				start, title, undirectedBalance);
-	}
-
-	@Override
-	public boolean equals(Object o) {
-		if (this == o) return true;
-		if (!(o instanceof Campaign campaign)) return false;
-        return isCampaingStatus() == campaign.isCampaingStatus() && Float.compare(getCollectionPercentage(), campaign.getCollectionPercentage()) == 0 && Objects.equals(getId(), campaign.getId()) && Objects.equals(getStart(), campaign.getStart()) && Objects.equals(getEnd(), campaign.getEnd()) && Objects.equals(getTitle(), campaign.getTitle()) && Objects.equals(getDescription(), campaign.getDescription()) && Objects.equals(donations, campaign.donations) && getAnimal() == campaign.getAnimal() && Objects.deepEquals(getImage(), campaign.getImage()) && Objects.equals(getCollectionGoal(), campaign.getCollectionGoal()) && Objects.equals(getBalance(), campaign.getBalance()) && Objects.equals(getUndirectedBalance(), campaign.getUndirectedBalance());
-	}
-
-	@Override
-	public String toString() {
-		return "Campaign [id=" + id + ", start=" + start + ", end=" + end + ", title=" + title + ", description="
-				+ description + ", campaingStatus=" + campaingStatus + ", image=" + image + ", collectionGoal="
-				+ collectionGoal + ", collectionPercentage=" + collectionPercentage + ", balance=" + balance
-				+ ", undirectedBalance=" + undirectedBalance + "]";
-	}
-	
-	
 	
 }
