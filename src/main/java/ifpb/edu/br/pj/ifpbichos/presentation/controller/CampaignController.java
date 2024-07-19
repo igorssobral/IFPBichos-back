@@ -28,14 +28,14 @@ public class CampaignController {
     private CampaignRepository campaignRepository;
 
     @GetMapping
-    public ResponseEntity getAll() {
+    public ResponseEntity<?> getAll() {
         List<Campaign> entityList = campaignService.findAll();
         List<CampaignDTO> dtoList = converterService.CampaignsToDtos(entityList);
         return ResponseEntity.ok().body(dtoList);
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity findById(@PathVariable Long id) {
+    public ResponseEntity<?> findById(@PathVariable Long id) {
 
         try {
             Campaign entity = campaignService.findById(id);
@@ -49,13 +49,19 @@ public class CampaignController {
     }
 
     @PostMapping
-    public ResponseEntity save(@RequestBody CampaignDTO dto) {
+    public ResponseEntity<?> save(@RequestBody CampaignDTO dto) {
+        System.out.println(dto);
+        System.out.println("11111111111111111111111111111");
         try {
+            System.out.println("21111111111111111111111111111");
             Campaign entity = converterService.dtoToCampaign(dto);
+            System.out.println("31111111111111111111111111111");
 
             entity = campaignService.save(entity);
+            System.out.println("41111111111111111111111111111");
             dto = converterService.campaignToDto(entity);
-            return new ResponseEntity(dto, HttpStatus.CREATED);
+            System.out.println("51111111111111111111111111111");
+            return new ResponseEntity<>(dto, HttpStatus.CREATED);
 
         } catch (Exception e) {
             return ResponseEntity.badRequest().body(e.getMessage());
@@ -63,17 +69,17 @@ public class CampaignController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity update(@PathVariable Long id, @RequestBody CampaignDTO dto) {
+    public ResponseEntity<?> update(@PathVariable Long id, @RequestBody CampaignDTO dto) {
         try {
             Optional<Campaign> entityOptional = campaignRepository.findById(id);
-            if (!entityOptional.isPresent()) {
+            if (entityOptional.isEmpty()) {
                 return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Campaign not found");
             }
             Campaign entity = entityOptional.get();
             entity.setTitle(dto.getTitle());
             entity.setEnd(dto.getEnd());
             entity.setDescription(dto.getDescription());
-            entity.setAnimal(Animal.valueOf(dto.getAnimal()));
+            entity.setAnimal(dto.getAnimal());
             entity.setImage(null);
 
             campaignService.update(entity);
@@ -85,7 +91,7 @@ public class CampaignController {
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity delete(@PathVariable Long id) {
+    public ResponseEntity<?> delete(@PathVariable Long id) {
 
         try {
             campaignService.deleteById(id);

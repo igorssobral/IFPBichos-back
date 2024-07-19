@@ -31,7 +31,7 @@ public class DonatorController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity findById(@PathVariable Integer id) {
+    public ResponseEntity findById(@PathVariable Long id) {
 
         try {
             Donator entity = donatorService.findById(id);
@@ -76,10 +76,10 @@ public class DonatorController {
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity delete(@PathVariable String cpf) {
+    public ResponseEntity delete(@PathVariable Long id) {
 
         try {
-            donatorService.deleteById(cpf);
+            donatorService.deleteById(id);
 
             return ResponseEntity.noContent().build();
 

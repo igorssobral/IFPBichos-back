@@ -33,7 +33,7 @@ public class ComissionMemberController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity findById(@PathVariable Integer id) {
+    public ResponseEntity findById(@PathVariable Long id) {
 
         try {
             ComissionMember entity = comissionMemberService.findById(id);
@@ -78,10 +78,10 @@ public class ComissionMemberController {
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity delete(@PathVariable String cpf) {
+    public ResponseEntity delete(@PathVariable Long id) {
 
         try {
-            comissionMemberService.deleteById(cpf);
+            comissionMemberService.deleteById(id);
 
             return ResponseEntity.noContent().build();
 

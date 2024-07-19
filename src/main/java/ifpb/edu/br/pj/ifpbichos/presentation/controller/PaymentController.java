@@ -6,6 +6,7 @@ import com.mercadopago.exceptions.MPException;
 import com.mercadopago.resources.preference.Preference;
 import ifpb.edu.br.pj.ifpbichos.business.service.MercadoPagoService;
 import ifpb.edu.br.pj.ifpbichos.model.entity.Donation;
+import ifpb.edu.br.pj.ifpbichos.presentation.exception.PaymentProcessingException;
 import lombok.Data;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -20,10 +21,10 @@ public class PaymentController {
     private MercadoPagoService mercadoPagoService;
 
     @PostMapping
-    public Preference createPayment(@RequestBody PaymentRequest paymentRequest) throws MPException, MPApiException, MPApiException {
+    public Preference createPayment(@RequestBody PaymentRequest paymentRequest) throws  PaymentProcessingException {
         return mercadoPagoService.createPayment(paymentRequest.getTitle(), paymentRequest.getDescription(),
                 paymentRequest.getTransactionAmount(), paymentRequest.getInstallments(),paymentRequest.getCampaignId()
-                ,paymentRequest.getUserLogin()
+                ,paymentRequest.getUserLogin(), paymentRequest.getBackUrl(), paymentRequest.getIsDirected()
 
         );
     }
@@ -55,6 +56,7 @@ class PaymentRequest {
     private String preferenceId;
     private Long CampaignId;
     private String userLogin;
+    private String backUrl;
+    private Boolean isDirected;
 
-    // Getters and setters
 }
