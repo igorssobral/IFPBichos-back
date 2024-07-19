@@ -10,7 +10,7 @@ import lombok.Data;
 public class UndirectedBalance {
 
     @Id
-    private Integer id;
-    @Column
+    private Long id;
+    @Column(nullable = false)
     private Double balance;
 }
