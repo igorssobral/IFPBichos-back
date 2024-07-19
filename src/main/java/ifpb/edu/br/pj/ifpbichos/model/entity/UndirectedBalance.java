@@ -5,6 +5,9 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
 import lombok.Data;
 
+import java.math.BigDecimal;
+import java.util.Formatter;
+
 @Entity(name = "UNDIRECTED_BALANCE")
 @Data
 public class UndirectedBalance {
@@ -12,5 +15,5 @@ public class UndirectedBalance {
     @Id
     private Long id;
     @Column(nullable = false)
-    private Double balance;
+    private BigDecimal balance;
 }
