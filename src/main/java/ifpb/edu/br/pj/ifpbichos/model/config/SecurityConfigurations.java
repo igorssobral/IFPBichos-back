@@ -31,7 +31,7 @@ public class SecurityConfigurations {
 						.requestMatchers(HttpMethod.POST, "/api/auth/userRegistration").permitAll()
 						.requestMatchers(HttpMethod.POST, "/api/campaign").hasRole("ADMIN")
 						.requestMatchers(HttpMethod.GET, "/api/campaign").permitAll()
-						.requestMatchers(HttpMethod.GET, "/api/campaign/{id}").hasRole("ADMIN")
+						.requestMatchers(HttpMethod.GET, "/api/campaign/{id}").permitAll()
 						.requestMatchers(HttpMethod.PUT, "/api/campaign/{id}").hasRole("ADMIN")
 						.requestMatchers(HttpMethod.DELETE, "/api/campaign/{id}").hasRole("ADMIN")
 						.requestMatchers(HttpMethod.POST, "/api/auth/isValidToken").permitAll()
