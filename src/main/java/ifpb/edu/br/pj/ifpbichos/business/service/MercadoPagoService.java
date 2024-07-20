@@ -8,6 +8,7 @@ import com.mercadopago.exceptions.MPException;
 import com.mercadopago.resources.preference.Preference;
 import ifpb.edu.br.pj.ifpbichos.model.entity.Campaign;
 import ifpb.edu.br.pj.ifpbichos.model.entity.Donation;
+import ifpb.edu.br.pj.ifpbichos.model.entity.UndirectedBalance;
 import ifpb.edu.br.pj.ifpbichos.model.entity.User;
 import ifpb.edu.br.pj.ifpbichos.model.enums.DonationPaymentStatus;
 import ifpb.edu.br.pj.ifpbichos.model.repository.CampaignRepository;
@@ -33,15 +34,17 @@ public class MercadoPagoService {
     private final DonationRepository donationRepository;
     private final CampaignRepository campaignRepository;
     private final UserRepository userRepository;
+    private final UndirectedBalanceService undirectedBalanceService;
     private static final Logger LOGGER = Logger.getLogger(MercadoPagoService.class.getName());
 
     @Autowired
     public MercadoPagoService(DonatorRepository donatorRepository, DonationRepository donationRepository,
-                              CampaignRepository campaignRepository, UserRepository userRepository) {
+                              CampaignRepository campaignRepository, UserRepository userRepository, UndirectedBalanceService undirectedBalanceService) {
         this.donatorRepository = donatorRepository;
         this.donationRepository = donationRepository;
         this.campaignRepository = campaignRepository;
         this.userRepository = userRepository;
+        this.undirectedBalanceService = undirectedBalanceService;
     }
 
     public Preference createPayment(String title, String description, BigDecimal transactionAmount, Integer installments, Long campaignId, String userLogin, String url, Boolean isDirected) throws PaymentProcessingException {
@@ -59,6 +62,8 @@ public class MercadoPagoService {
             return preference;
         } catch (MPException | MPApiException e) {
             throw new PaymentProcessingException("Failed to create payment", e);
+        } catch (Exception e) {
+            throw new RuntimeException(e);
         }
     }
 
@@ -111,51 +116,65 @@ public class MercadoPagoService {
                         .build())
                 .build();
     }
-    public Donation updatePayment(String preferenceId, String paymentId, String status, String paymentType) {
+    public Donation updatePayment(String preferenceId, String paymentId, String status, String paymentType) throws Exception {
 
         Donation donation = donationRepository.findByPreferenceId(preferenceId)
                 .orElseThrow(() -> new ResourceNotFoundException("Donation not found"));
 
-        Campaign campaign = campaignRepository.findById(donation.getCampaign().getId())
-                .orElseThrow(() -> new ResourceNotFoundException("Campaign not found"));
+        if (!donation.getDirected()  && donation.getCampaign() == null){
+            try {
+                donation.setPaymentId(paymentId);
+                donation.setStatus(DonationPaymentStatus.APPROVED);
+                donation.setPaymentType(paymentType);
+                UndirectedBalance undirectedBalance = undirectedBalanceService.getCurrentBalanceEntity();
+                undirectedBalanceService.update(undirectedBalance, donation.getDonationValue());
+            } catch (Exception e) {
+                throw new Exception("Failed to update undirected balance", e);
+            }
+        }else{
+            Campaign campaign = campaignRepository.findById(donation.getCampaign().getId())
+                    .orElseThrow(() -> new ResourceNotFoundException("Campaign not found"));
 
-        if(donation.getPaymentId() == null){
-            campaign.setBalance(campaign.getBalance().add(donation.getDonationValue()));
-            campaignRepository.save(campaign);
+            if(donation.getPaymentId() == null){
+                campaign.setBalance(campaign.getBalance().add(donation.getDonationValue()));
+                campaignRepository.save(campaign);
 
-            donation.setPaymentId(paymentId);
-            donation.setStatus(DonationPaymentStatus.APPROVED);
-            donation.setPaymentType(paymentType);
+                donation.setPaymentId(paymentId);
+                donation.setStatus(DonationPaymentStatus.APPROVED);
+                donation.setPaymentType(paymentType);
+            }
         }
-
-
         return donationRepository.save(donation);
     }
 
-    public void saveDonation(String preferenceId, BigDecimal transactionAmount,Long campaignId, String userLogin, Boolean isDirected) {
+    public void saveDonation(String preferenceId, BigDecimal transactionAmount,Long campaignId, String userLogin, Boolean isDirected) throws Exception {
 
         User user = (User) userRepository.findByLogin(userLogin);
 
         if (user == null) {
             throw new ResourceNotFoundException("User not found");
         }
-
+        Donation donation = new Donation();
         Campaign campaign = null;
         if (isDirected) {
             campaign = campaignRepository.findById(campaignId)
                     .orElseThrow(() -> new ResourceNotFoundException("Campaign not found"));
+
+            donation.setDate(LocalDateTime.now());
+            donation.setCampaign(campaign);
+            donation.setDirected(isDirected);
+            donation.setPreferenceId(preferenceId);
+            donation.setDonationValue(transactionAmount);
+            donation.setStatus(DonationPaymentStatus.PENDING);
+            donation.setDonator(user);
+        } else if (!isDirected) {
+            donation.setDate(LocalDateTime.now());
+            donation.setDirected(isDirected);
+            donation.setPreferenceId(preferenceId);
+            donation.setDonationValue(transactionAmount);
+            donation.setStatus(DonationPaymentStatus.PENDING);
+            donation.setDonator(user);
         }
-
-        Donation donation = new Donation();
-
-        donation.setDate(LocalDateTime.now());
-        donation.setCampaign(campaign);
-        donation.setDirected(isDirected);
-        donation.setPreferenceId(preferenceId);
-        donation.setDonationValue(transactionAmount);
-        donation.setStatus(DonationPaymentStatus.PENDING);
-        donation.setDonator(user);
-
         user.getDonations().add(donation);
 
         donationRepository.save(donation);
