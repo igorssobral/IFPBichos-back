@@ -36,4 +36,26 @@ public class UndirectedBalanceService {
 
         repository.delete(bank);
     }
+
+    public UndirectedBalance findOne(Long id) throws Exception {
+        return repository.findById(id)
+                .orElseThrow(() -> new ObjectNotFoundException("uma entidade saldo", "id", id));
+    }
+
+    public BigDecimal getCurrentBalance() throws Exception {
+        UndirectedBalance undirectedBalance = getCurrentBalanceEntity();
+        return undirectedBalance.getBalance();
+    }
+
+    public UndirectedBalance getCurrentBalanceEntity() throws Exception {
+        return repository.findFirstByOrderByIdAsc().orElseGet(() -> {
+            UndirectedBalance newBalance = new UndirectedBalance();
+            newBalance.setBalance(BigDecimal.ZERO);
+            try {
+                return repository.save(newBalance);
+            } catch (Exception e) {
+                throw new RuntimeException("Failed to create initial undirected balance", e);
+            }
+        });
+    }
 }
