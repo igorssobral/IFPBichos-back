@@ -1,8 +1,6 @@
 package ifpb.edu.br.pj.ifpbichos.model.entity;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
 import lombok.Data;
 
 import java.math.BigDecimal;
@@ -13,7 +11,16 @@ import java.util.Formatter;
 public class UndirectedBalance {
 
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     @Column(nullable = false)
     private BigDecimal balance;
+
+    public UndirectedBalance(BigDecimal balance){
+        this.balance = balance;
+    }
+
+    public UndirectedBalance(){
+
+    }
 }
