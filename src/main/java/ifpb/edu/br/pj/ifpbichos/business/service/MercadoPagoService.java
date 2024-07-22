@@ -103,6 +103,7 @@ public class MercadoPagoService {
     }
 
     private PreferencePayerRequest buildPayerRequest(User user) {
+
         return PreferencePayerRequest.builder()
                 .name(user.getName())
                 .email(user.getEmail())
@@ -121,7 +122,7 @@ public class MercadoPagoService {
         Donation donation = donationRepository.findByPreferenceId(preferenceId)
                 .orElseThrow(() -> new ResourceNotFoundException("Donation not found"));
 
-        if (!donation.getDirected()  && donation.getCampaign() == null){
+        if (!donation.getDirected() && status.equals("approved") && donation.getCampaign() == null) {
             try {
                 donation.setPaymentId(paymentId);
                 donation.setStatus(DonationPaymentStatus.APPROVED);
@@ -135,7 +136,7 @@ public class MercadoPagoService {
             Campaign campaign = campaignRepository.findById(donation.getCampaign().getId())
                     .orElseThrow(() -> new ResourceNotFoundException("Campaign not found"));
 
-            if(donation.getPaymentId() == null){
+            if(donation.getPaymentId() == null && status.equals("approved")){
                 campaign.setBalance(campaign.getBalance().add(donation.getDonationValue()));
                 campaignRepository.save(campaign);
 
@@ -155,21 +156,22 @@ public class MercadoPagoService {
             throw new ResourceNotFoundException("User not found");
         }
         Donation donation = new Donation();
-        Campaign campaign = null;
-        if (isDirected) {
-            campaign = campaignRepository.findById(campaignId)
-                    .orElseThrow(() -> new ResourceNotFoundException("Campaign not found"));
 
+
+        if (isDirected) {
+            Campaign campaign = campaignRepository.findById(campaignId)
+                    .orElseThrow(() -> new ResourceNotFoundException("Campaign not found"));
+            System.out.println(campaign.toString());
             donation.setDate(LocalDateTime.now());
             donation.setCampaign(campaign);
-            donation.setDirected(isDirected);
+            donation.setDirected(true);
             donation.setPreferenceId(preferenceId);
             donation.setDonationValue(transactionAmount);
             donation.setStatus(DonationPaymentStatus.PENDING);
             donation.setDonator(user);
         } else if (!isDirected) {
             donation.setDate(LocalDateTime.now());
-            donation.setDirected(isDirected);
+            donation.setDirected(false);
             donation.setPreferenceId(preferenceId);
             donation.setDonationValue(transactionAmount);
             donation.setStatus(DonationPaymentStatus.PENDING);
