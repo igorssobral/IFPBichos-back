@@ -7,9 +7,14 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.Table;
 import jakarta.persistence.UniqueConstraint;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
+import lombok.Getter;
+import lombok.Setter;
 
-import java.util.Objects;
 
+@EqualsAndHashCode(callSuper = true)
+@Setter
+@Getter
 @Entity
 @Table(name = "COMISSION_MEMBER", uniqueConstraints = {@UniqueConstraint(columnNames = {"USER_CPF"})})
 @Data
@@ -29,14 +34,7 @@ public class ComissionMember extends User {
 
 	public ComissionMember() {}
 
-	public ComissionMemberRole getRole() {
-		return role;
-	}
-	public void setRole(ComissionMemberRole role) {
-		this.role = role;
-	}
-
-	@Override
+    @Override
 	public String getUsername() {
 		return super.getLogin();
 	}

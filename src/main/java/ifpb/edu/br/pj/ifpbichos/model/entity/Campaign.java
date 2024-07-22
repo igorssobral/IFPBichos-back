@@ -4,12 +4,10 @@ import java.io.Serializable;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.List;
-import java.util.Objects;
 
 import ifpb.edu.br.pj.ifpbichos.model.enums.Animal;
 import jakarta.persistence.*;
 import lombok.Data;
-
 
 @Table(name = "CAMPAING")
 @Entity
