@@ -3,13 +3,15 @@ package ifpb.edu.br.pj.ifpbichos.model.entity;
 import ifpb.edu.br.pj.ifpbichos.model.enums.DonationPaymentStatus;
 import jakarta.persistence.*;
 import lombok.Data;
+import lombok.ToString;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
-@Entity
+@ToString(exclude = "campaign")
 @Data
+@Entity
 public class Donation implements Serializable{
 	/**
 	 * 

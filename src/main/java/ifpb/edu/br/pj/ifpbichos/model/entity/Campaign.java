@@ -8,10 +8,12 @@ import java.util.List;
 import ifpb.edu.br.pj.ifpbichos.model.enums.Animal;
 import jakarta.persistence.*;
 import lombok.Data;
+import lombok.ToString;
 
+@ToString(exclude = "donations")
+@Data
 @Table(name = "CAMPAING")
 @Entity
-@Data
 public class Campaign implements Serializable {
 
 	/**
