@@ -33,7 +33,6 @@ public class UndirectedBalanceController {
         try {
             UndirectedBalance balance = undirectedBalanceService.getCurrentBalanceEntity();
             UndirectedBalanceDTO dto = converter.balanceToDto(balance);
-            System.out.println(dto);
             return ResponseEntity.ok().body(dto);
 
         } catch (Exception e) {

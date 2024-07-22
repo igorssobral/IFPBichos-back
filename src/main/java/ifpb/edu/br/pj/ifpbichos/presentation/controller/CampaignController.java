@@ -50,17 +50,13 @@ public class CampaignController {
 
     @PostMapping
     public ResponseEntity<?> save(@RequestBody CampaignDTO dto) {
-        System.out.println(dto);
-        System.out.println("11111111111111111111111111111");
+
         try {
-            System.out.println("21111111111111111111111111111");
+
             Campaign entity = converterService.dtoToCampaign(dto);
-            System.out.println("31111111111111111111111111111");
 
             entity = campaignService.save(entity);
-            System.out.println("41111111111111111111111111111");
             dto = converterService.campaignToDto(entity);
-            System.out.println("51111111111111111111111111111");
             return new ResponseEntity<>(dto, HttpStatus.CREATED);
 
         } catch (Exception e) {
