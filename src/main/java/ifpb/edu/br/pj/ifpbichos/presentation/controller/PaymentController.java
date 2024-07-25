@@ -21,7 +21,7 @@ public class PaymentController {
 
     @PostMapping
     public Preference createPayment(@RequestBody @Valid PaymentRequestDTO paymentRequest) throws  PaymentProcessingException {
-        return mercadoPagoService.createPayment(paymentRequest.getTitle(), paymentRequest.getDescription(),
+        return mercadoPagoService.createPayment(paymentRequest.getTitle(),
                 paymentRequest.getTransactionAmount(), paymentRequest.getInstallments(),paymentRequest.getCampaignId()
                 ,paymentRequest.getUserLogin(), paymentRequest.getBackUrl(), paymentRequest.getIsDirected()
 

@@ -45,11 +45,11 @@ public class PaymentControllerTest {
         paymentRequest.setIsDirected(true);
 
         Preference preference = new Preference();
-        when(mercadoPagoService.createPayment(anyString(), anyString(), any(), anyInt(), anyLong(), anyString(), anyString(), anyBoolean())).thenReturn(preference);
+        when(mercadoPagoService.createPayment(anyString(),  any(), anyInt(), anyLong(), anyString(), anyString(), anyBoolean())).thenReturn(preference);
 
         Preference result = paymentController.createPayment(paymentRequest);
         assertNotNull(result);
-        verify(mercadoPagoService, times(1)).createPayment(anyString(), anyString(), any(), anyInt(), anyLong(), anyString(), anyString(), anyBoolean());
+        verify(mercadoPagoService, times(1)).createPayment(anyString(),  any(), anyInt(), anyLong(), anyString(), anyString(), anyBoolean());
     }
 
     @Test

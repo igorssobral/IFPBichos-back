@@ -64,7 +64,7 @@ public class CampaignController {
         }
     }
 
-    @PutMapping("/{id}")
+    @PatchMapping("/{id}")
     public ResponseEntity<?> update(@PathVariable Long id, @RequestBody CampaignDTO dto) {
         try {
             Optional<Campaign> entityOptional = campaignRepository.findById(id);

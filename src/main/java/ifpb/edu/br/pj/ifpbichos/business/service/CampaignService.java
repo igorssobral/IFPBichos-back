@@ -31,7 +31,7 @@ public class CampaignService {
 	
 	
 	public List<Campaign> findAll() {
-		return campaignRepository.findAllByOrderByStartAsc();
+		return campaignRepository.findAllByOrderByStartDesc();
 	}
 	
 	public Optional<Campaign> findByName(String title) throws Exception {

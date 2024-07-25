@@ -36,24 +36,26 @@ public class MercadoPagoService {
     private final UserRepository userRepository;
     private final UndirectedBalanceService undirectedBalanceService;
     private static final Logger LOGGER = Logger.getLogger(MercadoPagoService.class.getName());
+    private final CampaignService campaignService;
 
     @Autowired
     public MercadoPagoService(DonatorRepository donatorRepository, DonationRepository donationRepository,
-                              CampaignRepository campaignRepository, UserRepository userRepository, UndirectedBalanceService undirectedBalanceService) {
+                              CampaignRepository campaignRepository, UserRepository userRepository, UndirectedBalanceService undirectedBalanceService, CampaignService campaignService) {
         this.donatorRepository = donatorRepository;
         this.donationRepository = donationRepository;
         this.campaignRepository = campaignRepository;
         this.userRepository = userRepository;
         this.undirectedBalanceService = undirectedBalanceService;
+        this.campaignService = campaignService;
     }
 
-    public Preference createPayment(String title, String description, BigDecimal transactionAmount, Integer installments, Long campaignId, String userLogin, String url, Boolean isDirected) throws PaymentProcessingException {
+    public Preference createPayment(String title, BigDecimal transactionAmount, Integer installments, Long campaignId, String userLogin, String url, Boolean isDirected) throws PaymentProcessingException {
         try {
             PreferenceClient client = new PreferenceClient();
 
             User user = (User) userRepository.findByLogin(userLogin);
 
-            PreferenceRequest preferenceRequest = buildPreferenceRequest(title, description, transactionAmount, installments, user, url);
+            PreferenceRequest preferenceRequest = buildPreferenceRequest(title, transactionAmount, installments, user, url);
 
             Preference preference = client.create(preferenceRequest);
 
@@ -67,7 +69,7 @@ public class MercadoPagoService {
         }
     }
 
-    private PreferenceRequest buildPreferenceRequest(String title, String description, BigDecimal transactionAmount, Integer installments, User user, String url) {
+    private PreferenceRequest buildPreferenceRequest(String title, BigDecimal transactionAmount, Integer installments, User user, String url) {
         PreferenceItemRequest itemRequest = PreferenceItemRequest.builder()
                 .id(UUID.randomUUID().toString())
                 .title(title)
@@ -130,8 +132,7 @@ public class MercadoPagoService {
 
             if(donation.getPaymentId() == null && status.equals("approved")){
                 campaign.setBalance(campaign.getBalance().add(donation.getDonationValue()));
-                campaignRepository.save(campaign);
-
+                campaignService.update(campaign);
                 donation.setPaymentId(paymentId);
                 donation.setStatus(DonationPaymentStatus.APPROVED);
                 donation.setPaymentType(paymentType);
