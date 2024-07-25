@@ -71,11 +71,9 @@ public class MercadoPagoService {
         PreferenceItemRequest itemRequest = PreferenceItemRequest.builder()
                 .id(UUID.randomUUID().toString())
                 .title(title)
-                .description(description)
-                .categoryId("currency_id")
                 .quantity(1)
-                .currencyId("BRL")
                 .unitPrice(transactionAmount)
+                .currencyId("BRL")
                 .build();
 
         List<PreferenceItemRequest> items = Collections.singletonList(itemRequest);
@@ -91,14 +89,8 @@ public class MercadoPagoService {
                         .build())
                 .expires(false)
                 .items(items)
-                .marketplaceFee(BigDecimal.ZERO)
                 .autoReturn("all")
                 .payer(buildPayerRequest(user))
-                .binaryMode(true)
-                .externalReference("1643827245")
-                .marketplace("marketplace")
-                .notificationUrl("http://notificationurl.com")
-                .operationType("regular_payment")
                 .build();
     }
 
@@ -161,7 +153,6 @@ public class MercadoPagoService {
         if (isDirected) {
             Campaign campaign = campaignRepository.findById(campaignId)
                     .orElseThrow(() -> new ResourceNotFoundException("Campaign not found"));
-            System.out.println(campaign.toString());
             donation.setDate(LocalDateTime.now());
             donation.setCampaign(campaign);
             donation.setDirected(true);

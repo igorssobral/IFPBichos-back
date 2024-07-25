@@ -1,19 +1,18 @@
 package ifpb.edu.br.pj.ifpbichos.business.service;
 
-import java.io.IOException;
+import ifpb.edu.br.pj.ifpbichos.model.entity.Campaign;
+import ifpb.edu.br.pj.ifpbichos.model.repository.CampaignRepository;
+import ifpb.edu.br.pj.ifpbichos.presentation.exception.*;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
+
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
-
-import ifpb.edu.br.pj.ifpbichos.presentation.exception.*;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
-
-import ifpb.edu.br.pj.ifpbichos.model.entity.Campaign;
-import ifpb.edu.br.pj.ifpbichos.model.repository.CampaignRepository;
-import org.springframework.web.multipart.MultipartFile;
 
 @Service
 public class CampaignService {
@@ -82,7 +81,7 @@ public class CampaignService {
 	}
 
 	public Campaign update(Campaign campaign) throws Exception {
-		
+		System.out.println(campaign);
 		if (campaign.getId() == null) {
 			throw new MissingFieldException("id", "update");
 		} else if (!existsById(campaign.getId())) {
@@ -90,8 +89,10 @@ public class CampaignService {
 		} 
 		
 		if (existsByTitle(campaign.getTitle())) {
-			Campaign campaignSaved = findByName(campaign.getTitle()).get();
-			if (campaignSaved.getTitle() != campaign.getTitle()) {
+			Campaign campaignSaved = findByName(campaign.getTitle()).orElseThrow(
+					() -> new NullPointerException("Campaign by title not found"));
+
+			if (!Objects.equals(campaignSaved.getTitle(), campaign.getTitle())) {
 				throw new ObjectAlreadyExistsException("Já existe uma campanha com o título " + campaign.getTitle());
 			}
 		}

@@ -10,7 +10,6 @@ import org.springframework.stereotype.Repository;
 import ifpb.edu.br.pj.ifpbichos.model.entity.Campaign;
 
 
-@Repository
 public interface CampaignRepository extends JpaRepository<Campaign, Long>{
 	 Optional<Campaign> findByTitle(String title);
 	 boolean existsByTitle(String title);
