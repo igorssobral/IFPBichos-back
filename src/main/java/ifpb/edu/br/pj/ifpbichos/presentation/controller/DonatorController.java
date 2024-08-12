@@ -3,7 +3,9 @@ package ifpb.edu.br.pj.ifpbichos.presentation.controller;
 import ifpb.edu.br.pj.ifpbichos.business.service.DonatorService;
 import ifpb.edu.br.pj.ifpbichos.business.service.converter.DonatorConverterService;
 import ifpb.edu.br.pj.ifpbichos.model.entity.Donator;
+import ifpb.edu.br.pj.ifpbichos.presentation.dto.DonationHistoryDTO;
 import ifpb.edu.br.pj.ifpbichos.presentation.dto.DonatorDTO;
+import ifpb.edu.br.pj.ifpbichos.presentation.exception.ObjectNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -28,6 +30,12 @@ public class DonatorController {
         List<DonatorDTO> dtoList = converterService.donatorsToDtos(entityList);
 
         return ResponseEntity.ok().body(dtoList);
+    }
+
+    @GetMapping("/donations")
+    public ResponseEntity<List<DonationHistoryDTO>> getAllDonations(@RequestParam String login) throws ObjectNotFoundException {
+        List<DonationHistoryDTO> donations = donatorService.getDonationsByUser(login);
+        return ResponseEntity.ok(donations);
     }
 
     @GetMapping("/{id}")

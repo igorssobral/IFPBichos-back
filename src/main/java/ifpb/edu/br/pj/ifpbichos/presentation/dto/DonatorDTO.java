@@ -1,5 +1,6 @@
 package ifpb.edu.br.pj.ifpbichos.presentation.dto;
 
+import ifpb.edu.br.pj.ifpbichos.model.entity.User;
 import ifpb.edu.br.pj.ifpbichos.model.enums.DonatorType;
 import ifpb.edu.br.pj.ifpbichos.model.enums.UserRoles;
 import lombok.Data;
@@ -20,5 +21,6 @@ public class DonatorDTO extends UserDTO {
 	}
 
 
-	
+	public DonatorDTO(User donator) {
+	}
 }
