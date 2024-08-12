@@ -37,6 +37,9 @@ public class Campaign implements Serializable {
 	@OneToMany(mappedBy = "campaign")
 	private List<Donation> donations;
 
+	@OneToMany(mappedBy = "campanha")
+	private List<Notificacao> notificacoes;
+
 	@Column(name = "CAMPAIGN_ANIMAL")
 	private Animal animal;
 
