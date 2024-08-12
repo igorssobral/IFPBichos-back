@@ -8,7 +8,4 @@ import java.util.Optional;
 public interface DonationRepository extends JpaRepository<Donation,Long> {
 
     public Optional<Donation> findByPreferenceId(String preferenceId);
-
-
-
 }

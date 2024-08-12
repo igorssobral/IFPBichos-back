@@ -43,7 +43,6 @@ public class Campaign implements Serializable {
 	@Column(name = "CAMPAIGN_ANIMAL")
 	private Animal animal;
 
-
 	@Column(name = "CAMPAIGN_STATUS", nullable = false)
 	private boolean campaingStatus;
 

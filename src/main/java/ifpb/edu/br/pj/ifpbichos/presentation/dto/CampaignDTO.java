@@ -1,5 +1,6 @@
 package ifpb.edu.br.pj.ifpbichos.presentation.dto;
 
+import ifpb.edu.br.pj.ifpbichos.model.entity.Campaign;
 import ifpb.edu.br.pj.ifpbichos.model.enums.Animal;
 import lombok.Data;
 
@@ -40,4 +41,6 @@ public class CampaignDTO {
     }
 
 
+    public CampaignDTO(Campaign campaign) {
+    }
 }

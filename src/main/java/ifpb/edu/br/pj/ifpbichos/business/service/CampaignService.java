@@ -1,11 +1,18 @@
 package ifpb.edu.br.pj.ifpbichos.business.service;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
+import ifpb.edu.br.pj.ifpbichos.handler.WebSocketSessionManager;
 import ifpb.edu.br.pj.ifpbichos.model.entity.Campaign;
 import ifpb.edu.br.pj.ifpbichos.model.repository.CampaignRepository;
+import ifpb.edu.br.pj.ifpbichos.presentation.dto.CampaignNotificationDTO;
 import ifpb.edu.br.pj.ifpbichos.presentation.exception.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.socket.TextMessage;
+import org.springframework.web.socket.WebSocketSession;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
@@ -19,6 +26,11 @@ public class CampaignService {
 	
 	@Autowired
 	private CampaignRepository campaignRepository;
+
+
+	@Autowired
+	private WebSocketSessionManager webSocketSessionManager;
+
 
 	public boolean existsById(Long id) {
 		return campaignRepository.existsById(id);
@@ -77,7 +89,11 @@ public class CampaignService {
 			throw new InvalidCollectionPercentageException("O balanço da campanha deve ser um valor positivo");
 		}
 
-		return campaignRepository.save(campaign);
+		Campaign campaignSaved = campaignRepository.save(campaign);
+
+		sendNotification(campaign);
+
+		return campaignSaved;
 	}
 
 	public Campaign update(Campaign campaign) throws Exception {
@@ -146,6 +162,31 @@ public class CampaignService {
 		}
 		campaign.setImage(imageFile.getBytes());
 		campaignRepository.save(campaign);
+	}
+
+	private void sendNotification(Campaign campaign) {
+		CampaignNotificationDTO notification = new CampaignNotificationDTO(campaign);
+
+		ObjectMapper objectMapper = new ObjectMapper();
+		objectMapper.registerModule(new JavaTimeModule());
+
+		String notificationJson;
+		try {
+			notificationJson = objectMapper.writeValueAsString(notification);
+		} catch (JsonProcessingException e) {
+			e.printStackTrace();
+			throw new RuntimeException("Erro ao converter a notificação para JSON", e);
+		}
+
+		for (WebSocketSession session : webSocketSessionManager.getSessions()) {
+			if (session.isOpen()) {
+				try {
+					session.sendMessage(new TextMessage(notificationJson));
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+			}
+		}
 	}
 
 }

@@ -27,6 +27,7 @@ public class SecurityConfigurations {
 				.csrf(csrf -> csrf.disable())
 				.sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
 				.authorizeHttpRequests(authorize -> authorize
+						.requestMatchers("/ws/notifications").permitAll() // Permitir acesso ao WebSocket
 						.requestMatchers(HttpMethod.POST, "/api/auth/login").permitAll()
 						.requestMatchers(HttpMethod.POST, "/api/auth/userRegistration").permitAll()
 						.requestMatchers(HttpMethod.POST, "/api/campaign").hasRole("ADMIN")
