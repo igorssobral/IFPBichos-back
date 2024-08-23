@@ -54,6 +54,11 @@ public class Campaign implements Serializable {
 	private BigDecimal balance;
 	@Column(name = "UNDIRECTED_BALANCE", nullable = false)
 	private BigDecimal undirectedBalance;
+
+	@OneToOne
+	private ResourcesRealocation resourcesRealocation;
+
+
 	
 	public Campaign() {}
 
