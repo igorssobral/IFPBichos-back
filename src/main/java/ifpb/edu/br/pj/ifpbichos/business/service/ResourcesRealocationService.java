@@ -1,4 +1,4 @@
-package ifpb.edu.br.pj.ifpbichos.business.service.converter;
+package ifpb.edu.br.pj.ifpbichos.business.service;
 
 import ifpb.edu.br.pj.ifpbichos.business.service.UndirectedBalanceService;
 import ifpb.edu.br.pj.ifpbichos.model.entity.Campaign;

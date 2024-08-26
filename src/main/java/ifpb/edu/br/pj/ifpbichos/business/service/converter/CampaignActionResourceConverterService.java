@@ -8,7 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 @Service
-public class CampaignActionResourceService {
+public class CampaignActionResourceConverterService {
 
     @Autowired
     private CampaignRepository campaignRepository;

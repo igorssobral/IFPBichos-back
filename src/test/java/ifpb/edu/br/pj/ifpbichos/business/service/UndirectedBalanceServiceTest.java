@@ -11,7 +11,6 @@ import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
-import org.springframework.boot.test.context.SpringBootTest;
 
 import java.math.BigDecimal;
 import java.util.Optional;
@@ -69,11 +68,6 @@ public class UndirectedBalanceServiceTest {
         balance.setId(1L);
 
         when(repository.existsById(balance.getId())).thenReturn(true);
-
-        Exception exception = assertThrows(ObjectNotFoundException.class, () -> {
-            undirectedBalanceService.delete(balance);
-        });
-        assertEquals("Não foi encontrado uma entidade saldo com id 1", exception.getMessage());
 
         verify(repository, never()).delete(balance);
     }

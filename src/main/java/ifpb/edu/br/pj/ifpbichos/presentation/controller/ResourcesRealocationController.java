@@ -1,7 +1,7 @@
 package ifpb.edu.br.pj.ifpbichos.presentation.controller;
 
-import ifpb.edu.br.pj.ifpbichos.business.service.ResourcesRealocationConverterService;
-import ifpb.edu.br.pj.ifpbichos.business.service.converter.ResourcesRealocationService;
+import ifpb.edu.br.pj.ifpbichos.business.service.converter.ResourcesRealocationConverterService;
+import ifpb.edu.br.pj.ifpbichos.business.service.ResourcesRealocationService;
 import ifpb.edu.br.pj.ifpbichos.model.entity.Campaign;
 import ifpb.edu.br.pj.ifpbichos.model.entity.ResourcesRealocation;
 import ifpb.edu.br.pj.ifpbichos.presentation.dto.ResourcesRealocationDTO;

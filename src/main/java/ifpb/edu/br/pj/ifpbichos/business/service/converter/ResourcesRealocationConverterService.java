@@ -1,5 +1,6 @@
-package ifpb.edu.br.pj.ifpbichos.business.service;
+package ifpb.edu.br.pj.ifpbichos.business.service.converter;
 
+import ifpb.edu.br.pj.ifpbichos.business.service.CampaignService;
 import ifpb.edu.br.pj.ifpbichos.model.entity.ResourcesRealocation;
 import ifpb.edu.br.pj.ifpbichos.presentation.dto.ResourcesRealocationDTO;
 import org.springframework.beans.factory.annotation.Autowired;
