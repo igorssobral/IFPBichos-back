@@ -1,5 +1,6 @@
 package ifpb.edu.br.pj.ifpbichos.model.repository;
 
+import java.math.BigDecimal;
 import java.util.List;
 import java.util.Optional;
 
@@ -18,6 +19,9 @@ public interface CampaignRepository extends JpaRepository<Campaign, Long>{
 
 	 @Query("SELECT c FROM Campaign c ORDER BY c.start DESC")
 	 List<Campaign> findAllByOrderByStartDesc();
+
+	@Query("SELECT SUM(c.balance) FROM Campaign c")
+	BigDecimal findTotalBalance();
 
 }
 

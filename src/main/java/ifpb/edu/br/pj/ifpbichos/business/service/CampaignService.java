@@ -189,4 +189,8 @@ public class CampaignService {
 		}
 	}
 
+	public BigDecimal getTotalBalance() {
+		return campaignRepository.findTotalBalance();
+	}
+
 }
