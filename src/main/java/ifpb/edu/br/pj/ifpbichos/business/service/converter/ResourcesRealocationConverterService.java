@@ -6,6 +6,9 @@ import ifpb.edu.br.pj.ifpbichos.presentation.dto.ResourcesRealocationDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @Service
 public class ResourcesRealocationConverterService {
 
@@ -28,4 +31,24 @@ public class ResourcesRealocationConverterService {
         entity.setCampaign(service.findById(dto.getCampaignId()));
         return entity;
     }
-}
+
+    public List<ResourcesRealocationDTO> ResourcesRealocationToDtos(List<ResourcesRealocation> entityList) {
+        if (entityList == null) {
+            throw new IllegalArgumentException("Lista de realocações de recursos não pode ser nula");
+        }
+
+        List<ResourcesRealocationDTO> dtoList = new ArrayList<>();
+
+        for (ResourcesRealocation resourcesRealocation : entityList) {
+            if (resourcesRealocation == null) {
+                throw new IllegalArgumentException("Objeto ResourcesRealocation não pode ser nulo");
+            }
+
+            ResourcesRealocationDTO dto = toDto(resourcesRealocation);
+            dtoList.add(dto); // Assumindo que toDto nunca retorna null
+        }
+
+        return dtoList;
+        }
+    }
+

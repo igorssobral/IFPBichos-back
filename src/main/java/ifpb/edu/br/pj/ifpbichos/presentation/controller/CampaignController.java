@@ -1,16 +1,14 @@
 package ifpb.edu.br.pj.ifpbichos.presentation.controller;
-import ifpb.edu.br.pj.ifpbichos.model.enums.Animal;
-import ifpb.edu.br.pj.ifpbichos.model.repository.CampaignRepository;
-import org.springframework.http.HttpStatus;
 
 import ifpb.edu.br.pj.ifpbichos.business.service.CampaignService;
 import ifpb.edu.br.pj.ifpbichos.business.service.converter.CampaignConverterService;
 import ifpb.edu.br.pj.ifpbichos.model.entity.Campaign;
+import ifpb.edu.br.pj.ifpbichos.model.repository.CampaignRepository;
 import ifpb.edu.br.pj.ifpbichos.presentation.dto.CampaignDTO;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
 
 import java.math.BigDecimal;
 import java.util.List;
@@ -55,7 +53,6 @@ public class CampaignController {
         try {
 
             Campaign entity = converterService.dtoToCampaign(dto);
-
             entity = campaignService.save(entity);
             dto = converterService.campaignToDto(entity);
             return new ResponseEntity<>(dto, HttpStatus.CREATED);

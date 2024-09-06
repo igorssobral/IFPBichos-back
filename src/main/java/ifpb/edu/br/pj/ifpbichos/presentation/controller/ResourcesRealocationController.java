@@ -7,6 +7,7 @@ import ifpb.edu.br.pj.ifpbichos.model.entity.ResourcesRealocation;
 import ifpb.edu.br.pj.ifpbichos.presentation.dto.ResourcesRealocationDTO;
 import ifpb.edu.br.pj.ifpbichos.presentation.exception.ObjectNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -35,6 +36,13 @@ public class ResourcesRealocationController {
         return ResponseEntity.ok(dtoList);
     }
 
+    @GetMapping
+    public ResponseEntity<?> getALL(){
+        List<ResourcesRealocation> entityList=resourcesRealocationService.findAll();
+        List<ResourcesRealocationDTO> dtoList=converter.ResourcesRealocationToDtos(entityList);
+        return ResponseEntity.ok().body(dtoList);
+    }
+
     @GetMapping("/{id}")
     public ResponseEntity<?> getResourcesRealocationById(@PathVariable Long id) {
         try {
@@ -57,6 +65,19 @@ public class ResourcesRealocationController {
             return ResponseEntity.badRequest().body(e.getMessage());
         }
     }
+
+    @PostMapping
+    public ResponseEntity<?> save (@RequestBody ResourcesRealocationDTO dto) {
+        try {
+            ResourcesRealocation entity = converter.toEntity(dto);
+            entity = resourcesRealocationService.save(entity);
+            dto = converter.toDto(entity);
+            return new ResponseEntity<>(dto, HttpStatus.CREATED);
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
+    }
+
 
     @PutMapping("/{id}")
     public ResponseEntity<?> updateResourcesRealocation(@PathVariable Long id, @RequestBody ResourcesRealocationDTO dto) {

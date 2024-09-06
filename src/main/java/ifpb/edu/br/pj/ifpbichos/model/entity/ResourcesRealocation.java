@@ -8,7 +8,6 @@ import lombok.NoArgsConstructor;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
-import java.util.Date;
 
 @NoArgsConstructor
 @AllArgsConstructor
@@ -31,4 +30,8 @@ public class ResourcesRealocation implements Serializable {
     private LocalDateTime date;
 
     private BigDecimal value;
+
+
+    public ResourcesRealocation(Object o, Object o1, Object o2) {
+    }
 }
