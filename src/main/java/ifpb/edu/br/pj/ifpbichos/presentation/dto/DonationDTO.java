@@ -1,5 +1,6 @@
 package ifpb.edu.br.pj.ifpbichos.presentation.dto;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
 import ifpb.edu.br.pj.ifpbichos.model.entity.Donation;
 import ifpb.edu.br.pj.ifpbichos.model.enums.DonationPaymentStatus;
 import lombok.Data;
@@ -12,6 +13,12 @@ import java.time.LocalDateTime;
 public class DonationDTO {
 
 	private Integer id;
+
+	@JsonInclude(JsonInclude.Include.NON_NULL)
+	private String title;
+
+	@JsonInclude(JsonInclude.Include.NON_NULL)
+	private String description;
 
 	private String preferenceId;
 
@@ -29,9 +36,10 @@ public class DonationDTO {
 
 	private Boolean directed;
 
-
 	public DonationDTO(Donation donation) {
 		this.id = donation.getId();
+		this.title = donation.getTitle() != null ? donation.getTitle() : "";
+		this.description = donation.getDescription() != null ? donation.getDescription() : "";
 		this.preferenceId = donation.getPreferenceId();
 		this.paymentId = donation.getPaymentId();
 		this.donator = new DonatorDTO(donation.getDonator());
@@ -42,75 +50,4 @@ public class DonationDTO {
 		this.directed = donation.getDirected();
 	}
 
-	public Integer getId() {
-		return id;
-	}
-
-	public void setId(Integer id) {
-		this.id = id;
-	}
-
-	public String getPreferenceId() {
-		return preferenceId;
-	}
-
-	public void setPreferenceId(String preferenceId) {
-		this.preferenceId = preferenceId;
-	}
-
-	public String getPaymentId() {
-		return paymentId;
-	}
-
-	public void setPaymentId(String paymentId) {
-		this.paymentId = paymentId;
-	}
-
-	public UserDTO getDonator() {
-		return donator;
-	}
-
-	public void setDonator(UserDTO donator) {
-		this.donator = donator;
-	}
-
-	public CampaignDTO getCampaign() {
-		return campaign;
-	}
-
-	public void setCampaign(CampaignDTO campaign) {
-		this.campaign = campaign;
-	}
-
-	public LocalDateTime getDate() {
-		return date;
-	}
-
-	public void setDate(LocalDateTime date) {
-		this.date = date;
-	}
-
-	public BigDecimal getDonationValue() {
-		return donationValue;
-	}
-
-	public void setDonationValue(BigDecimal donationValue) {
-		this.donationValue = donationValue;
-	}
-
-	public DonationPaymentStatus getStatus() {
-		return status;
-	}
-
-	public void setStatus(DonationPaymentStatus status) {
-		this.status = status;
-	}
-
-	public Boolean getDirected() {
-		return directed;
-	}
-
-	public void setDirected(Boolean directed) {
-		this.directed = directed;
-	}
 }

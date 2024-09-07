@@ -22,7 +22,13 @@ public class Donation implements Serializable{
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Integer id;
 
-	@Column(name = "PREFERENCE_ID", nullable = false)
+	@Column(name = "TITLE")
+	private String title;
+
+	@Column(name = "DESCRIPTION")
+	private String description;
+
+	@Column(name = "PREFERENCE_ID", nullable = true)
 	private String preferenceId;
 
 	@Column(name = "PAYMENT_ID", nullable = true)
@@ -50,7 +56,7 @@ public class Donation implements Serializable{
 
 	@Column(name = "DIRECTED", nullable = false)
 	private Boolean directed;
-	
+
 	public Donation() {}
 	
 	public Donation(LocalDateTime date, BigDecimal donationValue, Boolean isDirected) {
