@@ -1,7 +1,7 @@
 package ifpb.edu.br.pj.ifpbichos.presentation.controller;
 
-import ifpb.edu.br.pj.ifpbichos.business.service.converter.ResourcesRealocationConverterService;
 import ifpb.edu.br.pj.ifpbichos.business.service.ResourcesRealocationService;
+import ifpb.edu.br.pj.ifpbichos.business.service.converter.ResourcesRealocationConverterService;
 import ifpb.edu.br.pj.ifpbichos.model.entity.Campaign;
 import ifpb.edu.br.pj.ifpbichos.model.entity.ResourcesRealocation;
 import ifpb.edu.br.pj.ifpbichos.presentation.dto.ResourcesRealocationDTO;
@@ -36,13 +36,6 @@ public class ResourcesRealocationController {
         return ResponseEntity.ok(dtoList);
     }
 
-    @GetMapping
-    public ResponseEntity<?> getALL(){
-        List<ResourcesRealocation> entityList=resourcesRealocationService.findAll();
-        List<ResourcesRealocationDTO> dtoList=converter.ResourcesRealocationToDtos(entityList);
-        return ResponseEntity.ok().body(dtoList);
-    }
-
     @GetMapping("/{id}")
     public ResponseEntity<?> getResourcesRealocationById(@PathVariable Long id) {
         try {
@@ -57,33 +50,17 @@ public class ResourcesRealocationController {
     @PostMapping
     public ResponseEntity<?> createResourcesRealocation(@RequestBody ResourcesRealocationDTO dto) {
         try {
-            ResourcesRealocation entity = converter.toEntity(dto);
-            ResourcesRealocation createdRealocation = resourcesRealocationService.save(entity);
-            ResourcesRealocationDTO createdDto = converter.toDto(createdRealocation);
-            return ResponseEntity.ok(createdDto);
+            resourcesRealocationService.save(dto);
+            return ResponseEntity.status(HttpStatus.CREATED).body("Saldo Avulso transferido para a campanha.");
         } catch (Exception e) {
-            return ResponseEntity.badRequest().body(e.getMessage());
+            return ResponseEntity.badRequest().body("Ocorreu um erro ao transferir o saldo para a campanha.");
         }
     }
-
-    @PostMapping
-    public ResponseEntity<?> save (@RequestBody ResourcesRealocationDTO dto) {
-        try {
-            ResourcesRealocation entity = converter.toEntity(dto);
-            entity = resourcesRealocationService.save(entity);
-            dto = converter.toDto(entity);
-            return new ResponseEntity<>(dto, HttpStatus.CREATED);
-        } catch (Exception e) {
-            return ResponseEntity.badRequest().body(e.getMessage());
-        }
-    }
-
 
     @PutMapping("/{id}")
     public ResponseEntity<?> updateResourcesRealocation(@PathVariable Long id, @RequestBody ResourcesRealocationDTO dto) {
         try {
-            ResourcesRealocation entity = converter.toEntity(dto);
-            ResourcesRealocation updatedRealocation = resourcesRealocationService.update(id, entity);
+            ResourcesRealocation updatedRealocation = resourcesRealocationService.update(id, dto);
             ResourcesRealocationDTO updatedDto = converter.toDto(updatedRealocation);
             return ResponseEntity.ok(updatedDto);
         } catch (Exception e) {

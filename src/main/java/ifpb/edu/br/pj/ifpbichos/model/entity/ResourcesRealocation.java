@@ -1,5 +1,6 @@
 package ifpb.edu.br.pj.ifpbichos.model.entity;
 
+import ifpb.edu.br.pj.ifpbichos.model.enums.ResourceRealocationType;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -27,11 +28,10 @@ public class ResourcesRealocation implements Serializable {
     @JoinColumn(name = "CAMPAIGN_ID", nullable = false)
     private Campaign campaign;
 
+    private ResourceRealocationType typeRealocation;
+
     private LocalDateTime date;
 
     private BigDecimal value;
 
-
-    public ResourcesRealocation(Object o, Object o1, Object o2) {
-    }
 }

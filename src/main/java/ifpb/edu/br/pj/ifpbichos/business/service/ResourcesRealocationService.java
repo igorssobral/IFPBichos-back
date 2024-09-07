@@ -1,10 +1,12 @@
 package ifpb.edu.br.pj.ifpbichos.business.service;
 
-import ifpb.edu.br.pj.ifpbichos.business.service.UndirectedBalanceService;
 import ifpb.edu.br.pj.ifpbichos.model.entity.Campaign;
 import ifpb.edu.br.pj.ifpbichos.model.entity.ResourcesRealocation;
 import ifpb.edu.br.pj.ifpbichos.model.entity.UndirectedBalance;
+import ifpb.edu.br.pj.ifpbichos.model.enums.ResourceRealocationType;
+import ifpb.edu.br.pj.ifpbichos.model.repository.CampaignRepository;
 import ifpb.edu.br.pj.ifpbichos.model.repository.ResourcesRealocationRepository;
+import ifpb.edu.br.pj.ifpbichos.presentation.dto.ResourcesRealocationDTO;
 import ifpb.edu.br.pj.ifpbichos.presentation.exception.ObjectNotFoundException;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,11 +22,15 @@ public class ResourcesRealocationService {
 
     private final ResourcesRealocationRepository resourcesRealocationRepository;
     private final UndirectedBalanceService undirectedBalanceService;
+    private final CampaignService campaignService;
+    private final CampaignRepository campaignRepository;
 
     @Autowired
-    public ResourcesRealocationService(ResourcesRealocationRepository resourcesRealocationRepository, UndirectedBalanceService undirectedBalanceService) {
+    public ResourcesRealocationService(ResourcesRealocationRepository resourcesRealocationRepository, UndirectedBalanceService undirectedBalanceService, CampaignService campaignService, CampaignRepository campaignRepository) {
         this.resourcesRealocationRepository = resourcesRealocationRepository;
         this.undirectedBalanceService = undirectedBalanceService;
+        this.campaignService = campaignService;
+        this.campaignRepository = campaignRepository;
     }
 
     public List<ResourcesRealocation> findAll() {
@@ -36,16 +42,53 @@ public class ResourcesRealocationService {
                 .orElseThrow(() -> new ObjectNotFoundException("Realocação de recurso", "id", id));
     }
 
-    public ResourcesRealocation save(ResourcesRealocation resourcesRealocation) throws InvalidObjectException {
-        validateResourcesRealocation(resourcesRealocation);
+    @Transactional
+    public ResourcesRealocation save(ResourcesRealocationDTO resourcesRealocationDTO) throws Exception {
+        validateResourcesRealocation(resourcesRealocationDTO);
+
+        Campaign campaign = campaignService.findById(resourcesRealocationDTO.getCampaignId());
+        UndirectedBalance undirectedBalance = undirectedBalanceService.getCurrentBalanceEntity();
+
+        processRealocation(resourcesRealocationDTO, campaign, undirectedBalance);
+
+        ResourcesRealocation resourcesRealocation = createResourcesRealocation(resourcesRealocationDTO, campaign);
+
+        campaignRepository.save(campaign);
         return resourcesRealocationRepository.save(resourcesRealocation);
     }
 
-    public ResourcesRealocation update(Long id, ResourcesRealocation resourcesRealocation) throws ObjectNotFoundException, InvalidObjectException {
+    private void processRealocation(ResourcesRealocationDTO dto, Campaign campaign, UndirectedBalance undirectedBalance) throws Exception {
+        if (dto.getTypeRealocation().equals("withdrawal")) {
+            campaign.setUndirectedBalance(dto.getValue());
+            undirectedBalance.setBalance(undirectedBalance.getBalance().subtract(dto.getValue()));
+        }
+    }
+
+    private ResourcesRealocation createResourcesRealocation(ResourcesRealocationDTO dto, Campaign campaign) {
+        ResourcesRealocation resourcesRealocation = new ResourcesRealocation();
+
+        ResourceRealocationType realocationType = dto.getTypeRealocation().equals("withdrawal")
+                ? ResourceRealocationType.EXTRA_BALANCE_WITHDRAWAL
+                : ResourceRealocationType.EXTRA_BALANCE_ENTRY;
+
+        resourcesRealocation.setTypeRealocation(realocationType);
+        resourcesRealocation.setCampaign(campaign);
+        resourcesRealocation.setValue(dto.getValue());
+        resourcesRealocation.setDate(LocalDateTime.now());
+
+        campaign.setResourcesRealocation(resourcesRealocation);
+
+        return resourcesRealocation;
+    }
+
+    public ResourcesRealocation update(Long id, ResourcesRealocationDTO resourcesRealocationDTO) throws Exception {
         if (!resourcesRealocationRepository.existsById(id)) {
             throw new ObjectNotFoundException("Realocação de recurso", "id", id);
         }
-        validateResourcesRealocation(resourcesRealocation);
+
+        validateResourcesRealocation(resourcesRealocationDTO);
+        ResourcesRealocation resourcesRealocation = resourcesRealocationRepository.findById(id).orElseThrow(() -> new ObjectNotFoundException("Realocação de recurso", "id", id));
+
         resourcesRealocation.setId(id);
         return resourcesRealocationRepository.save(resourcesRealocation);
     }
@@ -57,15 +100,18 @@ public class ResourcesRealocationService {
         resourcesRealocationRepository.deleteById(id);
     }
 
-    private void validateResourcesRealocation(ResourcesRealocation resourcesRealocation) throws InvalidObjectException {
-        if (resourcesRealocation.getCampaign() == null) {
+    private void validateResourcesRealocation(ResourcesRealocationDTO resourcesRealocation) throws Exception {
+
+        if (resourcesRealocation.getCampaignId() == null) {
             throw new InvalidObjectException("O campo campanha não pode ser nulo");
         }
-        if (resourcesRealocation.getDate() == null) {
-            throw new InvalidObjectException("O campo data não pode ser nulo");
-        }
+
         if (resourcesRealocation.getValue() == null || resourcesRealocation.getValue().compareTo(BigDecimal.ZERO) <= 0) {
             throw new InvalidObjectException("O valor da realocação deve ser maior que zero e não pode ser nulo.");
+        }
+
+        if (resourcesRealocation.getValue().compareTo(undirectedBalanceService.getCurrentBalance()) > 0) {
+            throw new InvalidObjectException("O valor da realocação é insuficiente.");
         }
     }
 

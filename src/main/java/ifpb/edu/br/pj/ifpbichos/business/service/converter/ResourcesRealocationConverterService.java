@@ -19,7 +19,8 @@ public class ResourcesRealocationConverterService {
         return new ResourcesRealocationDTO(
                 entity.getDate(),
                 entity.getValue(),
-                entity.getCampaign().getId() 
+                entity.getCampaign().getId(),
+                entity.getTypeRealocation().toString()
         );
     }
 

@@ -3,6 +3,7 @@ package ifpb.edu.br.pj.ifpbichos.presentation.controller;
 import ifpb.edu.br.pj.ifpbichos.business.service.ResourcesRealocationService;
 import ifpb.edu.br.pj.ifpbichos.business.service.converter.ResourcesRealocationConverterService;
 import ifpb.edu.br.pj.ifpbichos.model.entity.ResourcesRealocation;
+import ifpb.edu.br.pj.ifpbichos.model.enums.ResourceRealocationType;
 import ifpb.edu.br.pj.ifpbichos.model.repository.ResourcesRealocationRepository;
 import ifpb.edu.br.pj.ifpbichos.presentation.dto.ResourcesRealocationDTO;
 import ifpb.edu.br.pj.ifpbichos.presentation.exception.ObjectNotFoundException;
@@ -15,6 +16,8 @@ import org.mockito.MockitoAnnotations;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
+import java.math.BigDecimal;
+import java.time.LocalDateTime;
 import java.util.Arrays;
 
 import static org.junit.Assert.assertEquals;
@@ -62,7 +65,7 @@ public class ResourcesRealocationControllerTest {
         when(resourcesRealocationService.findAll()).thenReturn(Arrays.asList(resourcesRealocation));
         when(converter.ResourcesRealocationToDtos(anyList())).thenReturn(Arrays.asList(resourcesRealocationDTO));
 
-        ResponseEntity responseEntity = resourcesRealocationController.getALL();
+        ResponseEntity responseEntity = resourcesRealocationController.getAllResourcesRealocations();
 
         assertEquals(HttpStatus.OK, responseEntity.getStatusCode());
         assertEquals(Arrays.asList(resourcesRealocationDTO), responseEntity.getBody());
@@ -76,18 +79,15 @@ public class ResourcesRealocationControllerTest {
         ResourcesRealocation resourcesRealocation = new ResourcesRealocation();
         ResourcesRealocationDTO resourcesRealocationDTO = new ResourcesRealocationDTO();
 
-        when(converter.toEntity(resourcesRealocationDTO)).thenReturn(resourcesRealocation);
-        when(resourcesRealocationService.save(resourcesRealocation)).thenReturn(resourcesRealocation);
-        when(converter.toDto(resourcesRealocation)).thenReturn(resourcesRealocationDTO);
+
+        when(resourcesRealocationService.save(resourcesRealocationDTO)).thenReturn(resourcesRealocation);
 
         ResponseEntity responseEntity = resourcesRealocationController.createResourcesRealocation(resourcesRealocationDTO);
 
         assertEquals(HttpStatus.OK, responseEntity.getStatusCode());
-        assertEquals(resourcesRealocationDTO, responseEntity.getBody());
+        assertEquals("Saldo Avulso transferido para a campanha.", responseEntity.getBody());
 
-        verify(converter, times(1)).toEntity(resourcesRealocationDTO);
-        verify(resourcesRealocationService, times(1)).save(resourcesRealocation);
-        verify(converter, times(1)).toDto(resourcesRealocation);
+        verify(resourcesRealocationService, times(1)).save(resourcesRealocationDTO);
     }
 
     @Test
@@ -95,18 +95,14 @@ public class ResourcesRealocationControllerTest {
         ResourcesRealocation resourcesRealocation = new ResourcesRealocation();
         ResourcesRealocationDTO resourcesRealocationDTO = new ResourcesRealocationDTO();
 
-        when(converter.toEntity(resourcesRealocationDTO)).thenReturn(resourcesRealocation);
-        when(resourcesRealocationService.save(resourcesRealocation)).thenReturn(resourcesRealocation);
-        when(converter.toDto(resourcesRealocation)).thenReturn(resourcesRealocationDTO);
+        when(resourcesRealocationService.save(resourcesRealocationDTO)).thenReturn(resourcesRealocation);
 
-        ResponseEntity responseEntity = resourcesRealocationController.save(resourcesRealocationDTO);
+        ResponseEntity responseEntity = resourcesRealocationController.createResourcesRealocation(resourcesRealocationDTO);
 
         assertEquals(HttpStatus.CREATED, responseEntity.getStatusCode());
         assertEquals(resourcesRealocationDTO, responseEntity.getBody());
 
-        verify(converter, times(1)).toEntity(resourcesRealocationDTO);
-        verify(resourcesRealocationService, times(1)).save(resourcesRealocation);
-        verify(converter, times(1)).toDto(resourcesRealocation);
+        verify(resourcesRealocationService, times(1)).save(resourcesRealocationDTO);
     }
 
 
