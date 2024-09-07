@@ -1,11 +1,13 @@
 package ifpb.edu.br.pj.ifpbichos.presentation.controller;
 
 import ifpb.edu.br.pj.ifpbichos.business.service.ComissionMemberService;
+import ifpb.edu.br.pj.ifpbichos.business.service.DonationService;
 import ifpb.edu.br.pj.ifpbichos.business.service.converter.ComissionMemberConverterService;
-import ifpb.edu.br.pj.ifpbichos.model.entity.Campaign;
 import ifpb.edu.br.pj.ifpbichos.model.entity.ComissionMember;
-import ifpb.edu.br.pj.ifpbichos.presentation.dto.CampaignDTO;
+import ifpb.edu.br.pj.ifpbichos.model.entity.Donation;
 import ifpb.edu.br.pj.ifpbichos.presentation.dto.ComissionMemberDTO;
+import ifpb.edu.br.pj.ifpbichos.presentation.dto.DonationDTO;
+import ifpb.edu.br.pj.ifpbichos.presentation.dto.DonationHistoryDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -22,6 +24,8 @@ public class ComissionMemberController {
 
     @Autowired
     private ComissionMemberConverterService converterService;
+    @Autowired
+    private DonationService donationService;
 
     @GetMapping
     public ResponseEntity getAll() {
@@ -30,6 +34,14 @@ public class ComissionMemberController {
         List<ComissionMemberDTO> dtoList = converterService.comissionMembersToDtos(entityList);
 
         return ResponseEntity.ok().body(dtoList);
+    }
+
+    @GetMapping("/manual-donations")
+    public ResponseEntity getAllDonationsManual() {
+        List<DonationDTO> entityList = donationService.findAllDonationsManual();
+
+
+        return ResponseEntity.ok().body(entityList);
     }
 
     @GetMapping("/{id}")
@@ -89,4 +101,6 @@ public class ComissionMemberController {
             return ResponseEntity.badRequest().body(e.getMessage());
         }
     }
+
+
 }
