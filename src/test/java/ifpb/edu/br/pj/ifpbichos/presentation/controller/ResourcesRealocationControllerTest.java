@@ -3,7 +3,6 @@ package ifpb.edu.br.pj.ifpbichos.presentation.controller;
 import ifpb.edu.br.pj.ifpbichos.business.service.ResourcesRealocationService;
 import ifpb.edu.br.pj.ifpbichos.business.service.converter.ResourcesRealocationConverterService;
 import ifpb.edu.br.pj.ifpbichos.model.entity.ResourcesRealocation;
-import ifpb.edu.br.pj.ifpbichos.model.enums.ResourceRealocationType;
 import ifpb.edu.br.pj.ifpbichos.model.repository.ResourcesRealocationRepository;
 import ifpb.edu.br.pj.ifpbichos.presentation.dto.ResourcesRealocationDTO;
 import ifpb.edu.br.pj.ifpbichos.presentation.exception.ObjectNotFoundException;
@@ -18,7 +17,7 @@ import org.springframework.http.ResponseEntity;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
-import java.util.Arrays;
+import java.util.List;
 
 import static org.junit.Assert.assertEquals;
 import static org.mockito.ArgumentMatchers.anyList;
@@ -61,17 +60,22 @@ public class ResourcesRealocationControllerTest {
     public void testGetAll() {
         ResourcesRealocation resourcesRealocation = new ResourcesRealocation();
         ResourcesRealocationDTO resourcesRealocationDTO = new ResourcesRealocationDTO();
+        resourcesRealocationDTO.setDate(LocalDateTime.now());
+        resourcesRealocationDTO.setValue(BigDecimal.valueOf(100));
+        resourcesRealocationDTO.setCampaignId(1L);
+        resourcesRealocationDTO.setTypeRealocation("someType");
 
-        when(resourcesRealocationService.findAll()).thenReturn(Arrays.asList(resourcesRealocation));
-        when(converter.ResourcesRealocationToDtos(anyList())).thenReturn(Arrays.asList(resourcesRealocationDTO));
 
-        ResponseEntity responseEntity = resourcesRealocationController.getAllResourcesRealocations();
+        when(resourcesRealocationService.findAll()).thenReturn(List.of(resourcesRealocation));
+        when(converter.toDto(any(ResourcesRealocation.class))).thenReturn(resourcesRealocationDTO);
+
+        ResponseEntity<List<ResourcesRealocationDTO>> responseEntity = resourcesRealocationController.getAllResourcesRealocations();
 
         assertEquals(HttpStatus.OK, responseEntity.getStatusCode());
-        assertEquals(Arrays.asList(resourcesRealocationDTO), responseEntity.getBody());
+        assertEquals(List.of(resourcesRealocationDTO), responseEntity.getBody());
 
         verify(resourcesRealocationService, times(1)).findAll();
-        verify(converter, times(1)).ResourcesRealocationToDtos(anyList());
+        verify(converter, times(1)).toDto(any(ResourcesRealocation.class));
     }
 
     @Test
@@ -84,7 +88,7 @@ public class ResourcesRealocationControllerTest {
 
         ResponseEntity responseEntity = resourcesRealocationController.createResourcesRealocation(resourcesRealocationDTO);
 
-        assertEquals(HttpStatus.OK, responseEntity.getStatusCode());
+        assertEquals(HttpStatus.CREATED, responseEntity.getStatusCode());
         assertEquals("Saldo Avulso transferido para a campanha.", responseEntity.getBody());
 
         verify(resourcesRealocationService, times(1)).save(resourcesRealocationDTO);
@@ -100,7 +104,7 @@ public class ResourcesRealocationControllerTest {
         ResponseEntity responseEntity = resourcesRealocationController.createResourcesRealocation(resourcesRealocationDTO);
 
         assertEquals(HttpStatus.CREATED, responseEntity.getStatusCode());
-        assertEquals(resourcesRealocationDTO, responseEntity.getBody());
+        assertEquals("Saldo Avulso transferido para a campanha.", responseEntity.getBody());
 
         verify(resourcesRealocationService, times(1)).save(resourcesRealocationDTO);
     }
