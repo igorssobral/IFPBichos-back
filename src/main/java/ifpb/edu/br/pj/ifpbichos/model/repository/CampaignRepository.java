@@ -19,9 +19,15 @@ public interface CampaignRepository extends JpaRepository<Campaign, Long>{
 
 	 @Query("SELECT c FROM Campaign c ORDER BY c.start DESC")
 	 List<Campaign> findAllByOrderByStartDesc();
+	List<Campaign> findAllByCampaingStatusTrue();
+
+	 List<Campaign> findAllByCampaingStatusFalse();
+
+	List<Campaign> findAllByCampaingStatusFalseAndBalanceGreaterThan(BigDecimal balance);
 
 	@Query("SELECT SUM(c.balance) FROM Campaign c")
 	BigDecimal findTotalBalance();
+
 
 }
 

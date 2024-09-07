@@ -1,14 +1,14 @@
 package ifpb.edu.br.pj.ifpbichos.model.entity;
 
-import java.io.Serializable;
-import java.math.BigDecimal;
-import java.time.LocalDateTime;
-import java.util.List;
-
 import ifpb.edu.br.pj.ifpbichos.model.enums.Animal;
 import jakarta.persistence.*;
 import lombok.Data;
 import lombok.ToString;
+
+import java.io.Serializable;
+import java.math.BigDecimal;
+import java.time.LocalDateTime;
+import java.util.List;
 
 @ToString(exclude = "donations")
 @Data
@@ -90,6 +90,19 @@ public class Campaign implements Serializable {
 		this.animal=animal;
 	}
 
+	public BigDecimal getBalance() {
+		return this.balance.add(this.undirectedBalance);
+	}
+
+	@PrePersist
+	@PreUpdate
+	public void verifyStatus() {
+		updateStatus();
+	}
+
+	public void updateStatus() {
+		this.campaingStatus = !this.end.isBefore(LocalDateTime.now());
+	}
 
 	
 }

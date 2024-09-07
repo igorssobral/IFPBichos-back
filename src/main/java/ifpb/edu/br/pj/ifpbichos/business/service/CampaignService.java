@@ -10,6 +10,7 @@ import ifpb.edu.br.pj.ifpbichos.presentation.dto.CampaignNotificationDTO;
 import ifpb.edu.br.pj.ifpbichos.presentation.exception.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.socket.TextMessage;
 import org.springframework.web.socket.WebSocketSession;
@@ -43,7 +44,14 @@ public class CampaignService {
 	
 	
 	public List<Campaign> findAll() {
-		return campaignRepository.findAllByOrderByStartDesc();
+		return campaignRepository.findAllByCampaingStatusTrue();
+	}
+
+	public List<Campaign> findAllFinished() {
+		return campaignRepository.findAllByCampaingStatusFalse();
+	}
+	public List<Campaign> findAllFinishedBalance() {
+		return campaignRepository.findAllByCampaingStatusFalseAndBalanceGreaterThan(BigDecimal.ZERO);
 	}
 	
 	public Optional<Campaign> findByName(String title) throws Exception {
@@ -96,14 +104,15 @@ public class CampaignService {
 		return campaignSaved;
 	}
 
+	@Transactional
 	public Campaign update(Campaign campaign) throws Exception {
 		System.out.println(campaign);
 		if (campaign.getId() == null) {
 			throw new MissingFieldException("id", "update");
 		} else if (!existsById(campaign.getId())) {
 			throw new ObjectNotFoundException("Campanha", "id", campaign.getId());
-		} 
-		
+		}
+
 		if (existsByTitle(campaign.getTitle())) {
 			Campaign campaignSaved = findByName(campaign.getTitle()).orElseThrow(
 					() -> new NullPointerException("Campaign by title not found"));
@@ -135,7 +144,7 @@ public class CampaignService {
 
 		return campaignRepository.save(campaign);
 	}
-	
+
 	public void delete(Campaign campaign) throws Exception {
 		if (campaign.getId() == null) {
 			throw new MissingFieldException("id", "delete");
@@ -193,4 +202,11 @@ public class CampaignService {
 		return campaignRepository.findTotalBalance();
 	}
 
+	public void updateAllCampaignStatuses() {
+		List<Campaign> campaigns = campaignRepository.findAll(); // Carrega todas as campanhas
+//		campaigns.forEach(campaign -> {
+//			campaign.updateStatus(); // Atualiza o status com base na data atual
+//			campaignRepository.save(campaign); // Salva a atualização no banco de dados
+//		});
+	}
 }
