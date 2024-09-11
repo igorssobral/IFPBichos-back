@@ -48,7 +48,7 @@ public class CampaignService {
 	}
 
 	public List<Campaign> findAllFinished() {
-		return campaignRepository.findAllByCampaingStatusFalse();
+		return campaignRepository.findAllByCampaingStatusFalseAndCampaignActionResourceIsNull();
 	}
 	public List<Campaign> findAllFinishedBalance() {
 		return campaignRepository.findAllByCampaingStatusFalseAndBalanceGreaterThan(BigDecimal.ZERO);
@@ -203,7 +203,7 @@ public class CampaignService {
 	}
 
 	public void updateAllCampaignStatuses() {
-		List<Campaign> campaigns = campaignRepository.findAll(); // Carrega todas as campanhas
+		List<Campaign> campaigns = campaignRepository.findAll();
 //		campaigns.forEach(campaign -> {
 //			campaign.updateStatus(); // Atualiza o status com base na data atual
 //			campaignRepository.save(campaign); // Salva a atualização no banco de dados
