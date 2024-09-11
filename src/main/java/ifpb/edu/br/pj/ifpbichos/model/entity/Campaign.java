@@ -58,6 +58,9 @@ public class Campaign implements Serializable {
 	@OneToOne
 	private ResourcesRealocation resourcesRealocation;
 
+	@OneToOne
+	private CampaignActionResource campaignActionResource;
+
 
 	
 	public Campaign() {}

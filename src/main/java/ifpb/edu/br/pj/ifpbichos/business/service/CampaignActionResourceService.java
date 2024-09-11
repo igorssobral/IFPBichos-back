@@ -54,9 +54,11 @@ public class CampaignActionResourceService {
             campaign.setBalance(BigDecimal.ZERO);
             campaign.setUndirectedBalance(BigDecimal.ZERO);
 
+            CampaignActionResource campaignActionResource1 = repository.save(campaignActionResource);
+            campaign.setCampaignActionResource(campaignActionResource1);
             campaignRepository.save(campaign);
-            System.out.println(campaign.getBalance());
-            return repository.save(campaignActionResource);
+
+            return campaignActionResource1;
         } catch (DataAccessException e) {
             throw new RuntimeException("Failed to save CampaignActionResource", e);
         }

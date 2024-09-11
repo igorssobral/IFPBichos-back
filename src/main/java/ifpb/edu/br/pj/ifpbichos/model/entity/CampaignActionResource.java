@@ -20,7 +20,7 @@ public class CampaignActionResource implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @ManyToOne
+    @OneToOne
     @JoinColumn(name = "CAMPAIGN_ID", nullable = false)
     private Campaign campaign;
 
