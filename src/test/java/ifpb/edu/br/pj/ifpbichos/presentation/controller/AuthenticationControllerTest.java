@@ -1,6 +1,7 @@
 package ifpb.edu.br.pj.ifpbichos.presentation.controller;
 
 import ifpb.edu.br.pj.ifpbichos.business.service.LoginService;
+import ifpb.edu.br.pj.ifpbichos.business.service.PasswordResetService;
 import ifpb.edu.br.pj.ifpbichos.business.service.TokenService;
 import ifpb.edu.br.pj.ifpbichos.business.service.UserRegistrationService;
 import ifpb.edu.br.pj.ifpbichos.model.entity.Donator;
@@ -47,6 +48,9 @@ public class AuthenticationControllerTest {
     @Mock
     private TokenService tokenService;
 
+    @Mock
+    private PasswordResetService passwordResetService;
+
     @BeforeEach
     public void setUp() {
 
@@ -55,7 +59,8 @@ public class AuthenticationControllerTest {
         userRegistrationService = mock(UserRegistrationService.class);
         tokenService = mock(TokenService.class);
         loginService = mock(LoginService.class);
-        authenticationController = new AuthenticationController(authenticationManager, tokenService, userRegistrationService, loginService);
+        passwordResetService = mock(PasswordResetService.class);
+        authenticationController = new AuthenticationController(authenticationManager, tokenService, userRegistrationService, loginService,passwordResetService);
 
 
     }
