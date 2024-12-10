@@ -1,22 +1,23 @@
 package ifpb.edu.br.pj.ifpbichos.presentation.controller;
-import ifpb.edu.br.pj.ifpbichos.model.enums.Animal;
-import ifpb.edu.br.pj.ifpbichos.model.repository.CampaignRepository;
-import org.springframework.http.HttpStatus;
 
 import ifpb.edu.br.pj.ifpbichos.business.service.CampaignService;
 import ifpb.edu.br.pj.ifpbichos.business.service.converter.CampaignConverterService;
 import ifpb.edu.br.pj.ifpbichos.model.entity.Campaign;
+import ifpb.edu.br.pj.ifpbichos.model.repository.CampaignRepository;
 import ifpb.edu.br.pj.ifpbichos.presentation.dto.CampaignDTO;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
-
+import java.math.BigDecimal;
 import java.util.List;
-import java.util.Optional;
 
 @RestController
 @RequestMapping("/api/campaign")
+@Validated
 public class CampaignController {
 
     @Autowired
@@ -24,76 +25,85 @@ public class CampaignController {
 
     @Autowired
     private CampaignConverterService converterService;
-    @Autowired
-    private CampaignRepository campaignRepository;
 
     @GetMapping
-    public ResponseEntity getAll() {
+    public ResponseEntity<List<CampaignDTO>> getAll() {
         List<Campaign> entityList = campaignService.findAll();
         List<CampaignDTO> dtoList = converterService.CampaignsToDtos(entityList);
-        return ResponseEntity.ok().body(dtoList);
+        return ResponseEntity.ok(dtoList);
+    }
+
+    @GetMapping("/getAllFinished")
+    public ResponseEntity<List<CampaignDTO>> getAllFinished() {
+        List<Campaign> entityList = campaignService.findAllFinished();
+        List<CampaignDTO> dtoList = converterService.CampaignsToDtos(entityList);
+        return ResponseEntity.ok(dtoList);
+    }
+
+    @GetMapping("/finishedBalance")
+    public ResponseEntity<List<CampaignDTO>> getAllFinishedHighZero() {
+        List<Campaign> entityList = campaignService.findAllFinishedBalance();
+        List<CampaignDTO> dtoList = converterService.CampaignsToDtos(entityList);
+        return ResponseEntity.ok(dtoList);
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity findById(@PathVariable Integer id) {
-
+    public ResponseEntity<?> findById(@PathVariable Long id) {
         try {
             Campaign entity = campaignService.findById(id);
             CampaignDTO dto = converterService.campaignToDto(entity);
-
-            return ResponseEntity.ok().body(dto);
-
+            return ResponseEntity.ok(dto);
         } catch (Exception e) {
-            return ResponseEntity.badRequest().body(e.getMessage());
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Campaign not found: " + e.getMessage());
         }
     }
 
     @PostMapping
-    public ResponseEntity save(@RequestBody CampaignDTO dto) {
+    public ResponseEntity<CampaignDTO> save(@Valid @RequestBody CampaignDTO dto) {
         try {
             Campaign entity = converterService.dtoToCampaign(dto);
-
             entity = campaignService.save(entity);
-            dto = converterService.campaignToDto(entity);
-            return new ResponseEntity(dto, HttpStatus.CREATED);
-
+            CampaignDTO responseDto = converterService.campaignToDto(entity);
+            return ResponseEntity.status(HttpStatus.CREATED).body(responseDto);
         } catch (Exception e) {
-            return ResponseEntity.badRequest().body(e.getMessage());
+            return ResponseEntity.badRequest().body(null);
         }
     }
 
-    @PutMapping("/{id}")
-    public ResponseEntity update(@PathVariable Integer id, @RequestBody CampaignDTO dto) {
+    @PatchMapping("/{id}")
+    public ResponseEntity<?> update(@PathVariable Long id, @Valid @RequestBody CampaignDTO dto) {
         try {
-            Optional<Campaign> entityOptional = campaignRepository.findById(id);
-            if (!entityOptional.isPresent()) {
+            Campaign entity = campaignService.findById(id);
+            if (entity == null) {
                 return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Campaign not found");
             }
-            Campaign entity = entityOptional.get();
             entity.setTitle(dto.getTitle());
             entity.setEnd(dto.getEnd());
             entity.setDescription(dto.getDescription());
-            entity.setAnimal(Animal.valueOf(dto.getAnimal()));
+            entity.setAnimal(dto.getAnimal());
             entity.setImage(null);
 
             campaignService.update(entity);
-            dto = converterService.campaignToDto(entity);
-            return ResponseEntity.ok().body(dto);
+            CampaignDTO responseDto = converterService.campaignToDto(entity);
+            return ResponseEntity.ok(responseDto);
         } catch (Exception e) {
-            return ResponseEntity.badRequest().body(e.getMessage());
+            return ResponseEntity.badRequest().body("Error updating campaign: " + e.getMessage());
         }
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity delete(@PathVariable Integer id) {
-
+    public ResponseEntity<Void> delete(@PathVariable Long id) {
         try {
             campaignService.deleteById(id);
-
             return ResponseEntity.noContent().build();
-
         } catch (Exception e) {
-            return ResponseEntity.badRequest().body(e.getMessage());
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
         }
+    }
+
+    @GetMapping("/total-balance")
+    public ResponseEntity<BigDecimal> getTotalBalance() {
+        BigDecimal totalBalance = campaignService.getTotalBalance();
+        return ResponseEntity.ok(totalBalance);
     }
 }

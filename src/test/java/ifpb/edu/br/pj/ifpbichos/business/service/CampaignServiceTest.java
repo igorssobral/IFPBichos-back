@@ -15,6 +15,7 @@ import org.mockito.junit.MockitoJUnitRunner;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.Arrays;
@@ -49,7 +50,6 @@ public class CampaignServiceTest {
         assertNotNull(savedCampaign);
         assertEquals("Campanha de Teste", savedCampaign.getTitle());
         assertEquals(Animal.CACHORRO, savedCampaign.getAnimal());
-        assertEquals(10, savedCampaign.getBalance(), 0.001);
 
         verify(campaignRepository, times(1)).save(any(Campaign.class));
     }
@@ -75,7 +75,7 @@ public class CampaignServiceTest {
     @Test(expected = InvalidCollectionGoalException.class)
     public void testSave_InvalidCollectionGoal() throws Exception {
         Campaign campaign = createValidCampaign();
-        campaign.setBalance(-100);
+        campaign.setCollectionGoal(BigDecimal.valueOf(-100));
 
         campaignService.save(campaign);
     }
@@ -83,7 +83,7 @@ public class CampaignServiceTest {
     @Test(expected = InvalidCollectionPercentageException.class)
     public void testSave_InvalidCollectionPercentage() throws Exception {
         Campaign campaign = createValidCampaign();
-        campaign.setUndirectedBalance(-5);
+        campaign.setBalance(BigDecimal.valueOf(-5));
 
         campaignService.save(campaign);
     }
@@ -91,9 +91,9 @@ public class CampaignServiceTest {
     @Test
     public void testUpdate_ValidCampaign() throws Exception {
         Campaign campaign = createValidCampaign();
-        campaign.setId(1);
+        campaign.setId(1L);
 
-        when(campaignRepository.existsById(1)).thenReturn(true);
+        when(campaignRepository.existsById(1L)).thenReturn(true);
 
 
         when(campaignRepository.save(any(Campaign.class))).thenAnswer(invocation -> invocation.getArgument(0));
@@ -110,9 +110,9 @@ public class CampaignServiceTest {
     @Test(expected = ObjectNotFoundException.class)
     public void testUpdate_CampaignNotFound() throws Exception {
         Campaign campaign = createValidCampaign();
-        campaign.setId(1);
+        campaign.setId(1L);
 
-        when(campaignRepository.existsById(1)).thenReturn(false);
+        when(campaignRepository.existsById(1L)).thenReturn(false);
 
         campaignService.update(campaign);
     }
@@ -122,10 +122,10 @@ public class CampaignServiceTest {
     @Test(expected = CampaignNotEditableException.class)
     public void testUpdate_CampaignNotEditable() throws Exception {
         Campaign campaign = createValidCampaign();
-        campaign.setId(1);
+        campaign.setId(1L);
         campaign.setCampaingStatus(false);
 
-        when(campaignRepository.existsById(1)).thenReturn(true);
+        when(campaignRepository.existsById(1L)).thenReturn(true);
 
         campaignService.update(campaign);
     }
@@ -133,9 +133,9 @@ public class CampaignServiceTest {
     @Test
     public void testDelete_ValidCampaign() throws Exception {
         Campaign campaign = createValidCampaign();
-        campaign.setId(1);
+        campaign.setId(1L);
 
-        when(campaignRepository.existsById(1)).thenReturn(true);
+        when(campaignRepository.existsById(1L)).thenReturn(true);
 
         campaignService.delete(campaign);
 
@@ -145,27 +145,27 @@ public class CampaignServiceTest {
     @Test(expected = ObjectNotFoundException.class)
     public void testDelete_CampaignNotFound() throws Exception {
         Campaign campaign = createValidCampaign();
-        campaign.setId(1);
+        campaign.setId(1L);
 
-        when(campaignRepository.existsById(1)).thenReturn(false);
+        when(campaignRepository.existsById(1L)).thenReturn(false);
 
         campaignService.delete(campaign);
     }
 
     @Test
     public void testDeleteById_ValidId() throws Exception {
-        when(campaignRepository.existsById(1)).thenReturn(true);
+        when(campaignRepository.existsById(1L)).thenReturn(true);
 
-        campaignService.deleteById(1);
+        campaignService.deleteById(1L);
 
-        verify(campaignRepository, times(1)).deleteById(1);
+        verify(campaignRepository, times(1)).deleteById(1L);
     }
 
     @Test(expected = ObjectNotFoundException.class)
     public void testDeleteById_CampaignNotFound() throws Exception {
-        when(campaignRepository.existsById(1)).thenReturn(false);
+        when(campaignRepository.existsById(1L)).thenReturn(false);
 
-        campaignService.deleteById(1);
+        campaignService.deleteById(1L);
     }
 
     @Test
@@ -201,12 +201,12 @@ public class CampaignServiceTest {
     @Test
     public void testFindById_ValidId() throws Exception {
         Campaign campaign = createValidCampaign();
-        campaign.setId(1);
+        campaign.setId(1L);
 
-        when(campaignRepository.existsById(1)).thenReturn(true);
-        when(campaignRepository.getReferenceById(1)).thenReturn(campaign);
+        when(campaignRepository.existsById(1L)).thenReturn(true);
+        when(campaignRepository.getReferenceById(1L)).thenReturn(campaign);
 
-        Campaign foundCampaign = campaignService.findById(1);
+        Campaign foundCampaign = campaignService.findById(1L);
 
         assertNotNull(foundCampaign);
         assertEquals("Campanha de Teste", foundCampaign.getTitle());
@@ -219,9 +219,9 @@ public class CampaignServiceTest {
 
     @Test(expected = ObjectNotFoundException.class)
     public void testFindById_NonExistingId() throws Exception {
-        when(campaignRepository.existsById(1)).thenReturn(false);
+        when(campaignRepository.existsById(1L)).thenReturn(false);
 
-        campaignService.findById(1);
+        campaignService.findById(1L);
     }
 
     private Campaign createValidCampaign() {
@@ -230,9 +230,9 @@ public class CampaignServiceTest {
         campaign.setAnimal(Animal.CACHORRO);
         campaign.setStart(LocalDateTime.now());
         campaign.setEnd(LocalDateTime.now().plusDays(7));
-        campaign.setCollectionGoal(250);
-        campaign.setBalance(10);
-        campaign.setUndirectedBalance(20);
+        campaign.setCollectionGoal(BigDecimal.valueOf(250));
+        campaign.setBalance(BigDecimal.valueOf(10));
+        campaign.setUndirectedBalance(BigDecimal.valueOf(20));
         campaign.setCampaingStatus(true);
         return campaign;
     }

@@ -1,18 +1,18 @@
 package ifpb.edu.br.pj.ifpbichos.model.entity;
 
+import ifpb.edu.br.pj.ifpbichos.model.enums.DonationPaymentStatus;
+import jakarta.persistence.*;
+import lombok.Data;
+import lombok.ToString;
+
 import java.io.Serializable;
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
-import java.util.Objects;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-
+@ToString(exclude = "campaign")
+@Data
 @Entity
 public class Donation implements Serializable{
-
 	/**
 	 * 
 	 */
@@ -21,68 +21,49 @@ public class Donation implements Serializable{
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Integer id;
+
+	@Column(name = "TITLE")
+	private String title;
+
+	@Column(name = "DESCRIPTION")
+	private String description;
+
+	@Column(name = "PREFERENCE_ID", nullable = true)
+	private String preferenceId;
+
+	@Column(name = "PAYMENT_ID", nullable = true)
+	private String paymentId;
+
+	@Column(name = "PAYMENT_TYPE", nullable = true)
+	private String paymentType;
+
+	@ManyToOne
+	@JoinColumn(name = "DONATOR_ID")
+	private User donator;
+
+	@ManyToOne
+	@JoinColumn(nullable = true)
+	private Campaign campaign;
+
 	@Column(name = "DONATION_DATE", nullable = false)
 	private LocalDateTime date;
+
 	@Column(name = "DONATION_VALUE", nullable = false)
-	private double donationValue;
+	private BigDecimal donationValue;
+
+	@Column(name = "PAYMENT_STATUS", nullable = false)
+	private DonationPaymentStatus status;
+
 	@Column(name = "DIRECTED", nullable = false)
 	private Boolean directed;
+
+	public Donation() {}
 	
-	public Donation() {
-		
-	}
-	
-	public Donation(LocalDateTime date, float donationValue, Boolean isDirected) {
+	public Donation(LocalDateTime date, BigDecimal donationValue, Boolean isDirected) {
 		this.date = date;
 		this.donationValue = donationValue;
 		this.directed = isDirected;
 	}
-	
-	public LocalDateTime getDate() {
-		return date;
-	}
-	public void setDate(LocalDateTime date) {
-		this.date = date;
-	}
-	public double getDonationValue() {
-		return donationValue;
-	}
-	public void setDonationValue(float donationValue) {
-		this.donationValue = donationValue;
-	}
 
-	public Boolean getDirected() {
-		return directed;
-	}
-
-	public void setDirected(Boolean directed) {
-		this.directed = directed;
-	}
-
-	@Override
-	public String toString() {
-		return "Donation [id=" + id + ", date=" + date + ", donationValue=" + donationValue + ", directed=" + directed
-				+ "]";
-	}
-
-	@Override
-	public int hashCode() {
-		return Objects.hash(date, directed, donationValue, id);
-	}
-
-	@Override
-	public boolean equals(Object obj) {
-		if (this == obj)
-			return true;
-		if (obj == null)
-			return false;
-		if (getClass() != obj.getClass())
-			return false;
-		Donation other = (Donation) obj;
-		return Objects.equals(date, other.date) && Objects.equals(directed, other.directed)
-				&& Double.doubleToLongBits(donationValue) == Double.doubleToLongBits(other.donationValue)
-				&& Objects.equals(id, other.id);
-	}
-	
 	
 }

@@ -3,16 +3,12 @@ package ifpb.edu.br.pj.ifpbichos.presentation.controller;
 import ifpb.edu.br.pj.ifpbichos.business.service.LoginService;
 import ifpb.edu.br.pj.ifpbichos.business.service.TokenService;
 import ifpb.edu.br.pj.ifpbichos.business.service.UserRegistrationService;
-import ifpb.edu.br.pj.ifpbichos.model.entity.User;
-import ifpb.edu.br.pj.ifpbichos.model.repository.UserRepository;
 import ifpb.edu.br.pj.ifpbichos.presentation.dto.AuthenticationDTO;
-import ifpb.edu.br.pj.ifpbichos.presentation.dto.LoginResponseDTO;
 import ifpb.edu.br.pj.ifpbichos.presentation.dto.UserRegistrationDTO;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.web.bind.annotation.*;
 
 
@@ -20,46 +16,22 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("/api/auth")
 public class AuthenticationController {
 
-	@Autowired
-	private AuthenticationManager authenticationManager;
+	private final TokenService tokenService;
+	private final UserRegistrationService userRegistrationService;
+	private final LoginService loginService;
 
 	@Autowired
-	private UserRepository userRepository;
-
-	@Autowired
-	private TokenService tokenService;
-
-	@Autowired
-	private UserRegistrationService userRegistrationService;
-	
-	@Autowired
-	private LoginService loginService;
-
-
-
-	public AuthenticationController() {
-	}
-
-	public void setAuthenticationManager(AuthenticationManager authenticationManager) {
-		this.authenticationManager = authenticationManager;
-	}
-
-	public void setUserRepository(UserRepository userRepository) {
-		this.userRepository = userRepository;
-	}
-
-	public void setUserRegistrationService(UserRegistrationService userRegistrationService) {
-		this.userRegistrationService = userRegistrationService;
-	}
-	public void setTokenService(TokenService tokenService) {
+	public AuthenticationController(AuthenticationManager authenticationManager,
+									TokenService tokenService,
+									UserRegistrationService userRegistrationService,
+									LoginService loginService) {
 		this.tokenService = tokenService;
-	}
-	public void setLoginService(LoginService loginService) {
+		this.userRegistrationService = userRegistrationService;
 		this.loginService = loginService;
 	}
 
 	@PostMapping("/login")
-	public ResponseEntity login(@RequestBody @Valid AuthenticationDTO dto){
+	public ResponseEntity<?> login(@RequestBody @Valid AuthenticationDTO dto) {
 		try {
 			return ResponseEntity.ok(loginService.login(dto));
 		} catch (Exception e) {
@@ -68,7 +40,7 @@ public class AuthenticationController {
 	}
 
 	@PostMapping("/userRegistration")
-	public ResponseEntity userRegistration(@RequestBody UserRegistrationDTO dto) {
+	public ResponseEntity<?> userRegistration(@RequestBody @Valid UserRegistrationDTO dto) {
 		try {
 			userRegistrationService.registerUser(dto);
 		} catch (Exception e) {
@@ -79,16 +51,16 @@ public class AuthenticationController {
 	}
 
 	@PostMapping("/isValidToken")
-	public ResponseEntity isValidToken(@RequestParam String token){
+	public ResponseEntity<?> isValidToken(@RequestParam String token) {
 		try{
 			if(!tokenService.isValidToken(token)) {
 				return ResponseEntity.badRequest().body("token invalid!!");
 			}
-			else{
+
 				return ResponseEntity.ok().build();
-			}
+
 		}catch (Exception e) {
-			return ResponseEntity.internalServerError().body(e);
+			return ResponseEntity.internalServerError().body(e.getMessage());
 		}
 	}
 

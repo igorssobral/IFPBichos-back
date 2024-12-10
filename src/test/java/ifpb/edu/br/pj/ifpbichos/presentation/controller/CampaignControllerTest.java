@@ -18,6 +18,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.test.context.junit4.SpringRunner;
 
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.Arrays;
 import java.util.List;
@@ -63,7 +64,7 @@ public class CampaignControllerTest {
 
     @Test
     public void testFindById() throws Exception {
-        int id = 1;
+        Long id = 1L;
         Campaign campaign = new Campaign();
         CampaignDTO campaignDTO = new CampaignDTO();
 
@@ -102,7 +103,7 @@ public class CampaignControllerTest {
 
     @Test
     public void testUpdate() throws Exception {
-        int id = 1;
+        Long id = 1L;
         Campaign campaign = new Campaign();
         campaign.setId(id);
         campaign.setTitle("campanha");
@@ -110,15 +111,15 @@ public class CampaignControllerTest {
         campaign.setDescription("Descrição");
         campaign.setAnimal(Animal.CACHORRO);
         campaign.setStart(LocalDateTime.now().minusDays(1));
-        campaign.setBalance(1000);
-        campaign.setUndirectedBalance(500);
+        campaign.setBalance(BigDecimal.valueOf(1000));
+        campaign.setUndirectedBalance(BigDecimal.valueOf(500));
         campaign.setCampaingStatus(true);
 
         CampaignDTO campaignDTO = new CampaignDTO();
         campaignDTO.setTitle("campanha");
         campaignDTO.setEnd(LocalDateTime.of(2023, 12, 31, 23, 59));
         campaignDTO.setDescription("Descrição");
-        campaignDTO.setAnimal("CACHORRO");
+        campaignDTO.setAnimal(Animal.CACHORRO);
 
         when(campaignRepository.findById(id)).thenReturn(Optional.of(campaign));
         when(campaignService.update(campaign)).thenReturn(campaign);
@@ -137,7 +138,7 @@ public class CampaignControllerTest {
 
     @Test
     public void testUpdate_NotFound() throws Exception {
-        int id = 1;
+        Long id = 1L;
         CampaignDTO campaignDTO = new CampaignDTO();
         campaignDTO.setEnd(LocalDateTime.of(2023, 12, 31, 23, 59));
 
@@ -155,7 +156,7 @@ public class CampaignControllerTest {
 
     @Test
     public void testUpdate_InvalidDateRange() throws Exception {
-        int id = 1;
+        Long id = 1L;
 
         Campaign campaign = new Campaign();
         campaign.setId(id);
@@ -167,7 +168,7 @@ public class CampaignControllerTest {
         campaignDTO.setTitle("campanha");
         campaignDTO.setEnd(LocalDateTime.of(2023, 12, 30, 23, 59));
         campaignDTO.setDescription("Descrição");
-        campaignDTO.setAnimal("CACHORRO");
+        campaignDTO.setAnimal(Animal.CACHORRO);
 
         when(campaignRepository.findById(id)).thenReturn(Optional.of(campaign));
         when(converterService.dtoToCampaign(any(CampaignDTO.class))).thenReturn(campaign);

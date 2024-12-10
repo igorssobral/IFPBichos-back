@@ -6,11 +6,18 @@ import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Table;
 import jakarta.persistence.UniqueConstraint;
+import lombok.Data;
+import lombok.EqualsAndHashCode;
+import lombok.Getter;
+import lombok.Setter;
 
-import java.util.Objects;
 
+@EqualsAndHashCode(callSuper = true)
+@Setter
+@Getter
 @Entity
 @Table(name = "COMISSION_MEMBER", uniqueConstraints = {@UniqueConstraint(columnNames = {"USER_CPF"})})
+@Data
 public class ComissionMember extends User {
 
 	/**
@@ -25,37 +32,9 @@ public class ComissionMember extends User {
 		this.role = role;
 	}
 
-	public ComissionMember() {
-	}
+	public ComissionMember() {}
 
-	public ComissionMemberRole getRole() {
-		return role;
-	}
-	public void setRole(ComissionMemberRole role) {
-		this.role = role;
-	}
-	@Override
-	public String toString() {
-		return super.toString() + " - ComissionMember{" +
-				"role=" + role +
-				'}';
-	}
-
-
-	@Override
-	public boolean equals(Object o) {
-		if (this == o) return true;
-		if (!(o instanceof ComissionMember that)) return false;
-		if (!super.equals(o)) return false;
-		return getRole() == that.getRole();
-	}
-
-	@Override
-	public int hashCode() {
-		return Objects.hash(super.hashCode(), getRole());
-	}
-
-	@Override
+    @Override
 	public String getUsername() {
 		return super.getLogin();
 	}

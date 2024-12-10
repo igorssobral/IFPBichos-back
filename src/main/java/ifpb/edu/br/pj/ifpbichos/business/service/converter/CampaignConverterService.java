@@ -5,6 +5,8 @@ import ifpb.edu.br.pj.ifpbichos.model.enums.Animal;
 import ifpb.edu.br.pj.ifpbichos.presentation.dto.CampaignDTO;
 import org.springframework.stereotype.Service;
 
+import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.util.ArrayList;
 import java.util.Base64;
 import java.util.List;
@@ -12,38 +14,51 @@ import java.util.List;
 @Service
 public class CampaignConverterService {
     public Campaign dtoToCampaign(CampaignDTO dto){
-
-        if (dto != null) {
-
-
-            Campaign campaign = new Campaign(dto.getId(), dto.getStart(), dto.getEnd(), dto.getTitle(), dto.getDescription(), true,
-                            null, dto.getCollectionGoal(), dto.getCollectionPercentage(), dto.getBalance(), dto.getUndirectedBalance(), Animal.valueOf(dto.getAnimal()));
-                    return campaign;
-
-
+        System.out.println(dto.toString());
+        if (dto == null) {
+            throw new NullPointerException("Não foi possível converter pois o objeto DTO é nulo");
         }
 
-        throw new IllegalArgumentException("Não foi possível converter pois o objeto é nulo");
+        return new Campaign(
+                dto.getId(),
+                dto.getStart(),
+                dto.getEnd(),
+                dto.getTitle(),
+                dto.getDescription(),
+                true,
+                null,
+                dto.getCollectionGoal(),
+                dto.getCollectionPercentage(),
+                dto.getBalance(),
+                dto.getUndirectedBalance(),
+                dto.getAnimal()
+        );
 
     }
 
     public CampaignDTO campaignToDto(Campaign entity) {
-        if (entity != null) {
-            byte[] imageBytes = entity.getImage();
-            String encodedImage = "";
-            if (imageBytes != null) {
-                encodedImage = Base64.getEncoder().encodeToString(imageBytes);
-
-            }
-
-            float progress = (entity.getBalance() / entity.getCollectionGoal()) * 100;
-            int progressInt = (int) progress;
-            CampaignDTO dto = new CampaignDTO(entity.getId(), entity.getStart(), entity.getEnd(), entity.getTitle(), entity.getDescription(), entity.isCampaingStatus(),
-                    encodedImage, entity.getCollectionGoal(),progressInt , entity.getBalance(), entity.getUndirectedBalance(),entity.getAnimal() != null ? entity.getAnimal().toString() : "");
-            return dto;
+        if (entity == null) {
+            throw  new NullPointerException("Não foi possível converter pois o objeto campanha é nulo");
         }
 
-        throw new IllegalArgumentException("Não foi possível converter pois o objeto é nulo");
+        String encodedImage = encodeImage(entity.getImage());
+        int progressInt = calculateProgress(entity.getBalance(), entity.getCollectionGoal());
+
+        return new CampaignDTO(
+                entity.getId(),
+                entity.getStart(),
+                entity.getEnd(),
+                entity.getTitle(),
+                entity.getDescription(),
+                entity.isCampaingStatus(),
+                encodedImage,
+                entity.getCollectionGoal(),
+                progressInt,
+                entity.getBalance(),
+                entity.getUndirectedBalance(),
+                entity.getAnimal()
+        );
+
     }
 
     public List<Campaign> dtosToCampaigns(List<CampaignDTO> dtoList) {
@@ -85,6 +100,20 @@ public class CampaignConverterService {
         throw new IllegalArgumentException("Não foi possível converter pois o objeto é nulo");
     }
 
+
+    private String encodeImage(byte[] imageBytes) {
+        return imageBytes != null ? Base64.getEncoder().encodeToString(imageBytes) : "";
+    }
+
+    private int calculateProgress(BigDecimal balance, BigDecimal collectionGoal) {
+        if (collectionGoal.compareTo(BigDecimal.ZERO) == 0) {
+            return 0;
+        }
+        BigDecimal progress = balance.divide(collectionGoal, 4, RoundingMode.HALF_UP)
+                .multiply(new BigDecimal("100"))
+                .setScale(2, RoundingMode.HALF_UP);
+        return progress.intValue();
+    }
 
 }
 
