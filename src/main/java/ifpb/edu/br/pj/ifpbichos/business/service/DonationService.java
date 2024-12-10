@@ -55,9 +55,7 @@ public class DonationService {
     }
 
     public List<DonationDTO> findAllDonationsManual() {
-        System.out.println("chegou aqui");
         List<Donation> donations = donationRepository.findAllByPaymentTypeIgnoreCase("DINHEIRO FISICO");
-        System.out.println(donations.size());
 
         return donations.stream().map(DonationDTO::new).toList();
     }
