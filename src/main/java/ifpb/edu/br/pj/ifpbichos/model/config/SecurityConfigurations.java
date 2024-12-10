@@ -39,6 +39,8 @@ public class SecurityConfigurations {
 						.requestMatchers(HttpMethod.DELETE, "/api/campaign/{id}").hasRole("ADMIN")
 						.requestMatchers(HttpMethod.GET, "/api/campaign/finishedBalance").hasRole("ADMIN")
 						.requestMatchers(HttpMethod.POST, "/api/auth/isValidToken").permitAll()
+						.requestMatchers(HttpMethod.POST, "/api/auth/forgot-password").permitAll()
+						.requestMatchers(HttpMethod.POST, "/api/auth/reset-password").permitAll()
 						.requestMatchers(HttpMethod.POST, "/payments").permitAll()
 						.requestMatchers(HttpMethod.POST, "/api/payments/donation-manual").hasRole("ADMIN")
 						.requestMatchers(HttpMethod.POST, "/api/resources-realocations").hasRole("ADMIN")
