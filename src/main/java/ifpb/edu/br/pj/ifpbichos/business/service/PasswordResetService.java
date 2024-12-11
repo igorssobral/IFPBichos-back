@@ -35,7 +35,7 @@ public class PasswordResetService {
         user.setPasswordResetExpiration(expirationTime);
         userService.save(user);
 
-        String resetLink = "http://localhost:5173/reset-password?token=" + token;
+        String resetLink = "https://ifp-bichos-front.vercel.app/reset-password?token=" + token;
         emailService.sendEmail(email, "Recuperação de Senha", "Clique no link para redefinir sua senha: " + resetLink);
     }
 
