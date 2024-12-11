@@ -106,7 +106,6 @@ public class CampaignService {
 
 	@Transactional
 	public Campaign update(Campaign campaign) throws Exception {
-		System.out.println(campaign);
 		if (campaign.getId() == null) {
 			throw new MissingFieldException("id", "update");
 		} else if (!existsById(campaign.getId())) {

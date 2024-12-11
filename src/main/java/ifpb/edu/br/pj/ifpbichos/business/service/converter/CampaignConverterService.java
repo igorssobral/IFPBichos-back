@@ -14,7 +14,7 @@ import java.util.List;
 @Service
 public class CampaignConverterService {
     public Campaign dtoToCampaign(CampaignDTO dto){
-        System.out.println(dto.toString());
+
         if (dto == null) {
             throw new NullPointerException("Não foi possível converter pois o objeto DTO é nulo");
         }
