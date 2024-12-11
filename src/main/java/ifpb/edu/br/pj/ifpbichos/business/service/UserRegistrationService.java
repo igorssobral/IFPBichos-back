@@ -26,8 +26,7 @@ public class UserRegistrationService {
 
     @Transactional
     public User registerUser(UserRegistrationDTO dto) throws Exception {
-        System.out.println(dto);
-        
+
         if (userRepository.existsByLogin(dto.login())) {
             throw new  ObjectAlreadyExistsException("Já existe um usuário com esse login");
         }else if (userRepository.existsByCPF(dto.CPF())) {

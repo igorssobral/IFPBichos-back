@@ -76,7 +76,7 @@ public class AuthenticationControllerTest {
         when(authenticationManager.authenticate(any())).thenReturn(authentication);
         when(tokenService.generateToken(user)).thenReturn("generatedToken");
 
-        LoginResponseDTO loginResponse = new LoginResponseDTO("generatedToken", dto.login(), user.getUserRole());
+        LoginResponseDTO loginResponse = new LoginResponseDTO("generatedToken");
         when(loginService.login(dto)).thenReturn(loginResponse);
 
         ResponseEntity responseEntity = authenticationController.login(dto);
@@ -85,8 +85,6 @@ public class AuthenticationControllerTest {
         assertTrue(responseEntity.getBody() instanceof LoginResponseDTO);
 
         LoginResponseDTO loginResponseDTO = (LoginResponseDTO) responseEntity.getBody();
-        assertEquals("username@gmail.com", loginResponseDTO.user());
-        assertEquals(UserRoles.USER.toString(), loginResponseDTO.userRole().toString());
         assertEquals("generatedToken", loginResponseDTO.token());
     }
 

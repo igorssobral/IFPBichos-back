@@ -16,15 +16,15 @@ import ifpb.edu.br.pj.ifpbichos.presentation.exception.ObjectNotFoundException;
 
 @Service
 public class LoginService {
-	
-	 @Autowired
-	 private  UserRepository userRepository;
-	 
-	 @Autowired
-	 private AuthenticationManager authenticationManager;
-	 
-	 @Autowired
-	 private TokenService tokenService;
+
+	@Autowired
+	private  UserRepository userRepository;
+
+	@Autowired
+	private AuthenticationManager authenticationManager;
+
+	@Autowired
+	private TokenService tokenService;
 
 
 	@Transactional
@@ -40,6 +40,6 @@ public class LoginService {
 
 		var token = tokenService.generateToken((User) auth.getPrincipal());
 
-		return new LoginResponseDTO(token, dto.login(), user.getUserRole());
+		return new LoginResponseDTO(token);
 	}
 }
