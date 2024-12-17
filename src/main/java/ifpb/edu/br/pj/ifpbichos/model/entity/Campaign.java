@@ -43,9 +43,8 @@ public class Campaign implements Serializable {
 	@Column(name = "CAMPAIGN_STATUS", nullable = false)
 	private boolean campaingStatus;
 
-	@Lob
 	@Column(name = "CAMPAIGN_PET_IMAGE")
-	private byte[] image;
+	private String image;
 	@Column(name = "COLLECTION_GOAL", nullable = false)
 	private BigDecimal collectionGoal;
 	@Column(name = "COLLECTION_PERCENTAGE", nullable = false)
@@ -65,7 +64,7 @@ public class Campaign implements Serializable {
 	
 	public Campaign() {}
 
-	public Campaign(LocalDateTime start, LocalDateTime end, String title, String description, byte[] image,float collectionPercentage,  BigDecimal balance,
+	public Campaign(LocalDateTime start, LocalDateTime end, String title, String description, String image,float collectionPercentage,  BigDecimal balance,
 	BigDecimal undirectedBalance,Animal animal) {
 		this.start = start;
 		this.end = end;
@@ -78,7 +77,7 @@ public class Campaign implements Serializable {
 		this.animal=animal;
 	}
 
-	public Campaign(Long id, LocalDateTime start, LocalDateTime end, String title, String description, boolean campaingStatus, byte[] image, BigDecimal collectionGoal, float collectionPercentage, BigDecimal balance, BigDecimal undirectedBalance, Animal animal) {
+	public Campaign(Long id, LocalDateTime start, LocalDateTime end, String title, String description, boolean campaingStatus, String image, BigDecimal collectionGoal, float collectionPercentage, BigDecimal balance, BigDecimal undirectedBalance, Animal animal) {
 		this.id = id;
 		this.start = start;
 		this.end = end;

@@ -81,7 +81,7 @@ public class CampaignController {
             entity.setEnd(dto.getEnd());
             entity.setDescription(dto.getDescription());
             entity.setAnimal(dto.getAnimal());
-            entity.setImage(null);
+            entity.setImage(dto.getImage());
 
             campaignService.update(entity);
             CampaignDTO responseDto = converterService.campaignToDto(entity);
