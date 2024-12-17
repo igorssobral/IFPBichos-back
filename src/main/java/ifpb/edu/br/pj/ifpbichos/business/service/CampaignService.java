@@ -78,6 +78,7 @@ public class CampaignService {
 
 	public Campaign save(Campaign campaign) throws Exception {
 
+		System.out.println(campaign);
 		if (existsByTitle(campaign.getTitle())) {
 			throw new ObjectAlreadyExistsException("Já existe uma campanha com nome " + campaign.getTitle());
 		}
@@ -164,13 +165,13 @@ public class CampaignService {
 		campaignRepository.deleteById(id);
 	}
 
-	public void saveCampaignWithImage(MultipartFile imageFile, Campaign campaign) throws Exception {
-		if (!Arrays.asList("image/jpeg", "image/png").contains(imageFile.getContentType())) {
-			throw new InvalidImageTypeException("O tipo da imagem deve ser JPEG ou PNG");
-		}
-		campaign.setImage(imageFile.getBytes());
-		campaignRepository.save(campaign);
-	}
+//	public void saveCampaignWithImage(MultipartFile imageFile, Campaign campaign) throws Exception {
+//		if (!Arrays.asList("image/jpeg", "image/png").contains(imageFile.getContentType())) {
+//			throw new InvalidImageTypeException("O tipo da imagem deve ser JPEG ou PNG");
+//		}
+//		campaign.setImage(imageFile);
+//		campaignRepository.save(campaign);
+//	}
 
 	private void sendNotification(Campaign campaign) {
 		CampaignNotificationDTO notification = new CampaignNotificationDTO(campaign);
@@ -203,9 +204,9 @@ public class CampaignService {
 
 	public void updateAllCampaignStatuses() {
 		List<Campaign> campaigns = campaignRepository.findAll();
-//		campaigns.forEach(campaign -> {
-//			campaign.updateStatus(); // Atualiza o status com base na data atual
-//			campaignRepository.save(campaign); // Salva a atualização no banco de dados
-//		});
+		campaigns.forEach(campaign -> {
+			campaign.updateStatus();
+			campaignRepository.save(campaign);
+		});
 	}
 }

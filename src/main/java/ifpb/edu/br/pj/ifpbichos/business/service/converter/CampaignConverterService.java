@@ -26,7 +26,7 @@ public class CampaignConverterService {
                 dto.getTitle(),
                 dto.getDescription(),
                 true,
-                null,
+                dto.getImage(),
                 dto.getCollectionGoal(),
                 dto.getCollectionPercentage(),
                 dto.getBalance(),
@@ -41,7 +41,6 @@ public class CampaignConverterService {
             throw  new NullPointerException("Não foi possível converter pois o objeto campanha é nulo");
         }
 
-        String encodedImage = encodeImage(entity.getImage());
         int progressInt = calculateProgress(entity.getBalance(), entity.getCollectionGoal());
 
         return new CampaignDTO(
@@ -51,7 +50,7 @@ public class CampaignConverterService {
                 entity.getTitle(),
                 entity.getDescription(),
                 entity.isCampaingStatus(),
-                encodedImage,
+                entity.getImage(),
                 entity.getCollectionGoal(),
                 progressInt,
                 entity.getBalance(),
