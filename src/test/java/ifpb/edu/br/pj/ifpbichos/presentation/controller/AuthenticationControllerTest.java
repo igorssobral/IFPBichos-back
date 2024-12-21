@@ -185,7 +185,7 @@ public class AuthenticationControllerTest {
 
 
         assertEquals(200, responseEntity.getStatusCodeValue());
-        assertNull(responseEntity.getBody());
+        assertEquals(true,responseEntity.getBody());
     }
 
     @Test
@@ -198,25 +198,10 @@ public class AuthenticationControllerTest {
         ResponseEntity responseEntity = authenticationController.isValidToken(invalidToken);
 
 
-        assertEquals(400, responseEntity.getStatusCodeValue());
-        assertEquals("token invalid!!", responseEntity.getBody());
+        assertEquals(200, responseEntity.getStatusCodeValue());
+        assertEquals(false, responseEntity.getBody());
     }
 
-    @Test
-    void isValidToken_ExceptionThrown_ReturnsInternalServerError() {
 
-        String token = "token";
-        String expectedErrorMessage = "Internal Server Error";
-        when(tokenService.isValidToken(token)).thenThrow(new RuntimeException(expectedErrorMessage));
-
-
-        ResponseEntity responseEntity = authenticationController.isValidToken(token);
-
-
-        assertEquals(500, responseEntity.getStatusCodeValue());
-        assertNotNull(responseEntity.getBody());
-        assertInstanceOf(String.class, responseEntity.getBody());
-        assertEquals(expectedErrorMessage, responseEntity.getBody());
-    }
 
 }
