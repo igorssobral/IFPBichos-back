@@ -58,18 +58,16 @@ public class AuthenticationController {
 	}
 
 	@PostMapping("/isValidToken")
-	public ResponseEntity<?> isValidToken(@RequestParam String token) {
-		try{
-			if(!tokenService.isValidToken(token)) {
-				return ResponseEntity.badRequest().body("token invalid!!");
-			}
-
-				return ResponseEntity.ok().build();
-
-		}catch (Exception e) {
-			return ResponseEntity.internalServerError().body(e.getMessage());
+	public ResponseEntity<Boolean> isValidToken(@RequestParam String token) {
+		try {
+			boolean isValid = tokenService.isValidToken(token);
+			return ResponseEntity.ok(isValid);
+		} catch (Exception e) {
+			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+					.body(false);
 		}
 	}
+
 
 	@PostMapping("/forgot-password")
 	public ResponseEntity<String> forgotPassword(@RequestBody ForgotPasswordRequest request) {
